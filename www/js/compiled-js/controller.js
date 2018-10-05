@@ -66,7 +66,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                  // set status bar color
                  StatusBar.backgroundColorByHexString("#363E7C");
                  navigator.splashscreen.hide(); // hide the splashscreen
-                 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fullyt loaded and ready
+                 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
+                // todo remove next line
+                $('#loader-modal').get(0).hide(); // hide loader
             }
 
         }); // end of ons.ready()
