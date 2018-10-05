@@ -15,6 +15,14 @@
     font-size: 0.75em !important;
 }
 
+/** STYLE FOR THE APP ALERT DIALOG BEGINS **/
+.alert-dialog--utopiasoftware-alert-dialog {
+    width: 90vw;
+    min-width: 90vw;
+}
+/** STYLE FOR THE APP ALERT DIALOG ENDS **/
+
+
 /** STYLE FOR THE SAMPLE PUZZLE PAGE BEGINS **/
 #sample-puzzle-page .page--material__background {
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255,0.9) 100%),

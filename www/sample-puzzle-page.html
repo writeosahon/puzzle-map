@@ -12,18 +12,18 @@
     <div style="position: fixed; top: 45px; left: 0; display: block; width: calc(100vw); height: calc(100vh - 45px - 101px);
             margin: 0; padding: 0;">
         <div style="display: block; margin:0; padding: 0; width: 100vw; position: relative; top: calc((100vw / 2) * 0)">
-            <span style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute; top: 0;
+            <span class="puzzle-drop-zone-container" style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute; top: 0;
             left: calc((100vw / 2) * 0)">
-                <img src="game-puzzle/block-1-puzzle.png" style="width: 100%; height: auto">
+                <img src="game-puzzle/block-1-puzzle.png" class="puzzle-drop-zone" style="width: 100%; height: auto">
             </span>
-            <span style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute;
+            <span class="puzzle-drop-zone-container" style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute;
             top: 0; left: calc((100vw / 2) * 1)">
-                <img src="game-puzzle/block-2-puzzle.png" style="width: 100%; height: auto">
+                <img src="game-puzzle/block-2-puzzle.png" class="puzzle-drop-zone" style="width: 100%; height: auto">
             </span>
         </div>
         <div style="display: block; margin:0; padding: 0; width: 100vw; position: relative; top: calc((100vw / 2) * 1)">
-            <span style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute; top: 0; left: 0">
-                <img src="game-puzzle/block-3-puzzle.png" style="width: 100%; height: auto">
+            <span class="puzzle-drop-zone-container" style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2); position: absolute; top: 0; left: 0">
+                <img src="game-puzzle/block-3-puzzle.png" class="puzzle-drop-zone" style="width: 100%; height: auto">
             </span>
 
         </div>
@@ -35,7 +35,7 @@
 
     <ons-card style="position: fixed; display: block; width: 100%; bottom: 0; left: 0; height: 100px;
     padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;">
-        <ons-carousel overscrollable swipeable auto-refresh direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
+        <ons-carousel class="puzzle-pieces-carousel" overscrollable swipeable auto-refresh direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
                       item-width="40%" initial-index="0" style="height: 100%; width: 100%">
 
             <ons-carousel-item>

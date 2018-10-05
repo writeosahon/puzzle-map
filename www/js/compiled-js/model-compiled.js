@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Created by UTOPIA SOFTWARE on 26/7/2018.
@@ -34,5 +34,17 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
 
 // call the method to startup the app
 utopiasoftware[utopiasoftware_app_namespace].controller.startup();
+
+// listen for the initialisation of the SAMPLE PUZZLE page
+$(document).on("init", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageInit);
+
+// listen for when the SAMPLE PUZZLE page is shown
+$(document).on("show", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageShow);
+
+// listen for when the SAMPLE PUZZLE page is hidden
+$(document).on("hide", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageHide);
+
+// listen for when the SAMPLE PUZZLE page is destroyed
+$(document).on("destroy", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageDestroy);
 
 //# sourceMappingURL=model-compiled.js.map
