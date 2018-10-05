@@ -1,7 +1,7 @@
 <!-- sample puzzle page -->
 <ons-page id="sample-puzzle-page">
 
-    <ons-card style="position: fixed; display: block; width: 100%; top: 0; height: 42px;
+    <ons-card style="position: fixed; display: block; width: 100%; top: 0; left: 0; height: 42px;
     border-top-left-radius: 4px; border-top-right-radius: 4px; background-color: rgba(63,81,181,0.81)">
         <!-- page preloader -->
         <ons-progress-bar class="page-preloader" indeterminate style="display: none;"></ons-progress-bar>
@@ -9,7 +9,7 @@
 
 
 
-    <div style="position: fixed; top: 43px;  display: block; width: calc(100vw); height: calc(100vh - 43px - 101px);
+    <div style="position: fixed; top: 43px; left: 0; display: block; width: calc(100vw); height: calc(100vh - 43px - 101px);
             margin: 0; padding: 0;">
         <div style="display: block; margin:0; padding: 0; width: 100vw">
             <span style="display: inline-block; margin: 0; padding: 0; width: calc(100vw / 2)">
@@ -31,8 +31,9 @@
 
 
 
-    <ons-card style="position: fixed; display: block; width: 100%; bottom: 0; height: 100px; padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;">
-        <ons-carousel id="project-evaluation-carousel" overscrollable swipeable centered auto-refresh direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
+    <ons-card style="position: fixed; display: block; width: 100%; bottom: 0; left: 0; height: 100px;
+    padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;">
+        <ons-carousel overscrollable swipeable auto-refresh direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
                       item-width="40%" initial-index="0" style="height: 100%; width: 100%">
 
             <ons-carousel-item>
@@ -46,5 +47,7 @@
             </ons-carousel-item>
         </ons-carousel>
     </ons-card>
+
+    <div class="content" style="display: none"></div>
 
 </ons-page>
