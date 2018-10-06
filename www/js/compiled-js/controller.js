@@ -111,10 +111,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         scrollableElements: [...$('#sample-puzzle-page .puzzle-pieces-carousel').get()]
                     },
                     mirror: {
-                        constrainDimensions: true,
-                        cursorOffsetX: -100,
-                        cursorOffsetY: -100,
-                        appendTo: document.body
+                        constrainDimensions: false,
+                        appendTo: 'body'
                     },
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                 });
