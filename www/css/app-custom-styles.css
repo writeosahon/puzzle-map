@@ -31,4 +31,7 @@
     background-size: cover, cover;
     background-position: center;
 }
+.draggable-mirror {
+    z-index: 99999;
+}
 /** STYLE FOR THE SAMPLE PUZZLE PAGE ENDS **/
