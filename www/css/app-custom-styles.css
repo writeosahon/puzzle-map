@@ -32,7 +32,7 @@
     background-position: center;
 }
 .draggable-mirror {
-    z-index: 99999;
-    width: calc(99vw / 2);
+    z-index: 99999 !important;
+    width: calc(99vw / 2) !important;
 }
 /** STYLE FOR THE SAMPLE PUZZLE PAGE ENDS **/
