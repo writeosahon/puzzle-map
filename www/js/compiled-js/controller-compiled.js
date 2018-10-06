@@ -1,5 +1,7 @@
 'use strict';
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 /**
@@ -123,8 +125,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
                                     //todo
-                                    new Draggable.Droppable($('#sample-puzzle-page .puzzle-pieces-carousel .puzzle-pieces-container').get().concat($('#sample-puzzle-page .puzzle-drop-zone-container').get()), {
+                                    new Draggable.Droppable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
                                         draggable: 'img',
+                                        scrollable: {
+                                            sensitivity: 15,
+                                            scrollableElements: [].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-carousel').get()))
+                                        },
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                                     });
 
