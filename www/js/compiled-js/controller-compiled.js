@@ -124,7 +124,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     //todo
                                     new Draggable.Droppable($('#sample-puzzle-page .puzzle-pieces-carousel .puzzle-pieces-container').get().concat($('#sample-puzzle-page .puzzle-drop-zone-container').get()), {
-                                        draggable: 'img.puzzle-piece',
+                                        draggable: 'img',
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                                     });
 
