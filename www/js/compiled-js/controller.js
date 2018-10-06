@@ -104,7 +104,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
                 //todo
-                new Draggable.Droppable($('#sample-puzzle-page .puzzle-pieces-carousel ons-carousel-item .puzzle-pieces-container').get().
+                new Draggable.Droppable($('#sample-puzzle-page .puzzle-pieces-carousel .puzzle-pieces-container').get().
                 concat($('#sample-puzzle-page .puzzle-drop-zone-container').get()), {
                     draggable: 'img.puzzle-piece',
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()

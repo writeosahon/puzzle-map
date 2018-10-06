@@ -33,25 +33,25 @@
 
     <ons-card style="position: fixed; display: block; width: 100%; bottom: 0; left: 0; height: 100px;
     padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;">
-        <ons-carousel class="puzzle-pieces-carousel" overscrollable swipeable auto-refresh direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
-                      item-width="40%" initial-index="0" style="height: 100%; width: 100%">
+        <div class="puzzle-pieces-carousel" style="height: 100%; width: 100%; margin: 0; padding: 0;
+        overflow-y: hidden; overflow-x: auto">
 
-            <ons-carousel-item>
+            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
                 <div class="puzzle-pieces-container" style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-2-answer.png" class="puzzle-piece" style="height: 100%; width: auto">
                 </div>
-            </ons-carousel-item>
-            <ons-carousel-item>
+            </span>
+            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
                 <div class="puzzle-pieces-container" style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-1-answer.png" class="puzzle-piece" style="height: 100%; width: auto">
                 </div>
-            </ons-carousel-item>
-            <ons-carousel-item>
+            </span>
+            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
                 <div class="puzzle-pieces-container" style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-3-answer.png" class="puzzle-piece" style="height: 100%; width: auto">
                 </div>
-            </ons-carousel-item>
-        </ons-carousel>
+            </span>
+        </div>
     </ons-card>
 
     <div class="content" style="display: none"></div>
