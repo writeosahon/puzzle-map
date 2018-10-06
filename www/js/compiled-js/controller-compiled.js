@@ -128,8 +128,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     new Draggable.Droppable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
                                         draggable: 'img',
                                         scrollable: {
-                                            sensitivity: 90,
+                                            sensitivity: 30,
                                             scrollableElements: [].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-carousel').get()))
+                                        },
+                                        mirror: {
+                                            constrainDimensions: true,
+                                            cursorOffsetX: 1,
+                                            cursorOffsetY: 1
                                         },
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                                     });
