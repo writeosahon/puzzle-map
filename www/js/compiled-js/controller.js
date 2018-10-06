@@ -107,7 +107,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 new Draggable.Droppable([...$('#sample-puzzle-page .puzzle-pieces-container').get()], {
                     draggable: 'img',
                     scrollable: {
-                        sensitivity: 15,
+                        sensitivity: 90,
                         scrollableElements: [...$('#sample-puzzle-page .puzzle-pieces-carousel').get()]
                     },
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
