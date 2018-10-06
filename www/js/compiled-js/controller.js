@@ -112,8 +112,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     },
                     mirror: {
                         constrainDimensions: true,
-                        cursorOffsetX: -30,
-                        cursorOffsetY: -30
+                        cursorOffsetX: -200,
+                        cursorOffsetY: -200
                     },
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                 });
