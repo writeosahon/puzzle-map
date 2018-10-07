@@ -117,9 +117,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                 });
 
-                new Draggable.Swappable([...$('#sample-puzzle-page .puzzle-pieces-container.puzzle-swappable-container').get()], {
-                    draggable: 'img.puzzle-pieces',
-                }).removePlugin(Draggable.Plugins.Mirror);
 
                 $('#loader-modal').get(0).hide(); // hide loader
             }
