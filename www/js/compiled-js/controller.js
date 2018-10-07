@@ -120,6 +120,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     console.log("SOURCE", dragStartEvent.source);
                 }).on("droppable:start", function(droppableStartEvent){
                     console.log("DROP START", droppableStartEvent.dropzone);
+                }).on("droppable:stop", function(droppableStartEvent){
+                    console.log("DROP STOP", droppableStartEvent.dropzone);
                 }).on("droppable:dropped", function(droppableDroppedEvent){
                     $('.puzzle-pieces', droppableDroppedEvent.dropzone).addClass("animated tada");
                     console.log("DROP ZONE", droppableDroppedEvent.dropzone);
