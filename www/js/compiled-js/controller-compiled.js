@@ -138,13 +138,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                                     });
 
-                                    new Draggable.Swappable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
-                                        draggable: 'img.puzzle-pieces',
-                                        mirror: {
-                                            constrainDimensions: false,
-                                            appendTo: 'body'
-                                        }
-                                    });
+                                    new Draggable.Swappable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container.puzzle-swappable-container').get())), {
+                                        draggable: 'img.puzzle-pieces'
+                                    }).removePlugin(Draggable.Plugins.Mirror);
 
                                     $('#loader-modal').get(0).hide(); // hide loader
 
