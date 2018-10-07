@@ -139,6 +139,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }).on("drag:start", function (dragStartEvent) {
                                         $(dragStartEvent.source).removeClass("animated shake tada");
                                         console.log("SOURCE", dragStartEvent.source);
+                                    }).on("droppable:start", function (droppableStartEvent) {
+                                        console.log("DROP START", droppableStartEvent.dropzone);
                                     }).on("droppable:dropped", function (droppableDroppedEvent) {
                                         $('.puzzle-pieces', droppableDroppedEvent.dropzone).addClass("animated tada");
                                         console.log("DROP ZONE", droppableDroppedEvent.dropzone);
