@@ -125,6 +125,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }).on("droppable:dropped", function(droppableDroppedEvent){
                     $('.puzzle-pieces', droppableDroppedEvent.dropzone).addClass("animated tada");
                     console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+
+                    let jqueryDropZone = $(droppableDroppedEvent.dropzone);
+                    let puzzleSlotValue = null;
+
+                    if(jqueryDropZone.is('.puzzle-pieces-tray')){
+                        jqueryDropZone.isPuzzlePieceTray = true;
+                        // get the puzzle slot value attached to the puzzle piece of the puzzle-pieces-tray
+                        puzzleSlotValue = $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot');
+                    }
+                    else{
+                        // get the puzzle slot value attached to the puzzle-drop-zone
+                        puzzleSlotValue = jqueryDropZone.attr('data-puzzle-slot');
+                    }
+
+                    // remove all animation classes from the puzzle piece
+                    $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                    removeClass("animated shake tada");
+
+                    if(jqueryDropZone.isPuzzlePieceTray !== true){
+                        if(jqueryDropZone.attr('data-puzzle-slot') ===
+                            $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')){
+
+                            $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                            addClass("animated tada");
+                        }
+                        else{
+                            $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                            addClass("animated shake");
+                        }
+                    }
+
                 });
 
 
