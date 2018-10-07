@@ -138,9 +138,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                                     }).on("drag:start", function (dragStartEvent) {
                                         $(dragStartEvent.source).removeClass("animated shake tada");
+                                        console.log("SOURCE", dragStartEvent.source);
                                     }).on("droppable:dropped", function (droppableDroppedEvent) {
-                                        $(droppableDroppedEvent.source).addClass("animated tada");
-                                        console.log("SOURCE", droppableDroppedEvent.source);
+                                        $('.puzzle-pieces', droppableDroppedEvent.dropzone).addClass("animated tada");
+                                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
                                     });
 
                                     $('#loader-modal').get(0).hide(); // hide loader
