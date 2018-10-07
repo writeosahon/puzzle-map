@@ -25,7 +25,7 @@
 
 /** STYLE FOR THE SAMPLE PUZZLE PAGE BEGINS **/
 #sample-puzzle-page .page--material__background {
-    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255,0.9) 100%),
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255,0.8) 100%),
     url('app-images/puzzle-background-1.jpg');
     background-repeat: no-repeat;
     background-size: cover, cover;
@@ -33,6 +33,13 @@
 }
 .draggable-mirror {
     z-index: 99999 !important;
+    width: calc(100vw / 2) !important;
+    height: auto !important;
+}
+.draggable-dropzone--occupied .puzzle-piece-holder {
+    display: none;
+}
+.draggable-dropzone--occupied .puzzle-pieces {
     width: calc(100vw / 2) !important;
     height: auto !important;
 }
