@@ -115,7 +115,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         appendTo: 'body'
                     },
                     dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
-                }).on("drag: start", function(dragStartEvent){
+                }).on("drag:start", function(dragStartEvent){
                     $(dragStartEvent.source).removeClass("animated shake tada");
                     console.log("ORGINAL SOURCE", dragStartEvent.originalSource);
                     console.log("ORGINAL CONTAINER", dragStartEvent.sourceContainer);
