@@ -157,9 +157,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         if (jqueryDropZone.isPuzzlePieceTray !== true) {
                                             if (jqueryDropZone.attr('data-puzzle-slot') === $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')) {
 
-                                                $('.puzzle-pieces[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated tada");
+                                                // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                                // addClass("animated tada");
+                                                console.log("GOT 1");
                                             } else {
-                                                $('.puzzle-pieces[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated shake");
+                                                // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                                // addClass("animated shake");
+                                                console.log("FAILED 1");
                                             }
                                         }
                                     });
