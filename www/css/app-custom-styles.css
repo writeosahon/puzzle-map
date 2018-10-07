@@ -43,4 +43,8 @@
     width: calc(100vw / 2) !important;
     height: auto !important;
 }
+.puzzle-pieces-carousel .draggable-dropzone--occupied .puzzle-pieces {
+    width: auto !important;
+    height: 100% !important;
+}
 /** STYLE FOR THE SAMPLE PUZZLE PAGE ENDS **/
