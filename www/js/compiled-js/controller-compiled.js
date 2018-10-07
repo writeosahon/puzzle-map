@@ -155,6 +155,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('.puzzle-pieces[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).removeClass("animated shake tada");
 
                                         if (jqueryDropZone.isPuzzlePieceTray !== true) {
+                                            console.log("CONTAINER SLOT", jqueryDropZone.attr('data-puzzle-slot'));
+                                            console.log("PUZZLE PIECE", $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot'));
+
                                             if (jqueryDropZone.attr('data-puzzle-slot') === $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')) {
 
                                                 // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
