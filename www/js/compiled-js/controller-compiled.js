@@ -150,7 +150,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         if (!utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')) {
                                             var puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
                                             // remove all animation from the container
-                                            $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).removeClass("animated shake tada");
+                                            $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).removeClass("animated shake pulse");
                                         }
                                     }).on("droppable:dropped", function (droppableDroppedEvent) {
                                         console.log("DROP ZONE", droppableDroppedEvent.dropzone);
@@ -177,7 +177,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                             if (utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue) {
                                                 // add positive animation to container
-                                                $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated tada");
+                                                $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated pul");
                                             } else {
                                                 // add negative animation to container
                                                 $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated shake");
@@ -190,7 +190,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
                                                 // add positive animation to container
                                                 $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                                addClass("animated tada");
+                                                addClass("animated pulse");
                                             }
                                         }*/
                                     });
