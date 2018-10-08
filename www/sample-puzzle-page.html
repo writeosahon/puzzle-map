@@ -5,17 +5,19 @@
     margin: 0; padding: 0; border-top-left-radius: 4px; border-top-right-radius: 4px; background-color: rgba(63,81,181,0.81)">
         <div class="row" style="position: relative; bottom: 0; ">
             <div class="col-xs-2" style="text-align: center">
-                <ons-fab id="project-evaluation-next-button" modifier="mini" position="bottom right"
-                         style="display: none;"
-                         onclick="utopiasoftware[utopiasoftware_app_namespace].
-            controller.projectEvaluationPageViewModel.nextButtonClicked()">
-                    <ons-icon
-                            icon="md-chevron-right">
+                <ons-fab onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                samplePuzzlePageViewModel.backButtonClicked()">
+                    <ons-icon icon="md-close-circle" style="color: #F4C724">
                     </ons-icon>
                 </ons-fab>
             </div>
             <div class="col-xs-8" style="text-align: center"></div>
-            <div class="col-xs-2" style="text-align: center"></div>
+            <div class="col-xs-2" style="text-align: center">
+                <ons-fab onclick="" style="box-shadow: none">
+                    <ons-icon icon="md-puzzle-piece" style="color: #F4C724; text-shadow: -1px -1px 2px #000000;">
+                    </ons-icon>
+                </ons-fab>
+            </div>
         </div>
     </ons-card>
 
