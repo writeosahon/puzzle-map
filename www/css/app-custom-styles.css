@@ -39,11 +39,13 @@
 .draggable-dropzone--occupied .puzzle-piece-holder {
     display: none;
 }
-.draggable-container--is-dragging.draggable-dropzone--occupied .puzzle-piece-holder {
-    display: inline-block;
+.puzzle-pieces-container:not(.puzzle-pieces-tray){
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: 0 0;
 }
 .draggable-dropzone--occupied .puzzle-pieces {
-    width: calc(100vw / 2) !important;
+    width: 100% !important;
     height: auto !important;
 }
 .puzzle-pieces-carousel .draggable-dropzone--occupied .puzzle-pieces {
