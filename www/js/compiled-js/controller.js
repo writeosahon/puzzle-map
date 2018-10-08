@@ -137,7 +137,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     if(jqueryDropZone.isPuzzlePieceTray !== true){
                         console.log("CONTAINER SLOT", jqueryDropZone.attr('data-puzzle-slot'));
-                        console.log("PUZZLE PIECE", $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot'));
+                        console.log("PUZZLE PIECE", jqueryDropZone.find('img.puzzle-pieces').attr('data-puzzle-slot'));
 
                         if(jqueryDropZone.attr('data-puzzle-slot') ===
                             $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')){
