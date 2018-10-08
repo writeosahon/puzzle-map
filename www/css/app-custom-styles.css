@@ -38,6 +38,10 @@
 }
 .draggable-dropzone--occupied .puzzle-piece-holder {
     display: none;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 /*.puzzle-pieces-container:not(.puzzle-pieces-tray){
     background-repeat: no-repeat;
@@ -47,6 +51,10 @@
 .draggable-dropzone--occupied .puzzle-pieces {
     width: 100% !important;
     height: auto !important;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }
 .puzzle-pieces-carousel .draggable-dropzone--occupied .puzzle-pieces {
     width: auto !important;
