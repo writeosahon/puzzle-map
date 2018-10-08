@@ -37,24 +37,16 @@
     height: auto !important;
 }
 .draggable-dropzone--occupied .puzzle-piece-holder {
-    display: inline-block;
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: 1;
+    display: none;
 }
-/*.puzzle-pieces-container:not(.puzzle-pieces-tray){
+.puzzle-pieces-container:not(.puzzle-pieces-tray){
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: 0 0;
-}*/
+}
 .draggable-dropzone--occupied .puzzle-pieces {
     width: 100% !important;
     height: auto !important;
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: 2;
 }
 .puzzle-pieces-carousel .draggable-dropzone--occupied .puzzle-pieces {
     width: auto !important;
