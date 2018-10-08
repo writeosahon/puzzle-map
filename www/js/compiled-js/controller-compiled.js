@@ -144,6 +144,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
                                     }).on("droppable:start", function (droppableStartEvent) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp = Date.now();
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = false;
 
                                         if (!utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')) {
                                             var puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
@@ -156,42 +158,41 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.jqueryDropZone = $(droppableDroppedEvent.dropzone);
                                         var puzzleSlotValue = null;
 
-                                        if (jqueryDropZone.is('.puzzle-pieces-tray')) {
+                                        if (utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')) {
                                             utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true;
+
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = false;
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = 0;
                                         } else {
                                             utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
-                                            // get the puzzle slot value attached to the puzzle-drop-zone
-                                            //puzzleSlotValue = jqueryDropZone.attr('data-puzzle-slot');
-                                        }
 
-                                        //
-                                        // if(jqueryDropZone.isPuzzlePieceTray !== true){
-                                        //     console.log("CONTAINER SLOT", jqueryDropZone.attr('data-puzzle-slot'));
-                                        //     console.log("PUZZLE PIECE", dragStartSource.attr('data-puzzle-slot'));
-                                        //
-                                        //     if(jqueryDropZone.attr('data-puzzle-slot') ==
-                                        //         dragStartSource.attr('data-puzzle-slot')){
-                                        //
-                                        //         // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                        //         // addClass("animated tada");
-                                        //         console.log("GOT 1");
-                                        //     }
-                                        //     else{
-                                        //         // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                        //         // addClass("animated shake");
-                                        //         console.log("FAILED 1");
-                                        //     }
-                                        // }
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = true;
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp;
+                                        }
                                     }).on("droppable:stop", function (droppableStopEvent) {
 
-                                        if (!$(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')) {
+                                        if (utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDropped === true && utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp === utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp) {
+
                                             var puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
 
                                             if (utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue) {
                                                 // add positive animation to container
                                                 $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated tada");
+                                            } else {
+                                                // add negative animation to container
+                                                $('.puzzle-drop-zone[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).addClass("animated shake");
                                             }
                                         }
+
+                                        /*if(! $(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')){
+                                            let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
+                                                if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                                samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
+                                                // add positive animation to container
+                                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                                addClass("animated tada");
+                                            }
+                                        }*/
                                     });
 
                                     $('#loader-modal').get(0).hide(); // hide loader
