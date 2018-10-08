@@ -128,10 +128,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     if(jqueryDropZone.is('.puzzle-pieces-tray')){
                         jqueryDropZone.isPuzzlePieceTray = true;
-                        // get the puzzle slot value attached to the puzzle piece of the puzzle-pieces-tray
-                        puzzleSlotValue = $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot');
+
                     }
                     else{
+                        jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
                         // get the puzzle slot value attached to the puzzle-drop-zone
                         puzzleSlotValue = jqueryDropZone.attr('data-puzzle-slot');
                     }
@@ -144,8 +144,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         console.log("CONTAINER SLOT", jqueryDropZone.attr('data-puzzle-slot'));
                         console.log("PUZZLE PIECE", dragStartSource.attr('data-puzzle-slot'));
 
-                        if(jqueryDropZone.attr('data-puzzle-slot') ===
-                            $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')){
+                        if(jqueryDropZone.attr('data-puzzle-slot') ==
+                            dragStartSource.attr('data-puzzle-slot')){
 
                             // $(`.puzzle-pieces[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                             // addClass("animated tada");
