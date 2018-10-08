@@ -39,6 +39,9 @@
 .draggable-dropzone--occupied .puzzle-piece-holder {
     display: none;
 }
+.draggable-container--is-dragging.draggable-dropzone--occupied .puzzle-piece-holder {
+    display: inline-block;
+}
 .draggable-dropzone--occupied .puzzle-pieces {
     width: calc(100vw / 2) !important;
     height: auto !important;
