@@ -43,6 +43,8 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: 0 0;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 .draggable-dropzone--occupied .puzzle-pieces {
     width: 100% !important;
