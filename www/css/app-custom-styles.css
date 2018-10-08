@@ -39,11 +39,11 @@
 .draggable-dropzone--occupied .puzzle-piece-holder {
     display: none;
 }
-.puzzle-pieces-container:not(.puzzle-pieces-tray){
+/*.puzzle-pieces-container:not(.puzzle-pieces-tray){
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: 0 0;
-}
+}*/
 .draggable-dropzone--occupied .puzzle-pieces {
     width: 100% !important;
     height: auto !important;
