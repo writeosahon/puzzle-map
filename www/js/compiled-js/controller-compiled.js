@@ -136,6 +136,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             appendTo: 'body'
                                         },
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
+                                    }).on("drag:start", function (dragStartEvent) {
+                                        dragStartSource = $(dragStartEvent.source);
                                     }).on("droppable:dropped", function (droppableDroppedEvent) {
                                         console.log("DROP ZONE", droppableDroppedEvent.dropzone);
 
@@ -155,10 +157,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('.puzzle-pieces[data-puzzle-slot="' + puzzleSlotValue + '"]', $thisPage).removeClass("animated shake tada");
 
                                         if (jqueryDropZone.isPuzzlePieceTray !== true) {
-                                            jqueryDropZone.addClass('puzzle-testing').css("display", "none");
-                                            $('body').append(jqueryDropZone);
-                                            console.log("CONTAINER SLOT", $('.puzzle-testing').attr('data-puzzle-slot'));
-                                            console.log("PUZZLE PIECE", $('.puzzle-testing').find('img.puzzle-pieces').attr('data-puzzle-slot'));
+                                            console.log("CONTAINER SLOT", jqueryDropZone.attr('data-puzzle-slot'));
+                                            console.log("PUZZLE PIECE", dragStartSource.attr('data-puzzle-slot'));
 
                                             if (jqueryDropZone.attr('data-puzzle-slot') === $('.puzzle-pieces', jqueryDropZone).attr('data-puzzle-slot')) {
 
@@ -189,6 +189,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }();
 
             var $thisPage = $(event.target); // get the current page shown
+            var dragStartSource = null;
             // disable the swipeable feature for the app splitter
             $('ons-splitter-side').removeAttr("swipeable");
 
