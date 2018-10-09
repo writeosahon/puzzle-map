@@ -200,9 +200,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         console.log("DROP ZONE", droppableDroppedEvent.dropzone);
 
                                         // increase the move counter value by 1
-                                        utopiasoftware[utopiasoftware_app_namespace].samplePuzzlePageViewModel.moveCounter += 1;
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter += 1;
                                         // display the new value of the move counter to the user
-                                        $('#sample-puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].samplePuzzlePageViewModel.moveCounter);
+                                        $('#sample-puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
                                     });
 
                                     // create the Puzzle Timer object
@@ -212,7 +212,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
                                     // add event listener for when timer value is updated
                                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.addEventListener("secondTenthsUpdated", function (timer) {
-                                        $('#sample-puzzle-page .puzzle-timer-counter').html(timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+                                        $('#sample-puzzle-page .puzzle-timer-counter').html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                                     });
 
                                     // start the puzzle timer
