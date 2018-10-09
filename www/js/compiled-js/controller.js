@@ -30,7 +30,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // await ons.createPopover("view-reports-additional-menu-popover-template");
 
             // displaying prepping message
-            $('#loader-modal-message').html("Loading App...");
+            $('#loader-modal-message').html("Loading Puzzle...");
             $('#loader-modal').get(0).show(); // show loader
 
             if(true){ // there is a previous logged in user
@@ -85,6 +85,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         dragStartContainer: null,
         moveCounter: 0,
         puzzleTimer: null,
+        puzzleAnswerSheetMap: null,
 
 
         /**
@@ -93,7 +94,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageInit: function(event){
 
             var $thisPage = $(event.target); // get the current page shown
-            var dragStartSource = null;
+
             // disable the swipeable feature for the app splitter
             $('ons-splitter-side').removeAttr("swipeable");
 
@@ -127,6 +128,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         },
                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
                 }).
+                removePlugin(Draggable.Plugin.Focusable).
                 on("drag:start", function(dragStartEvent){
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         samplePuzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
@@ -194,11 +196,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // add positive animation to container
                             $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                             addClass("animated pulse");
+
+                            // update the puzzleAnswerSheet map object to indicate this answer was correct
+                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
+                                set(puzzleSlotValue, true);
+
+                            // call the method to check the users answer sheet
+                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.checkAnswerSheet();
                         }
                         else{
                             // add negative animation to container
                             $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                             addClass("animated shake");
+
+                            // update the puzzleAnswerSheet map object to indicate this answer was wrong
+                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
+                            set(puzzleSlotValue, false);
                         }
                     }
 
@@ -224,18 +237,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
                 });
 
+                // instantiate the puzzleAnswerSheet
+                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap =
+                    new Map();
+                for(let index = 0; index < 3; index++){
+                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
+                        set(("" + (index + 1)), false);
+                }
+
                 // create the Puzzle Timer object
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer = new Timer();
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                 start({startValues: {secondTenths: 0, seconds: 0, minutes: 0, hours: 0, days: 0},
                     precision: 'secondTenths'});
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+
                 // add event listener for when timer value is updated
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                     addEventListener("secondTenthsUpdated", function(timer){
                         $('#sample-puzzle-page .puzzle-timer-counter').
                         html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                         getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+                });
+
+                // add event listener for when timer value is stopped
+                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
+                addEventListener("stopped", function(timer){
+                    // displaying prepping message
+                    $('#loader-modal-message').html("Puzzle Completed!");
+                    $('#loader-modal').get(0).show(); // show loader
                 });
 
 
@@ -299,6 +329,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
                     }
                 });
+        },
+
+        async checkAnswerSheet(){
+
+            // update the puzzleAnswerSheet map object to indicate this answer was correct
+            for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                puzzleAnswerSheetMap){
+                if(entry[1] === false){ // an answer is still wrong
+                    return;
+                }
+            }
+            // stop the entire to indicate that puzzle has completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
+            return;
         }
 
     }
