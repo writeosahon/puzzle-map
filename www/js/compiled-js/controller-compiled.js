@@ -99,10 +99,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     samplePuzzlePageViewModel: {
 
+        draggableDroppableObject: null,
         dragStartSource: null,
         jqueryDropZone: null,
         dragStartContainer: null,
         moveCounter: 0,
+        puzzleTimer: null,
 
         /**
          * event is triggered when page is initialised
@@ -129,8 +131,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
-                                    //todo
-                                    new Draggable.Droppable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
+                                    // create the Draggable.Droppable object
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
                                         draggable: 'img.puzzle-pieces',
                                         scrollable: {
                                             sensitivity: 30,
@@ -203,9 +205,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#sample-puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].samplePuzzlePageViewModel.moveCounter);
                                     });
 
+                                    // create the Puzzle Timer object
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer = new Timer();
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start({ startValues: { secondTenths: 0, seconds: 0, minutes: 0, hours: 0, days: 0 },
+                                        precision: 'secondTenths' });
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
+                                    // add event listener for when timer value is updated
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.addEventListener("secondTenthsUpdated", function (timer) {
+                                        $('#sample-puzzle-page .puzzle-timer-counter').html(timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+                                    });
+
+                                    // start the puzzle timer
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 6:
+                                case 11:
                                 case 'end':
                                     return _context2.stop();
                             }
@@ -271,16 +285,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 3:
 
+                                // pause puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+
                                 ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
                                     buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' }) // Ask for confirmation
                                 .then(function (index) {
                                     if (index === 1) {
                                         // OK button
                                         navigator.app.exitApp(); // Close the app
+                                    } else {
+                                        // resume the puzzle timer
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
                                     }
                                 });
 
-                            case 4:
+                            case 5:
                             case 'end':
                                 return _context3.stop();
                         }
