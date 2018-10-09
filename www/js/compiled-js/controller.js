@@ -228,8 +228,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer = new Timer();
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                 start({startValues: {secondTenths: 0, seconds: 0, minutes: 0, hours: 0, days: 0},
-                    precision: 'secondTenths', });
-                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
+                    precision: 'secondTenths'});
+                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
                 // add event listener for when timer value is updated
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                     addEventListener("secondTenthsUpdated", function(timer){
@@ -240,7 +240,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                 // start the puzzle timer
-                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
+                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.reset();
                 $('#loader-modal').get(0).hide(); // hide loader
             }
 
