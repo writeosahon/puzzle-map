@@ -13,7 +13,12 @@
                 </ons-fab>
             </div>
             <div class="col-xs-8" style="text-align: center; color: #F4C724; text-shadow: -1px -1px 2px #000000;">
-                Moves: 0
+                <div style="width: 100%; display: block">
+                    Moves: 0
+                </div>
+                <div style="width: 100%; display: block">
+                    Time: 0
+                </div>
             </div>
             <div class="col-xs-2" style="text-align: center">
                 <ons-fab onclick="" style="box-shadow: none; background-color: transparent;">
@@ -26,7 +31,7 @@
 
 
 
-    <div style="position: fixed; top: 45px; left: 0; display: block; width: calc(100vw); height: calc(100vh - 45px - 101px);
+    <div style="position: fixed; top: 45px; left: 0; display: block; width: calc(100vw); height: calc(100vh - 45px - 106px);
             margin: 0; padding: 0;">
         <div style="display: block; margin:0; padding: 0; width: 100vw; white-space: nowrap">
             <span class="puzzle-pieces-container puzzle-drop-zone"
@@ -54,25 +59,25 @@
 
 
 
-    <div style="position: fixed; display: block; width: 100%; top: calc(100vh - 100px); left: 0; height: 100px;
-    padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;">
+    <div style="position: fixed; display: block; width: 100%; top: calc(100vh - 105px); left: 0; height: 105px;
+    padding: 0; padding-top: 5px; padding-bottom: 5px; margin: 0;  background-color: rgba(108,83,40,1)">
         <div class="puzzle-pieces-carousel" style="height: 100%; width: 100%; margin: 0; padding: 0;
         overflow-y: scroll; overflow-x: scroll; white-space: nowrap;">
 
-            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
+            <span style="display: inline-block; text-align: center; width: 40%; height: 100%; margin: 0; padding: 0; border: brown 1px ridge">
                 <div class="puzzle-pieces-container puzzle-pieces-tray puzzle-drop-zone draggable-dropzone--occupied"
                      style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-2-answer.png" class="puzzle-pieces" style="height: 100%; width: auto"
                          data-puzzle-slot="2">
                 </div>
             </span>
-            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
+            <span style="display: inline-block; text-align: center; width: 40%; height: 100%; margin: 0; padding: 0; border: brown 1px ridge">
                 <div class="puzzle-pieces-container puzzle-pieces-tray puzzle-drop-zone draggable-dropzone--occupied" style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-1-answer.png" class="puzzle-pieces" style="height: 100%; width: auto"
                          data-puzzle-slot="1">
                 </div>
             </span>
-            <span style="display: inline-block; width: 40%; height: 100%; margin: 0; padding: 0;">
+            <span style="display: inline-block; text-align: center; width: 40%; height: 100%; margin: 0; padding: 0; border: brown 1px ridge">
                 <div class="puzzle-pieces-container puzzle-pieces-tray puzzle-drop-zone draggable-dropzone--occupied" style="display: block; width: 100%; height: 100%">
                     <img src="game-puzzle/block-3-answer.png" class="puzzle-pieces" style="height: 100%; width: auto"
                          data-puzzle-slot="3">
