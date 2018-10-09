@@ -145,7 +145,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             appendTo: 'body'
                                         },
                                         dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
-                                    }).removePlugin(Draggable.Plugin.Focusable).on("drag:start", function (dragStartEvent) {
+                                    }).removePlugin(Draggable.Plugins.Focusable).on("drag:start", function (dragStartEvent) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
                                     }).on("droppable:start", function (droppableStartEvent) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
