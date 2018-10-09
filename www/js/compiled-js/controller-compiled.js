@@ -102,6 +102,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         dragStartSource: null,
         jqueryDropZone: null,
         dragStartContainer: null,
+        moveCounter: 0,
 
         /**
          * event is triggered when page is initialised
@@ -193,6 +194,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 addClass("animated pulse");
                                             }
                                         }*/
+                                    }).on("droppable:dropped", function (droppableDroppedEvent) {
+                                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+
+                                        // increase the move counter value by 1
+                                        utopiasoftware[utopiasoftware_app_namespace].samplePuzzlePageViewModel.moveCounter += 1;
+                                        // display the new value of the move counter to the user
+                                        $('#sample-puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].samplePuzzlePageViewModel.moveCounter);
                                     });
 
                                     $('#loader-modal').get(0).hide(); // hide loader
