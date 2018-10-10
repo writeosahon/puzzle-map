@@ -106,6 +106,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         moveCounter: 0,
         puzzleTimer: null,
         puzzleAnswerSheetMap: null,
+        puzzleCompleted: false,
 
         /**
          * event is triggered when page is initialised
@@ -234,7 +235,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     // add event listener for when timer value is stopped
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.addEventListener("stopped", function (timer) {
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.addEventListener("paused", function (timer) {
+
+                                        // check if puzzle has been completed
+                                        if (utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleCompleted !== true) {
+                                            // puzzle has not been completed, so exit method
+                                            return;
+                                        }
                                         // update the contents of the level completed modal
                                         $('#puzzle-level-complete-modal .level-time').html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                                         $('#puzzle-level-complete-modal .level-moves').html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
@@ -367,69 +374,75 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context4.next = 12;
+                                    _context4.next = 13;
                                     break;
                                 }
 
                                 entry = _step.value;
 
                                 if (!(entry[1] === false)) {
-                                    _context4.next = 9;
+                                    _context4.next = 10;
                                     break;
                                 }
 
+                                // an answer is still wrong
+                                // flag that puzzle has NOT been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleCompleted = false;
                                 return _context4.abrupt('return');
 
-                            case 9:
+                            case 10:
                                 _iteratorNormalCompletion = true;
                                 _context4.next = 5;
                                 break;
 
-                            case 12:
-                                _context4.next = 18;
+                            case 13:
+                                _context4.next = 19;
                                 break;
 
-                            case 14:
-                                _context4.prev = 14;
+                            case 15:
+                                _context4.prev = 15;
                                 _context4.t0 = _context4['catch'](3);
                                 _didIteratorError = true;
                                 _iteratorError = _context4.t0;
 
-                            case 18:
-                                _context4.prev = 18;
+                            case 19:
                                 _context4.prev = 19;
+                                _context4.prev = 20;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
-                            case 21:
-                                _context4.prev = 21;
+                            case 22:
+                                _context4.prev = 22;
 
                                 if (!_didIteratorError) {
-                                    _context4.next = 24;
+                                    _context4.next = 25;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
-                            case 24:
-                                return _context4.finish(21);
-
                             case 25:
-                                return _context4.finish(18);
+                                return _context4.finish(22);
 
                             case 26:
+                                return _context4.finish(19);
+
+                            case 27:
+
+                                // flag that puzzle has been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleCompleted = true;
                                 // stop the entire to indicate that puzzle has completed
-                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
                                 return _context4.abrupt('return');
 
-                            case 28:
+                            case 30:
                             case 'end':
                                 return _context4.stop();
                         }
                     }
-                }, _callee4, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+                }, _callee4, this, [[3, 15, 19, 27], [20,, 22, 26]]);
             }));
 
             function checkAnswerSheet() {

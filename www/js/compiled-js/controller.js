@@ -86,6 +86,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         moveCounter: 0,
         puzzleTimer: null,
         puzzleAnswerSheetMap: null,
+        puzzleCompleted: false,
 
 
         /**
@@ -262,7 +263,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // add event listener for when timer value is stopped
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
-                addEventListener("stopped", function(timer){
+                addEventListener("paused", function(timer){
+
+                    // check if puzzle has been completed
+                    if(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                        puzzleCompleted !== true){ // puzzle has not been completed, so exit method
+                        return;
+                    }
                     // update the contents of the level completed modal
                     $('#puzzle-level-complete-modal .level-time').html(
                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
@@ -350,11 +357,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
                 puzzleAnswerSheetMap){
                 if(entry[1] === false){ // an answer is still wrong
+                    // flag that puzzle has NOT been completed
+                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                        puzzleCompleted = false;
                     return;
                 }
             }
+
+            // flag that puzzle has been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                puzzleCompleted = true;
             // stop the entire to indicate that puzzle has completed
-            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.stop();
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
             return;
         },
 
