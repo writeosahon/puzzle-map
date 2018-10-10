@@ -68,11 +68,3 @@
     background-size: cover, cover;
     background-position: center;
 }
-#puzzle-level-complete-modal .puzzle-level-complete-content-container::-webkit-scrollbar {
-    width: 0.5em !important;
-    background-color: #363E7C !important;
-}
-#puzzle-level-complete-modal .puzzle-level-complete-content-container::-webkit-scrollbar-thumb {
-    width: 0.5em !important;
-    background-color: #F4C724 !important;
-}
