@@ -263,9 +263,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // add event listener for when timer value is stopped
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
                 addEventListener("stopped", function(timer){
-                    // displaying prepping message
-                    $('#loader-modal-message').html("Puzzle Completed!");
-                    $('#loader-modal').get(0).show(); // show loader
+                    // update the contents of the level completed modal
+                    $('#puzzle-level-complete-modal .level-time').html(
+                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
+                        getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths'])
+                    );
+                    $('#puzzle-level-complete-modal .level-moves').html(
+                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter
+                    );
+
+                    // show the level completed modal
+                    $('#puzzle-level-complete-modal').get(0).show();
                 });
 
 
