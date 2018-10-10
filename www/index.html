@@ -151,6 +151,44 @@
     <div id="loader-modal-message" style="text-align: center; margin-top: 0.5em; font-size: 1.2em;"></div>
 </ons-modal>
 
+<!-- pause-puzzle-modal -->
+<ons-modal id="pause-puzzle-modal" direction="up" style="background-color: rgba(0,0,0,1);">
+    <div style="display: block; width: 100vw; height: 100vh; margin: 0; padding: 0;">
+
+        <!-- header -->
+        <div class="pause-puzzle-modal-header" style="position: relative; display: block; top: 0; left: 0; margin: 0; padding: 0;
+         width: 100vw; height: calc((100vh - 100vw) / 2)">
+            <!-- header content -->
+            <div style="display: block; width: 100%; margin: 0; padding: 5px;
+         text-align: center; font-size: 1.2em; color: #F4C724; text-shadow: -1px -1px 2px #000000;">
+                Arrange Puzzle Pieces To Create The Picture
+            </div>
+        </div>
+
+        <!-- content block -->
+        <div class="pause-puzzle-modal-content" style="position: relative; display: block; top: calc((100vh - 100vw) / 2);
+         left: 0; margin: 0; padding: 0; width: 100vw; height: 100vw">
+            <!-- display content-->
+            <div class="puzzle-image-container" style="display: block; width: 100%; margin: 0; padding: 10px;">
+                <img src="game-puzzle/level-1-puzzle-completed.png" alt="Puzzle Map" style="width: 100%; height: auto">
+            </div>
+        </div>
+
+        <!-- footer -->
+        <div class="pause-puzzle-modal-footer" style="position: relative; display: block; bottom: 0; left: 0; margin: 0; padding: 0;
+         width: 100vw; height: calc((100vh - 100vw) / 2)">
+            <!-- footer content -->
+            <div style="display: block; width: 100%; margin: 0; padding: 10px; text-align: center;">
+                <ons-button style="background-color: rgba(63,81,181,1); color: #F4C724; border-radius: 21px;"
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            samplePuzzlePageViewModel.resumePuzzleLevel()">
+                    Continue</ons-button>
+            </div>
+        </div>
+
+    </div>
+</ons-modal>
+
 <!-- determinate progress modal -->
 <ons-modal id="determinate-progress-modal" direction="up" style="background-color: rgba(0,0,0,0.8);">
     <div style="text-align: center; padding-left: 5%; padding-right: 5%">

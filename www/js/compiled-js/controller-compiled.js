@@ -216,7 +216,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#sample-puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
                                     });
 
-                                    // instantiate the puzzleAnswerSheet
+                                    // instantiate the puzzleAnswerSheet js Map
                                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap = new Map();
                                     for (index = 0; index < 3; index++) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.set("" + (index + 1), false);
@@ -240,8 +240,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#loader-modal').get(0).show(); // show loader
                                     });
 
-                                    // start the puzzle timer
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.reset();
+                                    // pause the puzzle level in order to begin. level starts when user hits "Continue" button
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
                                 case 14:
@@ -339,6 +339,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return backButtonClicked;
         }(),
+
+
+        /**
+         * method is used to check the status of the users puzzle answer sheet.
+         * if all puzzle pieces have been place correctly, then the level is completed
+         * @returns {Promise<void>}
+         */
         checkAnswerSheet: function () {
             var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
                 var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, entry;
@@ -427,6 +434,60 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return checkAnswerSheet;
+        }(),
+        pausePuzzleLevel: function () {
+            var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
+                            case 0:
+
+                                // pause puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+                                // show the pause-puzzle-modal
+                                _context5.next = 3;
+                                return $('#pause-puzzle-modal').get(0).show();
+
+                            case 3:
+                            case 'end':
+                                return _context5.stop();
+                        }
+                    }
+                }, _callee5, this);
+            }));
+
+            function pausePuzzleLevel() {
+                return _ref5.apply(this, arguments);
+            }
+
+            return pausePuzzleLevel;
+        }(),
+        resumePuzzleLevel: function () {
+            var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+                return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                    while (1) {
+                        switch (_context6.prev = _context6.next) {
+                            case 0:
+                                _context6.next = 2;
+                                return $('#pause-puzzle-modal').get(0).hide();
+
+                            case 2:
+                                // resume puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
+
+                            case 3:
+                            case 'end':
+                                return _context6.stop();
+                        }
+                    }
+                }, _callee6, this);
+            }));
+
+            function resumePuzzleLevel() {
+                return _ref6.apply(this, arguments);
+            }
+
+            return resumePuzzleLevel;
         }()
     }
 
