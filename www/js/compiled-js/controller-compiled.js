@@ -320,6 +320,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 3:
 
+                                // todo REMOVE THIS NEXT LINE LATER flag that puzzle has NOT been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleCompleted = false;
                                 // pause puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
 
@@ -335,7 +337,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 });
 
-                            case 5:
+                            case 6:
                             case 'end':
                                 return _context3.stop();
                         }
