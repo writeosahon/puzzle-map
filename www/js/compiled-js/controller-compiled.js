@@ -124,28 +124,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
-                                    // add puzzle level background tune
-                                    _context2.next = 6;
+                                    // add background tune
+                                    _context2.prev = 4;
+                                    _context2.next = 7;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, reject);
                                     });
 
-                                case 6:
-                                    _context2.next = 8;
+                                case 7:
+                                    _context2.next = 11;
+                                    break;
+
+                                case 9:
+                                    _context2.prev = 9;
+                                    _context2.t0 = _context2['catch'](4);
+
+                                case 11:
+                                    _context2.prev = 11;
+                                    _context2.next = 14;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                                     });
 
-                                case 8:
+                                case 14:
+                                    _context2.next = 18;
+                                    break;
+
+                                case 16:
+                                    _context2.prev = 16;
+                                    _context2.t1 = _context2['catch'](11);
+
+                                case 18:
 
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 9:
+                                case 19:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this);
+                    }, _callee2, this, [[4, 9], [11, 16]]);
                 }));
 
                 return function loadPageOnAppReady() {

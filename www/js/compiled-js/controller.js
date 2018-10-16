@@ -105,16 +105,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
-                // add puzzle level background tune
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
-                        1, 1, 0, resolve, reject);
-                });
-                // start playing background tune in a loop
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
-                });
+                // add background tune
+                try{
 
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
+                            1, 1, 0, resolve, reject);
+                    });
+                }
+                catch(err){}
+
+                // start playing background tune in a loop
+                try{
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
+                    });
+                }
+                catch(err){}
 
                 $('#loader-modal').get(0).hide(); // hide loader
             }
