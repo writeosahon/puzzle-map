@@ -114,6 +114,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
+                // add puzzle level background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
+                        1, 1, 0, resolve, reject);
+                });
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
+                });
+
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.draggableDroppableObject =
                 new Draggable.Droppable([...$('#sample-puzzle-page .puzzle-pieces-container').get()],

@@ -134,6 +134,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
 
+                                    // add puzzle level background tune
+                                    _context2.next = 6;
+                                    return new Promise(function (resolve, reject) {
+                                        window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, reject);
+                                    });
+
+                                case 6:
+                                    _context2.next = 8;
+                                    return new Promise(function (resolve, reject) {
+                                        window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
+                                    });
+
+                                case 8:
+
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#sample-puzzle-page .puzzle-pieces-container').get())), {
                                         draggable: 'img.puzzle-pieces',
@@ -254,7 +268,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 14:
+                                case 18:
                                 case 'end':
                                     return _context2.stop();
                             }
