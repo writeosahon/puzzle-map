@@ -127,13 +127,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // add puzzle level background tune
                                     _context2.next = 6;
                                     return new Promise(function (resolve, reject) {
-                                        window.plugins.NativeAudio.preloadComplex('puzzle--level-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, reject);
+                                        window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, reject);
                                     });
 
                                 case 6:
                                     _context2.next = 8;
                                     return new Promise(function (resolve, reject) {
-                                        window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
+                                        window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                                     });
 
                                 case 8:

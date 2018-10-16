@@ -107,12 +107,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // add puzzle level background tune
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('puzzle--level-background', 'audio/puzzles-select-level-background.mp3',
+                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
                         1, 1, 0, resolve, reject);
                 });
                 // start playing background tune in a loop
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                 });
 
 
