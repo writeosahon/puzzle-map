@@ -75,6 +75,157 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
     /**
+     * this is the view-model/controller for the Puzzle Levels page
+     */
+    puzzleLevelsPageViewModel: {
+
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // disable the swipeable feature for the app splitter
+            $('ons-splitter-side').removeAttr("swipeable");
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady(){
+                // check to see if onsen is ready and if all app loading has been completed
+                if(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false){
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.backButtonClicked;
+
+                // add puzzle level background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle--level-background', 'audio/puzzles-select-level-background.mp3',
+                        1, 1, 0, resolve, reject);
+                });
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
+                });
+
+
+                $('#loader-modal').get(0).hide(); // hide loader
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            // disable the swipeable feature for the app splitter
+            $('ons-splitter-side').removeAttr("swipeable");
+
+            // adjust the window/view-port settings for when the soft keyboard is displayed
+            //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: function(){
+            // adjust the window/view-port settings for when the soft keyboard is displayed
+            // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        async backButtonClicked(){
+
+            // check if the side menu is open
+            if($('ons-splitter').get(0).right.isOpen){ // side menu open, so close it
+                $('ons-splitter').get(0).right.close();
+                return; // exit the method
+            }
+
+            // todo REMOVE THIS NEXT LINE LATER flag that puzzle has NOT been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                puzzleCompleted = false;
+            // pause puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+
+            ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
+                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}) // Ask for confirmation
+                .then(function(index) {
+                    if (index === 1) { // OK button
+                        navigator.app.exitApp(); // Close the app
+                    }
+                    else{
+                        // resume the puzzle timer
+                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
+                    }
+                });
+        },
+
+        /**
+         * method is used to check the status of the users puzzle answer sheet.
+         * if all puzzle pieces have been place correctly, then the level is completed
+         * @returns {Promise<void>}
+         */
+        async checkAnswerSheet(){
+
+            // update the puzzleAnswerSheet map object to indicate this answer was correct
+            for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                puzzleAnswerSheetMap){
+                if(entry[1] === false){ // an answer is still wrong
+                    // flag that puzzle has NOT been completed
+                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                        puzzleCompleted = false;
+                    return;
+                }
+            }
+
+            // flag that puzzle has been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.
+                puzzleCompleted = true;
+            // stop the entire to indicate that puzzle has completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+            return;
+        },
+
+
+        async pausePuzzleLevel(){
+
+            // pause puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.pause();
+            // show the pause-puzzle-modal
+            await $('#pause-puzzle-modal').get(0).show();
+        },
+
+        async resumePuzzleLevel(){
+
+            // hide the pause-puzzle-modal
+            await $('#pause-puzzle-modal').get(0).hide();
+            // resume puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
+        }
+
+    },
+
+
+    /**
      * this is the view-model/controller for the Sample Puzzle page
      */
     samplePuzzlePageViewModel: {
@@ -126,134 +277,134 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.draggableDroppableObject =
-                new Draggable.Droppable([...$('#sample-puzzle-page .puzzle-pieces-container').get()],
-                    {
-                        draggable: 'img.puzzle-pieces',
-                        scrollable: {
-                            sensitivity: 30,
-                            scrollableElements: [...$('#sample-puzzle-page .puzzle-pieces-carousel').get()]
-                        },
-                        mirror: {
-                            constrainDimensions: false,
-                            appendTo: 'body'
-                        },
-                        dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
-                }).
-                removePlugin(Draggable.Plugins.Focusable).
-                on("drag:start", function(dragStartEvent){
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
-                }).
-                on("droppable:start", function(droppableStartEvent){
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp = Date.now();
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = false;
-
-                    if(! utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')){
-                        let puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
-                        // remove all animation from the container
-                        $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                        removeClass("animated shake pulse");
-                    }
-                }).
-                on("droppable:dropped", function(droppableDroppedEvent){
-                    console.log("DROP ZONE", droppableDroppedEvent.dropzone);
-
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.jqueryDropZone = $(droppableDroppedEvent.dropzone);
-                    let puzzleSlotValue = null;
-
-                    if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                    samplePuzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')){
+                    new Draggable.Droppable([...$('#sample-puzzle-page .puzzle-pieces-container').get()],
+                        {
+                            draggable: 'img.puzzle-pieces',
+                            scrollable: {
+                                sensitivity: 30,
+                                scrollableElements: [...$('#sample-puzzle-page .puzzle-pieces-carousel').get()]
+                            },
+                            mirror: {
+                                constrainDimensions: false,
+                                appendTo: 'body'
+                            },
+                            dropzone: $('#sample-puzzle-page .puzzle-drop-zone').get()
+                        }).
+                    removePlugin(Draggable.Plugins.Focusable).
+                    on("drag:start", function(dragStartEvent){
                         utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true;
-
+                            samplePuzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
+                    }).
+                    on("droppable:start", function(droppableStartEvent){
+                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                            samplePuzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
+                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                            samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp = Date.now();
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = false;
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = 0;
-                    }
-                    else{
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
+
+                        if(! utopiasoftware[utopiasoftware_app_namespace].controller.
+                        samplePuzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')){
+                            let puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.
+                            samplePuzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
+                            // remove all animation from the container
+                            $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                            removeClass("animated shake pulse");
+                        }
+                    }).
+                    on("droppable:dropped", function(droppableDroppedEvent){
+                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
 
                         utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = true;
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp =
-                            utopiasoftware[utopiasoftware_app_namespace].controller.
-                                samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp;
-                    }
-                }).
-                on("droppable:stop", function(droppableStopEvent){
-
-                    if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartContainer.puzzleDropped === true &&
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp ===
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp){
-
-                        let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
-
+                            samplePuzzlePageViewModel.jqueryDropZone = $(droppableDroppedEvent.dropzone);
+                        let puzzleSlotValue = null;
 
                         if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                        samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
-                            // add positive animation to container
-                            $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                            addClass("animated pulse");
+                        samplePuzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')){
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true;
 
-                            // update the puzzleAnswerSheet map object to indicate this answer was correct
-                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
-                                set(puzzleSlotValue, true);
-
-                            // call the method to check the users answer sheet
-                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.checkAnswerSheet();
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = false;
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = 0;
                         }
                         else{
-                            // add negative animation to container
-                            $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                            addClass("animated shake");
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
 
-                            // update the puzzleAnswerSheet map object to indicate this answer was wrong
-                            utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
-                            set(puzzleSlotValue, false);
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDropped = true;
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp =
+                                utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp;
                         }
-                    }
-
-                    /*if(! $(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')){
-                        let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
-
+                    }).
+                    on("droppable:stop", function(droppableStopEvent){
 
                         if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                            samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
-                            // add positive animation to container
-                            $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                            addClass("animated pulse");
-                        }
-                    }*/
-                }).
-                on("droppable:dropped", function(droppableDroppedEvent){
-                    console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDropped === true &&
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleStartDropStamp ===
+                            utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartContainer.puzzleDroppedStamp){
 
-                    // increase the move counter value by 1
-                    utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter += 1;
-                    // display the new value of the move counter to the user
-                    $('#sample-puzzle-page .puzzle-moves-counter').
-                    html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
-                });
+                            let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
+
+
+                            if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                            samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
+                                // add positive animation to container
+                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                addClass("animated pulse");
+
+                                // update the puzzleAnswerSheet map object to indicate this answer was correct
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
+                                set(puzzleSlotValue, true);
+
+                                // call the method to check the users answer sheet
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.checkAnswerSheet();
+                            }
+                            else{
+                                // add negative animation to container
+                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                addClass("animated shake");
+
+                                // update the puzzleAnswerSheet map object to indicate this answer was wrong
+                                utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
+                                set(puzzleSlotValue, false);
+                            }
+                        }
+
+                        /*if(! $(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')){
+                            let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
+
+
+                            if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
+                                // add positive animation to container
+                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                addClass("animated pulse");
+                            }
+                        }*/
+                    }).
+                    on("droppable:dropped", function(droppableDroppedEvent){
+                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+
+                        // increase the move counter value by 1
+                        utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter += 1;
+                        // display the new value of the move counter to the user
+                        $('#sample-puzzle-page .puzzle-moves-counter').
+                        html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.moveCounter);
+                    });
 
                 // instantiate the puzzleAnswerSheet js Map
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap =
                     new Map();
                 for(let index = 0; index < 3; index++){
                     utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleAnswerSheetMap.
-                        set(("" + (index + 1)), false);
+                    set(("" + (index + 1)), false);
                 }
 
                 // create the Puzzle Timer object
@@ -265,10 +416,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // add event listener for when timer value is updated
                 utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
-                    addEventListener("secondTenthsUpdated", function(timer){
-                        $('#sample-puzzle-page .puzzle-timer-counter').
-                        html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
-                        getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+                addEventListener("secondTenthsUpdated", function(timer){
+                    $('#sample-puzzle-page .puzzle-timer-counter').
+                    html(utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.
+                    getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                 });
 
                 // add event listener for when timer value is stopped
@@ -402,7 +553,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.puzzleTimer.start();
         }
 
-    }
+    },
 
 };
 

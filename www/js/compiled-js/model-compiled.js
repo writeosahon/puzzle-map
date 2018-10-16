@@ -35,6 +35,18 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
 // call the method to startup the app
 utopiasoftware[utopiasoftware_app_namespace].controller.startup();
 
+// listen for the initialisation of the PUZZLE-LEVELS page
+$(document).on("init", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageInit);
+
+// listen for when the PUZZLE-LEVELS page is shown
+$(document).on("show", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageShow);
+
+// listen for when the PUZZLE-LEVELS page is hidden
+$(document).on("hide", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageHide);
+
+// listen for when the PUZZLE-LEVELS page is destroyed
+$(document).on("destroy", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageDestroy);
+
 // listen for the initialisation of the SAMPLE PUZZLE page
 $(document).on("init", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageInit);
 
