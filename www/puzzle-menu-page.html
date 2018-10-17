@@ -1,0 +1,43 @@
+<!-- puzzle-menu page -->
+<ons-page id="puzzle-menu-page">
+    <ons-toolbar modifier="transparent cover-content">
+        <div class="left">
+        </div>
+        <div class="center" style="font-size: 1.7em; color: #F4C724; text-transform: uppercase;
+                            text-shadow: -1px -1px 2px #000000;">
+            <div style="display: block; width: 100%; text-align: center;">
+                MENU
+            </div>
+        </div>
+        <div class="right">
+            <ons-toolbar-button  style="font-size: 1.6em;" onclick="$('#side-menu').get(0).toggle()">
+                <ons-icon icon="fa-long-arrow-left" style="color: #F4C724; text-shadow: -1px -1px 2px #000000;"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
+    <div class="content container-fluid">
+        <div id="puzzle-menu-container" class="row" style="margin-top: 30%; margin-bottom: 20%; margin-left: 10%;
+                          margin-right: 10%; padding-right: 8%;
+                          -webkit-border-radius: 10px 10px 10px 10px; border-radius: 10px 10px 10px 10px;
+                           border: 5px solid #3F51B5; background-color: #F4C724; width: 80%; height: 50%;
+                           overflow: hidden; overflow-y: scroll;">
+
+            <ons-list id="puzzle-menu-list" modifier="inset" style="border: none; background-color: transparent;">
+                <ons-list-item modifier="longdivider" tappable lock-on-drag
+                               style="border: 4px groove #3F51B5; border-radius: 10px 10px 10px 10px;
+                               margin-bottom: 1em; color: #3F51B5;">
+                    <div class="left">
+                        <ons-icon icon="md-close-circle-o" size="32px" class="list-item__icon"
+                                  style="color: #3F51B5; text-shadow: -1px -1px 2px #000000;" fixed-width></ons-icon>
+                    </div>
+                    <div class="center" style="text-shadow: -1px -1px #000000; font-size: 2em;">Exit</div>
+                </ons-list-item>
+            </ons-list>
+        </div>
+
+    </div>
+
+
+
+</ons-page>
