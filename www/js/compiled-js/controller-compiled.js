@@ -105,6 +105,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         gameConfigObject: null,
 
         /**
+         * property flags if the audio effects and sounds are ready to be
+         */
+        isAudioReady: false,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function pageInit(event) {
@@ -188,10 +193,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     _context2.t1 = _context2['catch'](18);
 
                                 case 25:
+                                    _context2.next = 27;
+                                    return $('#loader-modal').get(0).hide();
 
-                                    $('#loader-modal').get(0).hide(); // hide loader
+                                case 27:
+                                    // hide loader
 
-                                case 26:
+                                    // set that audio use is ready
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady = true;
+
+                                case 28:
                                 case 'end':
                                     return _context2.stop();
                             }
@@ -222,6 +233,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // adjust the window/view-port settings for when the soft keyboard is displayed
             //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+
+            // check that audio is ready
+            if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true) {
+                // play audio
+                new Promise(function (resolve, reject) {
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                });
+            }
         },
 
         /**
@@ -230,6 +249,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: function pageHide() {
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+            // stop playing the background music
+            new Promise(function (resolve, reject) {
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+            });
         },
 
         /**
@@ -298,10 +322,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 3:
                                 _context4.next = 5;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                                });
+
+                            case 5:
+                                _context4.next = 7;
                                 return $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
                                     data: { puzzleData: { levelNumber: levelNumber } } });
 
-                            case 5:
+                            case 7:
                             case 'end':
                                 return _context4.stop();
                         }

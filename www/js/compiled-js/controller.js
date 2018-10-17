@@ -85,6 +85,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         gameConfigObject: null,
 
         /**
+         * property flags if the audio effects and sounds are ready to be
+         */
+        isAudioReady: false,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -163,7 +168,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){}
 
-                $('#loader-modal').get(0).hide(); // hide loader
+
+                await $('#loader-modal').get(0).hide(); // hide loader
+
+                // set that audio use is ready
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.isAudioReady = true;
             }
 
         },
@@ -177,6 +187,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // adjust the window/view-port settings for when the soft keyboard is displayed
             //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+
+            // check that audio is ready
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzleLevelsPageViewModel.isAudioReady === true){
+                // play audio
+                new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                });
+            }
         },
 
 
@@ -186,6 +205,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: function(){
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+            // stop playing the background music
+            new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+            });
         },
 
         /**
@@ -225,6 +249,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // displaying prepping message
             $('#loader-modal-message').html("Loading Puzzle Level...");
             await $('#loader-modal').get(0).show(); // show loader
+
+            // stop playing the background music
+            await new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+            });
 
             // load the puzzle level page with the required page data
             await $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
