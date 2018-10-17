@@ -23,12 +23,30 @@
                            border: 5px solid #3F51B5; background-color: #F4C724; width: 80%; height: 50%;
                            overflow: hidden; overflow-y: scroll;">
 
-            <ons-list id="puzzle-menu-list" modifier="inset" style="border: none; background-color: transparent;">
-                <ons-list-item modifier="longdivider" tappable lock-on-drag
-                               style="border: 4px groove #3F51B5; border-radius: 10px 10px 10px 10px;
+            <ons-list id="puzzle-menu-list" style="border: none; background-color: transparent;">
+                <ons-list-item modifier="longdivider" tappable lock-on-drag tap-background-color="#ffce25"
+                               style="border: none; border-bottom: 4px solid #3F51B5; border-radius: 10px 10px 10px 10px;
                                margin-bottom: 1em; color: #3F51B5; background-color: #F4C724;">
                     <div class="left">
-                        <ons-icon icon="md-close-circle-o" size="32px" class="list-item__icon"
+                        <ons-icon icon="md-audio" size="40px" class="list-item__icon"
+                                  style="text-shadow: -1px -1px 2px #000000;" fixed-width></ons-icon>
+                    </div>
+                    <div class="center" style="text-shadow: -1px -1px #000000; font-size: 2em;">
+                        <label for="puzzle-menu-background-music-switch-input">
+                            Background Music
+                        </label>
+                    </div>
+                    <div class="right">
+                        <ons-switch id="puzzle-menu-background-music-switch"
+                                    input-id="puzzle-menu-background-music-switch-input" checked></ons-switch>
+                    </div>
+                </ons-list-item>
+
+                <ons-list-item modifier="longdivider" tappable lock-on-drag tap-background-color="#ffce25"
+                               style="border: 4px outset #3F51B5; border-radius: 10px 10px 10px 10px;
+                               margin: 1em; color: #3F51B5; background-color: #F4C724;">
+                    <div class="left">
+                        <ons-icon icon="md-close-circle-o" size="40px" class="list-item__icon"
                                   style="text-shadow: -1px -1px 2px #000000;" fixed-width></ons-icon>
                     </div>
                     <div class="center" style="text-shadow: -1px -1px #000000; font-size: 2em;">Exit</div>
