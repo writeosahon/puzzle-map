@@ -154,7 +154,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     for (index = 1; index <= utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["config"]["total_levels"]; index++) {
                                         puzzleLevelContent += '<div class="col-xs-1" style="margin-top: 1em;"></div>\n                            <div class="col-xs-3" style="margin-top: 1em;"\n                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.\n                            loadPuzzleLevel(' + index + ')">\n                            <ons-ripple></ons-ripple>\n                            <img src="game-puzzle/level-' + index + '-puzzle-completed.png" style="width: 90%; height: auto;">\n                            <span style="display: block; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;\n                            text-shadow: -1px -1px 2px #000000;">\n                            LEVEL 1\n                            </span>\n                        </div>';
                                     }
-                                    //
+
                                     $('#puzzle-levels-page #puzzle-levels-container').html(puzzleLevelContent); // append the content to the page
 
                                     // add background tune

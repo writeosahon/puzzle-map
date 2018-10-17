@@ -142,7 +142,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                         </div>`;
                 }
-//
+
                 $('#puzzle-levels-page #puzzle-levels-container').html(puzzleLevelContent); // append the content to the page
 
                 // add background tune
