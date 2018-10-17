@@ -41,6 +41,10 @@
     background-size: cover, cover;
     background-position: center;
 }
+/** STYLE FOR THE PUZZLE MENU LIST ITEM **/
+#puzzle-menu-page #puzzle-menu-list .list-item:active {
+    background-color: #ffce25;
+}
 /** STYLE FOR THE PUZZLE MENU PAGE ENDS **/
 
 
