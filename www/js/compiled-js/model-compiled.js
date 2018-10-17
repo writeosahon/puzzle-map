@@ -47,16 +47,16 @@ $(document).on("hide", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_
 // listen for when the PUZZLE-LEVELS page is destroyed
 $(document).on("destroy", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageDestroy);
 
-// listen for the initialisation of the SAMPLE PUZZLE page
-$(document).on("init", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageInit);
+// listen for the initialisation of the PUZZLE page
+$(document).on("init", "#puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pageInit);
 
-// listen for when the SAMPLE PUZZLE page is shown
-$(document).on("show", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageShow);
+// listen for when the PUZZLE page is shown
+$(document).on("show", "#puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pageShow);
 
-// listen for when the SAMPLE PUZZLE page is hidden
-$(document).on("hide", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageHide);
+// listen for when the PUZZLE page is hidden
+$(document).on("hide", "#puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pageHide);
 
-// listen for when the SAMPLE PUZZLE page is destroyed
-$(document).on("destroy", "#sample-puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.samplePuzzlePageViewModel.pageDestroy);
+// listen for when the PUZZLE page is destroyed
+$(document).on("destroy", "#puzzle-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pageDestroy);
 
 //# sourceMappingURL=model-compiled.js.map

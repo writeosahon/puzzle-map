@@ -34,8 +34,8 @@
 /** STYLE FOR THE PUZZLE LEVELS PAGE ENDS **/
 
 
-/** STYLE FOR THE SAMPLE PUZZLE PAGE BEGINS **/
-#sample-puzzle-page .page--material__background {
+/** STYLE FOR THE PUZZLE PAGE BEGINS **/
+#puzzle-page .page--material__background {
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255,0.8) 100%),
     url('app-images/puzzle-background-1.jpg');
     background-repeat: no-repeat;
@@ -62,7 +62,7 @@
     position: relative;
     top: 0;
 }
-/** STYLE FOR THE SAMPLE PUZZLE PAGE ENDS **/
+/** STYLE FOR THE PUZZLE PAGE ENDS **/
 
 /** STYLE FOR THE PAUSE-PUZZLE-MODAL PAGE BEGINS **/
 #pause-puzzle-modal .puzzle-image-container {

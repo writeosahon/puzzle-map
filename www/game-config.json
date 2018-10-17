@@ -1,0 +1,11 @@
+{
+  "config": {
+    "total_levels": 1
+  },
+  "levels": {
+    "1" : {
+      "total_puzzle_pieces": 4,
+      "level_name": "Simple Puzzle"
+    }
+  }
+}

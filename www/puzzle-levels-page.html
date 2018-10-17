@@ -2,7 +2,9 @@
 <ons-page id="puzzle-levels-page">
     <ons-toolbar modifier="transparent cover-content">
         <div class="left">
-            <ons-toolbar-button  style="font-size: 1.6em;" onclick="">
+            <ons-toolbar-button  style="font-size: 1.6em;"
+                                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                 puzzleLevelsPageViewModel.backButtonClicked()">
                 <ons-icon icon="md-close-circle" style="color: #F4C724; text-shadow: -1px -1px 2px #000000;"></ons-icon>
             </ons-toolbar-button>
         </div>
@@ -20,13 +22,14 @@
     </ons-toolbar>
 
     <div class="content container-fluid">
-        <div class="row" style="margin-top: 20%; margin-bottom: 20%; margin-left: 10%; margin-right: 10%; padding-right: 8%;
+        <div id="puzzle-levels-container" class="row" style="margin-top: 20%; margin-bottom: 20%; margin-left: 10%;
+                          margin-right: 10%; padding-right: 8%;
                           -webkit-border-radius: 10px 10px 10px 10px; border-radius: 10px 10px 10px 10px;
                            border: 3px outset #F4C724; background-color: rgba(54,62,124,0.8); color: #F4C724; width: 80%; height: 60%;
                            overflow: hidden; overflow-y: scroll;">
             <div class="col-xs-1" style="margin-top: 1em;"></div>
             <div class="col-xs-3" style="margin-top: 1em;"
-                 onclick="">
+                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.loadPuzzleLevel(1)">
                 <ons-ripple></ons-ripple>
                 <img src="game-puzzle/level-1-puzzle-completed.png" style="width: 90%; height: auto;">
                 <span style="display: block; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;
