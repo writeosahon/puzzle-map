@@ -150,28 +150,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 $('#puzzle-levels-page #puzzle-levels-container').html(puzzleLevelContent); // append the content to the page
 
-                // add background tune
-                try{
 
-                    await new Promise(function(resolve, reject){
-                        window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
-                            1, 1, 0, resolve, reject);
-                    });
-                }
-                catch(err){
-                    console.log(err);
-                }
+                // add background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
 
                 // start playing background tune in a loop
-                try{
-                    await new Promise(function(resolve, reject){
-                        window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
-                    });
-                }
-                catch(err){
-                    console.log(err);
-                }
-
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                });
 
                 await $('#loader-modal').get(0).hide(); // hide loader
 
@@ -197,7 +186,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 puzzleLevelsPageViewModel.isAudioReady === true){
                 // play audio
                 new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                 });
             }
         },
@@ -206,13 +195,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is hidden
          */
-        pageHide: function(){
+        pageHide: async function(){
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
 
             // stop playing the background music
-            new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
+            await new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+            });
+            // unload playing the background music
+            await new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
             });
         },
 
@@ -243,7 +236,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // stop playing the background music
             await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+            });
+            // unload the background music
+            await new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
             });
 
             // load the puzzle level page with the required page data
@@ -294,26 +291,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backButtonClicked;
 
                 // add puzzle level background tune
-                try{
-
-                    await new Promise(function(resolve, reject){
-                        window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
-                            1, 1, 0, resolve, reject);
-                    });
-                }
-                catch(err){
-                    console.log(err);
-                }
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
 
                 // start playing background tune in a loop
-                try{
-                    await new Promise(function(resolve, reject){
-                        window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
-                    });
-                }
-                catch(err){
-                    console.log(err);
-                }
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                });
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =
