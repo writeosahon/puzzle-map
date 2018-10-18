@@ -17,7 +17,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      * create the LifeCycle object for managing different app states
      */
     appLifeCycleObservable: new Lifecycle({},
-                                    ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked"], {
+                                    ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked",
+                                    "app:will-exit"], {
                                     autoStart: false, autoEmit: false, autoEnd: false}).start(),
 
     /**
@@ -146,6 +147,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     emit("puzzle-menu:closed", []));
                 }, 0);
             });
+        },
+
+        /**
+         * method is used to listener for when the Exit Button on the menu is clicked
+         * @returns {Promise<void>}
+         */
+        async exitButtonClicked(){
+            // flag that Exit Button on the puzzle menu has been clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:exit-clicked");
+
+            // call all the listeners registered for this lifecycle stage
+            await new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:exit-clicked", []));
+                }, 0);
+            });
+
+            // ask the user if they want to exit the app
+            let exitIndex = await ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
+                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}); // Ask for confirmation
+
+            // check if the user decided to exit the app
+            if (exitIndex === 1) { // user want to exit
+
+                // flag that the app will soon exit if the listeners do not prevent it
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:will-exit");
+
+                // call all the listeners registered for this lifecycle stage
+                await new Promise(function(resolve, reject){
+
+                    setTimeout(function(){
+                        // return the values gotten from the registered listeners as the resolved value of the Promise
+                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                        emit("app:will-exit", []));
+                    }, 0);
+                });
+
+                navigator.app.exitApp(); // close the app
+            }
         },
 
         /**
