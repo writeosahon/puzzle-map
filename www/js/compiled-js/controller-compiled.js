@@ -170,44 +170,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                 case 14:
-                                    _context2.next = 18;
+                                    _context2.next = 19;
                                     break;
 
                                 case 16:
                                     _context2.prev = 16;
                                     _context2.t0 = _context2['catch'](11);
 
-                                case 18:
-                                    _context2.prev = 18;
-                                    _context2.next = 21;
+                                    console.log(_context2.t0);
+
+                                case 19:
+                                    _context2.prev = 19;
+                                    _context2.next = 22;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                                     });
 
-                                case 21:
-                                    _context2.next = 25;
+                                case 22:
+                                    _context2.next = 27;
                                     break;
 
-                                case 23:
-                                    _context2.prev = 23;
-                                    _context2.t1 = _context2['catch'](18);
+                                case 24:
+                                    _context2.prev = 24;
+                                    _context2.t1 = _context2['catch'](19);
 
-                                case 25:
-                                    _context2.next = 27;
-                                    return $('#loader-modal').get(0).hide();
+                                    console.log(_context2.t1);
 
                                 case 27:
+                                    _context2.next = 29;
+                                    return $('#loader-modal').get(0).hide();
+
+                                case 29:
                                     // hide loader
 
                                     // set that audio use is ready
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady = true;
 
-                                case 28:
+                                case 30:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this, [[11, 16], [18, 23]]);
+                    }, _callee2, this, [[11, 16], [19, 24]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -238,7 +242,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true) {
                 // play audio
                 new Promise(function (resolve, reject) {
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                 });
             }
         },
@@ -252,7 +256,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // stop playing the background music
             new Promise(function (resolve, reject) {
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
             });
         },
 
@@ -306,7 +310,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 3:
                                 _context4.next = 5;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
                                 });
 
                             case 5:
@@ -378,29 +382,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                 case 7:
-                                    _context5.next = 11;
+                                    _context5.next = 12;
                                     break;
 
                                 case 9:
                                     _context5.prev = 9;
                                     _context5.t0 = _context5['catch'](4);
 
-                                case 11:
-                                    _context5.prev = 11;
-                                    _context5.next = 14;
+                                    console.log(_context5.t0);
+
+                                case 12:
+                                    _context5.prev = 12;
+                                    _context5.next = 15;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
                                     });
 
-                                case 14:
-                                    _context5.next = 18;
+                                case 15:
+                                    _context5.next = 20;
                                     break;
 
-                                case 16:
-                                    _context5.prev = 16;
-                                    _context5.t1 = _context5['catch'](11);
+                                case 17:
+                                    _context5.prev = 17;
+                                    _context5.t1 = _context5['catch'](12);
 
-                                case 18:
+                                    console.log(_context5.t1);
+
+                                case 20:
 
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#puzzle-page .puzzle-pieces-container').get())), {
@@ -522,12 +530,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 28:
+                                case 30:
                                 case 'end':
                                     return _context5.stop();
                             }
                         }
-                    }, _callee5, this, [[4, 9], [11, 16]]);
+                    }, _callee5, this, [[4, 9], [12, 17]]);
                 }));
 
                 return function loadPageOnAppReady() {

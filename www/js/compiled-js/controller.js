@@ -158,7 +158,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             1, 1, 0, resolve, reject);
                     });
                 }
-                catch(err){}
+                catch(err){
+                    console.log(err);
+                }
 
                 // start playing background tune in a loop
                 try{
@@ -166,7 +168,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                     });
                 }
-                catch(err){}
+                catch(err){
+                    console.log(err);
+                }
 
 
                 await $('#loader-modal').get(0).hide(); // hide loader
@@ -193,7 +197,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 puzzleLevelsPageViewModel.isAudioReady === true){
                 // play audio
                 new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, reject);
                 });
             }
         },
@@ -208,7 +212,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // stop playing the background music
             new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
             });
         },
 
@@ -239,7 +243,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // stop playing the background music
             await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, reject);
             });
 
             // load the puzzle level page with the required page data
@@ -297,7 +301,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             1, 1, 0, resolve, reject);
                     });
                 }
-                catch(err){}
+                catch(err){
+                    console.log(err);
+                }
 
                 // start playing background tune in a loop
                 try{
@@ -305,7 +311,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         window.plugins.NativeAudio.loop('puzzle-background', resolve, reject);
                     });
                 }
-                catch(err){}
+                catch(err){
+                    console.log(err);
+                }
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =
