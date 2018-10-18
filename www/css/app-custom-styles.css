@@ -41,10 +41,16 @@
     background-size: cover, cover;
     background-position: center;
 }
-/** STYLE FOR THE PUZZLE MENU LIST ITEM **/
-/*#puzzle-menu-page #puzzle-menu-list .list-item:active {
-    background-color: #ffce25;
-}*/
+/** STYLE FOR THE PUZZLE MENU SCROLL BAR **/
+#puzzle-menu-page #puzzle-menu-container::-webkit-scrollbar {
+    width: 0.5em;
+    background-color: brown;
+    border-radius: 3px
+}
+#puzzle-menu-page #puzzle-menu-container::-webkit-scrollbar-thumb {
+    background-color: silver;
+    border-radius: 3px;
+}
 /** STYLE FOR THE PUZZLE MENU PAGE ENDS **/
 
 

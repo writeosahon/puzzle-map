@@ -225,21 +225,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async backButtonClicked(){
 
-            // check if the side menu is open
-            if($('ons-splitter').get(0).right.isOpen){ // side menu open, so close it
-                $('ons-splitter').get(0).right.close();
-                return; // exit the method
-            }
-
-            ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
-                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}) // Ask for confirmation
-                .then(function(index) {
-                    if (index === 1) { // OK button
-                        navigator.app.exitApp(); // Close the app
-                    }
-                    else{
-                    }
-                });
+            // toggle the side-menu i.e. the puzzle menu
+            await $('#side-menu').get(0).toggle();
         },
 
         /**

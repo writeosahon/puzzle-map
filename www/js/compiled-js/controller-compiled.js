@@ -270,27 +270,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
-                                if (!$('ons-splitter').get(0).right.isOpen) {
-                                    _context3.next = 3;
-                                    break;
-                                }
+                                _context3.next = 2;
+                                return $('#side-menu').get(0).toggle();
 
-                                // side menu open, so close it
-                                $('ons-splitter').get(0).right.close();
-                                return _context3.abrupt('return');
-
-                            case 3:
-
-                                ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
-                                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' }) // Ask for confirmation
-                                .then(function (index) {
-                                    if (index === 1) {
-                                        // OK button
-                                        navigator.app.exitApp(); // Close the app
-                                    } else {}
-                                });
-
-                            case 4:
+                            case 2:
                             case 'end':
                                 return _context3.stop();
                         }
