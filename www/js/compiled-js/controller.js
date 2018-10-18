@@ -373,6 +373,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backButtonClicked;
 
+                // listen for when the puzzle menu is opened
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("puzzle-menu:opened", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleMenuOpenedListener);
+
+                // listen for when the puzzle menu is closed
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("puzzle-menu:closed", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleMenuClosedListener);
+
                 // add puzzle level background tune
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
@@ -660,9 +670,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             await $('#pause-puzzle-modal').get(0).hide();
             // resume puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+        },
+
+        /**
+         * method is used to listen for when the puzzle menu is opened
+         * @returns {Promise<void>}
+         */
+        async puzzleMenuOpenedListener(){
+            // flag that puzzle has NOT been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzleCompleted = false;
+            // pause puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+        },
+
+        puzzleMenuClosedListener(){
+            // resume puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
         }
 
-    },
+    }
 
 };
 

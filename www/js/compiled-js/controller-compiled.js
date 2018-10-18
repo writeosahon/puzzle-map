@@ -533,19 +533,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backButtonClicked;
 
+                                    // listen for when the puzzle menu is opened
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:opened", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuOpenedListener);
+
+                                    // listen for when the puzzle menu is closed
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:closed", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuClosedListener);
+
                                     // add puzzle level background tune
-                                    _context10.next = 6;
+                                    _context10.next = 8;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
-                                case 6:
-                                    _context10.next = 8;
+                                case 8:
+                                    _context10.next = 10;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                     });
 
-                                case 8:
+                                case 10:
 
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#puzzle-page .puzzle-pieces-container').get())), {
@@ -667,7 +673,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 18:
+                                case 20:
                                 case "end":
                                     return _context10.stop();
                             }
@@ -919,7 +925,42 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return resumePuzzleLevel;
-        }()
+        }(),
+
+
+        /**
+         * method is used to listen for when the puzzle menu is opened
+         * @returns {Promise<void>}
+         */
+        puzzleMenuOpenedListener: function () {
+            var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+                return regeneratorRuntime.wrap(function _callee15$(_context15) {
+                    while (1) {
+                        switch (_context15.prev = _context15.next) {
+                            case 0:
+                                // flag that puzzle has NOT been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                                // pause puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+
+                            case 2:
+                            case "end":
+                                return _context15.stop();
+                        }
+                    }
+                }, _callee15, this);
+            }));
+
+            function puzzleMenuOpenedListener() {
+                return _ref15.apply(this, arguments);
+            }
+
+            return puzzleMenuOpenedListener;
+        }(),
+        puzzleMenuClosedListener: function puzzleMenuClosedListener() {
+            // resume puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+        }
     }
 
 };
