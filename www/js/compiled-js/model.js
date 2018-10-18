@@ -35,6 +35,12 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
 // call the method to startup the app
 utopiasoftware[utopiasoftware_app_namespace].controller.startup();
 
+// listen for when the SIDE-MENU is opened
+$(document).on("postopen", "#side-menu", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.puzzleMenuOpened);
+
+// listen for when the SIDE-MENU is closed
+$(document).on("postclose", "#side-menu", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.puzzleMenuClosed);
+
 // listen for the initialisation of the PUZZLE-LEVELS page
 $(document).on("init", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageInit);
 

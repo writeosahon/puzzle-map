@@ -51,6 +51,9 @@
     background-color: silver;
     border-radius: 3px;
 }
+#puzzle-menu-page .progress-circular--puzzle-menu-circular-loader__primary { /** style for process loading on the menu page **/
+    stroke: #F4C724;
+}
 /** STYLE FOR THE PUZZLE MENU PAGE ENDS **/
 
 

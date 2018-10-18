@@ -13,6 +13,12 @@
 // define the controller namespace
 utopiasoftware[utopiasoftware_app_namespace].controller = {
 
+    /**
+     * create the LifeCycle object for managing different app states
+     */
+    appLifeCycleObservable: new Lifecycle({},
+                                    ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked"], {
+                                    autoStart: false, autoEmit: false, autoEnd: false}).start(),
 
     /**
      * method contains the stratup/bootstrap code needed to initiate app logic execution
@@ -71,6 +77,84 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         }); // end of ons.ready()
 
+    },
+
+
+    /**
+     * this is the view-model/controller for the Puzzle Menu page
+     */
+    puzzleMenuPageViewModel: {
+
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+
+        /**
+         * method is triggered whenever the puzzle menu is opened
+         */
+        async puzzleMenuOpened(){
+            // flag that the puzzle menu has been opened
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:opened");
+            // call all the listeners registered for this lifecycle stage
+            return new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:opened", []));
+                }, 0);
+            });
+        },
+
+        /**
+         * method is triggered whenever the puzzle menu is closed
+         */
+        async puzzleMenuClosed(){
+            // flag that the puzzle menu has been closed
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:closed");
+            // call all the listeners registered for this lifecycle stage
+            return new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:closed", []));
+                }, 0);
+            });
+        },
+
+        /**
+         * method is used to safely toggle the Puzzle Menu open or close
+         */
+        async tooglePuzzleMenu(){
+            // toggle the side-menu i.e. the puzzle menu
+            return await $('#side-menu').get(0).toggle();
+        }
     },
 
 
@@ -221,9 +305,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         async backButtonClicked(){
-
-            // toggle the side-menu i.e. the puzzle menu
-            await $('#side-menu').get(0).toggle();
+            // toggle the puzzle menu
+            await utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
         },
 
         /**

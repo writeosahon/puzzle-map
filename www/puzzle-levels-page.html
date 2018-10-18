@@ -15,7 +15,9 @@
             </div>
         </div>
         <div class="right">
-            <ons-toolbar-button  style="font-size: 1.6em;" onclick="$('#side-menu').get(0).toggle()">
+            <ons-toolbar-button  style="font-size: 1.6em;"
+                                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                 puzzleMenuPageViewModel.tooglePuzzleMenu()">
                 <ons-icon icon="md-menu" style="color: #F4C724; text-shadow: -1px -1px 2px #000000;"></ons-icon>
             </ons-toolbar-button>
         </div>
@@ -32,6 +34,11 @@
 
     </div>
 
-
+    <ons-bottom-toolbar modifier="transparent" style="box-shadow: none; border: none;">
+        <div style="text-align: center; width: 100%; display: block; font-size: 1.5em; text-transform: capitalize;
+            color: #3F51B5; text-shadow: -1px -1px 2px #000000;">
+            Pick A Puzzle Level
+        </div>
+    </ons-bottom-toolbar>
 
 </ons-page>
