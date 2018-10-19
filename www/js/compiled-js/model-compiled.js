@@ -20,6 +20,14 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
    */
   appDatabase: null,
 
+  gameSettings: {
+    _id: "gameSettings",
+    doctype: "GAME SETTINGS",
+    backgroundMusicOn: true,
+    soundEffectsOn: true,
+    puzzleHintsOn: true
+  },
+
   /**
    * holds the base url for reaching the application server
    */

@@ -22,5 +22,39 @@ const utopiasoftware_app_namespace = 'puzzle';
 const utopiasoftware = {
     [utopiasoftware_app_namespace]: {
 
+        /**
+         * object is responsible for handling operations on the "game settings" data
+         */
+        gameSettings: {
+
+            /**
+             * method loads the game settings data from the app database
+             * @returns {Promise<void>}
+             */
+            async loadGameSettingsData(){
+
+                try{
+                    return await utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.get("gameSettings");
+                }
+                finally{
+                }
+            },
+
+
+            /**
+             * method is used to save the game settings data to the app database
+             * @param gameSettings
+             * @returns {Promise<void>}
+             */
+            async saveGameSettingsData(gameSettings){
+
+                try{
+                    return await utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.put(gameSettings);
+                }
+                finally{
+                }
+            }
+        }
+
     }
 };

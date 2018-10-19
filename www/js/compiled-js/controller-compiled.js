@@ -81,7 +81,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         case 12:
 
-                            try {// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+                            try {
+                                // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+
+                                // create the pouchdb app database
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase = new PouchDB('mapteazerpuzzle.db', {
+                                    adapter: 'cordova-sqlite',
+                                    location: 'default',
+                                    androidDatabaseImplementation: 2
+                                });
+
+                                // load the game settings data stored in the app database
                             } catch (err) {
                                 console.log("APP LOADING ERROR", err);
                             } finally {
@@ -286,7 +296,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // emit the lifecycle stage event to the listeners
                                         utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:will-exit", [eventObject]);
                                         // resolve this promise with the event object
-                                        console.log("Event Object ", eventObject);
                                         resolve(eventObject);
                                     }, 0); // end of setTimeout
                                 });
@@ -294,34 +303,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 7:
                                 willExitEvent = _context5.sent;
 
-
-                                console.log("Event Object 2 ", willExitEvent);
-                                // check if any listener whens to forestall an exit
-
                                 if (!(willExitEvent.isCanceled === true)) {
-                                    _context5.next = 15;
+                                    _context5.next = 14;
                                     break;
                                 }
 
-                                _context5.next = 12;
+                                _context5.next = 11;
                                 return ons.notification.confirm('', { title: '<ons-icon icon="md-alert-triangle" style="color: #3f51b5" size="33px"></ons-icon> <span style="color: #3f51b5; display: inline-block; margin-left: 1em;">Warning</span>',
                                     messageHTML: willExitEvent.warningMessage + "<br><br>Do you want to close the app?",
                                     buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
 
-                            case 12:
+                            case 11:
                                 exitIndex = _context5.sent;
-                                _context5.next = 18;
+                                _context5.next = 17;
                                 break;
 
-                            case 15:
-                                _context5.next = 17;
+                            case 14:
+                                _context5.next = 16;
                                 return ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
                                     buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
 
-                            case 17:
+                            case 16:
                                 exitIndex = _context5.sent;
 
-                            case 18:
+                            case 17:
 
                                 // check if the user decided to exit the app
                                 if (exitIndex === 1) {
@@ -339,7 +344,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:no-exit", []);
                                 }
 
-                            case 19:
+                            case 18:
                             case "end":
                                 return _context5.stop();
                         }
@@ -1159,27 +1164,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * method is used to listen for when the app notifies that it wants to exit
-         * @param parameters
+         * @param eventArgs
          * @returns {Promise<void>}
          */
         appWillExitListener: function () {
-            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(parameters) {
+            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(eventArgs) {
                 var event;
                 return regeneratorRuntime.wrap(function _callee19$(_context19) {
                     while (1) {
                         switch (_context19.prev = _context19.next) {
                             case 0:
-                                event = parameters[0];
-
-                                console.log("Event Object 3 ", event);
+                                event = eventArgs[0]; // get the event object from eventArgs array
                                 // check if event has been canceled
+
                                 if (event.isCanceled !== true) {
                                     // event has not been canceled
                                     // check if puzzle has been completed
                                     if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted !== true) {
                                         // puzzle level has not been completed
-                                        // pause puzzle timer
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+
                                         // since user has not completed the puzzle, try to prevent app exit using a warning
                                         event.cancel = true;
                                         // attach the warning message for preventing exit
@@ -1187,7 +1190,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 }
 
-                            case 3:
+                            case 2:
                             case "end":
                                 return _context19.stop();
                         }
@@ -1213,10 +1216,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context20.prev = _context20.next) {
                             case 0:
-                                // resume puzzle timer
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
-
-                            case 1:
                             case "end":
                                 return _context20.stop();
                         }

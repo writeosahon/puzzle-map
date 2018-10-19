@@ -65,6 +65,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             catch(err){}
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+
+                // create the pouchdb app database
+                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase = new PouchDB('mapteazerpuzzle.db', {
+                    adapter: 'cordova-sqlite',
+                    location: 'default',
+                    androidDatabaseImplementation: 2
+                });
+
+                // load the game settings data stored in the app database
+
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
@@ -212,12 +222,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                     emit("app:will-exit", [eventObject]);
                     // resolve this promise with the event object
-                    console.log("Event Object ", eventObject);
                     resolve(eventObject);
                 }, 0); // end of setTimeout
             });
 
-            console.log("Event Object 2 ", willExitEvent);
             // check if any listener whens to forestall an exit
             if(willExitEvent.isCanceled === true){ // listener wants it canceled
                 exitIndex = await ons.notification.confirm('',
@@ -808,19 +816,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * method is used to listen for when the app notifies that it wants to exit
-         * @param parameters
+         * @param eventArgs
          * @returns {Promise<void>}
          */
-        async appWillExitListener(parameters){
-            var event = parameters[0];
-            console.log("Event Object 3 ", event);
+        async appWillExitListener(eventArgs){
+            var event = eventArgs[0]; // get the event object from eventArgs array
             // check if event has been canceled
             if(event.isCanceled !== true){ // event has not been canceled
                 // check if puzzle has been completed
                 if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                     puzzleCompleted !== true){ // puzzle level has not been completed
-                    // pause puzzle timer
-                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+
                     // since user has not completed the puzzle, try to prevent app exit using a warning
                     event.cancel = true;
                     // attach the warning message for preventing exit
@@ -834,8 +840,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async appNoExitListener(){
-            // resume puzzle timer
-            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+            // do nothing for now
         }
 
     }
