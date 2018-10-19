@@ -196,6 +196,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             configurable: false
                         },
                         "cancel": {
+                            value: false,
                             enumerable: true,
                             configurable: false,
                             writable: true
@@ -211,10 +212,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                     emit("app:will-exit", [eventObject]);
                     // resolve this promise with the event object
+                    console.log("Event Object ", eventObject);
                     resolve(eventObject);
                 }, 0); // end of setTimeout
             });
 
+            console.log("Event Object 2 ", willExitEvent);
             // check if any listener whens to forestall an exit
             if(willExitEvent.isCanceled === true){ // listener wants it canceled
                 exitIndex = await ons.notification.confirm('',
@@ -809,6 +812,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async appWillExitListener(event){
+            console.log("Event Object 3 ", event);
             // check if event has been canceled
             if(event.isCanceled !== true){ // event has not been canceled
                 // check if puzzle has been completed

@@ -271,6 +271,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 configurable: false
                                             },
                                             "cancel": {
+                                                value: false,
                                                 enumerable: true,
                                                 configurable: false,
                                                 writable: true
@@ -285,6 +286,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // emit the lifecycle stage event to the listeners
                                         utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:will-exit", [eventObject]);
                                         // resolve this promise with the event object
+                                        console.log("Event Object ", eventObject);
                                         resolve(eventObject);
                                     }, 0); // end of setTimeout
                                 });
@@ -292,30 +294,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 7:
                                 willExitEvent = _context5.sent;
 
+
+                                console.log("Event Object 2 ", willExitEvent);
+                                // check if any listener whens to forestall an exit
+
                                 if (!(willExitEvent.isCanceled === true)) {
-                                    _context5.next = 14;
+                                    _context5.next = 15;
                                     break;
                                 }
 
-                                _context5.next = 11;
+                                _context5.next = 12;
                                 return ons.notification.confirm('', { title: '<ons-icon icon="md-alert-triangle" style="color: #3f51b5" size="33px"></ons-icon> <span style="color: #3f51b5; display: inline-block; margin-left: 1em;">Warning</span>',
                                     messageHTML: willExitEvent.warningMessage + "<br><br>Do you want to close the app?",
                                     buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
 
-                            case 11:
+                            case 12:
                                 exitIndex = _context5.sent;
-                                _context5.next = 17;
+                                _context5.next = 18;
                                 break;
 
-                            case 14:
-                                _context5.next = 16;
+                            case 15:
+                                _context5.next = 17;
                                 return ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
                                     buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
 
-                            case 16:
+                            case 17:
                                 exitIndex = _context5.sent;
 
-                            case 17:
+                            case 18:
 
                                 // check if the user decided to exit the app
                                 if (exitIndex === 1) {
@@ -333,7 +339,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:no-exit", []);
                                 }
 
-                            case 18:
+                            case 19:
                             case "end":
                                 return _context5.stop();
                         }
@@ -1162,6 +1168,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context19.prev = _context19.next) {
                             case 0:
+                                console.log("Event Object 3 ", event);
                                 // check if event has been canceled
                                 if (event.isCanceled !== true) {
                                     // event has not been canceled
@@ -1177,7 +1184,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 }
 
-                            case 1:
+                            case 2:
                             case "end":
                                 return _context19.stop();
                         }
