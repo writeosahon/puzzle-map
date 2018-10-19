@@ -1159,15 +1159,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * method is used to listen for when the app notifies that it wants to exit
-         * @param event
+         * @param parameters
          * @returns {Promise<void>}
          */
         appWillExitListener: function () {
-            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(event) {
+            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(parameters) {
+                var event;
                 return regeneratorRuntime.wrap(function _callee19$(_context19) {
                     while (1) {
                         switch (_context19.prev = _context19.next) {
                             case 0:
+                                event = parameters[0];
+
                                 console.log("Event Object 3 ", event);
                                 // check if event has been canceled
                                 if (event.isCanceled !== true) {
@@ -1184,7 +1187,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 }
 
-                            case 2:
+                            case 3:
                             case "end":
                                 return _context19.stop();
                         }

@@ -808,10 +808,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * method is used to listen for when the app notifies that it wants to exit
-         * @param event
+         * @param parameters
          * @returns {Promise<void>}
          */
-        async appWillExitListener(event){
+        async appWillExitListener(parameters){
+            var event = parameters[0];
             console.log("Event Object 3 ", event);
             // check if event has been canceled
             if(event.isCanceled !== true){ // event has not been canceled
