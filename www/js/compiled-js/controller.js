@@ -18,7 +18,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     appLifeCycleObservable: new Lifecycle({},
                                     ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked",
-                                    "app:will-exit"], {
+                                    "app:will-exit", "app:no-exit", "app:exited"], {
                                     autoStart: false, autoEmit: false, autoEnd: false}).start(),
 
     /**
@@ -167,27 +167,81 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, 0);
             });
 
-            // ask the user if they want to exit the app
-            let exitIndex = await ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
-                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}); // Ask for confirmation
+            let exitIndex = -1; // holds the exit index gotten from the user's confirmation of exit
+
+
+            // flag that the app will soon exit if the listeners do not prevent it
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:will-exit");
+
+            // call all the listeners registered for this lifecycle stage
+            let willExitEvent = await new Promise(function(resolve, reject){
+                setTimeout(function(){
+                    // lifecycle event object.
+                    // listeners can cancel the event that logically follows by setting its cancel property to true
+                    let eventObject = {};
+                    // define properties for the event object
+                    eventObject = Object.defineProperties(eventObject, {
+                        "canCancel": {
+                            value: true,
+                            enumerable: true,
+                            configurable: false,
+                            writable: false
+                        },
+                        "isCanceled": {
+                            get: function(){
+                                return typeof this.cancel === "boolean" ? this.cancel : new Boolean(this.cancel).valueOf();
+                            }.bind(eventObject),
+                            set: function(cancellation){},
+                            enumerable: true,
+                            configurable: false
+                        },
+                        "cancel": {
+                            enumerable: true,
+                            configurable: false,
+                            writable: true
+                        },
+                        "warningMessage": {
+                            enumerable: true,
+                            configurable: false,
+                            writable: true
+                        }
+                    });
+
+                    // emit the lifecycle stage event to the listeners
+                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("app:will-exit", [eventObject]);
+                    // resolve this promise with the event object
+                    resolve(eventObject);
+                }, 0); // end of setTimeout
+            });
+
+            // check if any listener whens to forestall an exit
+            if(willExitEvent.isCanceled === true){ // listener wants it canceled
+                exitIndex = await ons.notification.confirm('',
+                    {title: '<ons-icon icon="md-alert-triangle" style="color: #3f51b5" size="33px"></ons-icon> <span style="color: #3f51b5; display: inline-block; margin-left: 1em;">Warning</span>',
+                        messageHTML: `${willExitEvent.warningMessage}<br><br>Do you want to close the app?`,
+                        buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'});
+            }
+            else{ // no listener wants to cancel, so find out directly from user if they want to exit
+                exitIndex = await ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
+                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}); // Ask for confirmation
+            }
 
             // check if the user decided to exit the app
             if (exitIndex === 1) { // user want to exit
-
-                // flag that the app will soon exit if the listeners do not prevent it
-                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:will-exit");
-
-                // call all the listeners registered for this lifecycle stage
-                await new Promise(function(resolve, reject){
-
-                    setTimeout(function(){
-                        // return the values gotten from the registered listeners as the resolved value of the Promise
-                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
-                        emit("app:will-exit", []));
-                    }, 0);
-                });
-
-                navigator.app.exitApp(); // close the app
+                // flag that the app has exited
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:exited");
+                // notify all listeners that app has exited
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                emit("app:exited", []);
+                navigator.app.exitApp(); // close/exit the app
+            }
+            else{ // user does not want to exit
+                // flag that the app NOT EXITED
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:no-exit");
+                // notify all listeners that app NOT EXITED
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                emit("app:no-exit", []);
             }
         },
 
@@ -301,7 +355,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function(){
+        pageShow: async function(){
             // disable the swipeable feature for the app splitter
             $('ons-splitter-side').removeAttr("swipeable");
 
@@ -311,8 +365,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // check that audio is ready
             if(utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzleLevelsPageViewModel.isAudioReady === true){
+                // add background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
+
                 // play audio
-                new Promise(function(resolve, reject){
+                await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                 });
             }
@@ -425,6 +485,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                 on("puzzle-menu:closed", utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.puzzleMenuClosedListener);
+
+                // listen for when the app desires/wants to exit
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("app:will-exit", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.appWillExitListener);
+
+                // listen for when the app is NO LONGER EXITING
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.appNoExitListener);
 
                 // add puzzle level background tune
                 await new Promise(function(resolve, reject){
@@ -606,6 +676,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#puzzle-level-complete-modal').get(0).show();
                 });
 
+                // flag that puzzle has not been completed
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
 
                 // pause the puzzle level in order to begin. level starts when user hits "Continue" button
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
@@ -638,7 +710,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-
+            // flag that puzzle has been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzleCompleted = true;
         },
 
 
@@ -647,29 +721,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async backButtonClicked(){
 
-            // check if the side menu is open
-            if($('ons-splitter').get(0).right.isOpen){ // side menu open, so close it
-                $('ons-splitter').get(0).right.close();
-                return; // exit the method
-            }
-
-            // todo REMOVE THIS NEXT LINE LATER flag that puzzle has NOT been completed
+            // flag that the puzzle has not been completed
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleCompleted = false;
+
             // pause puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
 
-            ons.notification.confirm('Do you want to close the app?', {title: 'Exit App',
-                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'}) // Ask for confirmation
-                .then(function(index) {
-                    if (index === 1) { // OK button
-                        navigator.app.exitApp(); // Close the app
-                    }
-                    else{
-                        // resume the puzzle timer
-                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
-                    }
-                });
+            // toggle the puzzle menu
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzleMenuPageViewModel.tooglePuzzleMenu();
         },
 
         /**
@@ -701,6 +762,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         async pausePuzzleLevel(){
 
+            // flag that the puzzle has not been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzleCompleted = false;
             // pause puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
             // show the pause-puzzle-modal
@@ -709,6 +773,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         async resumePuzzleLevel(){
 
+            // flag that the puzzle has not been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzleCompleted = false;
             // hide the pause-puzzle-modal
             await $('#pause-puzzle-modal').get(0).hide();
             // resume puzzle timer
@@ -727,7 +794,41 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
         },
 
-        puzzleMenuClosedListener(){
+        /**
+         * method is used to listen for when the puzzle menu is opened
+         * @returns {Promise<void>}
+         */
+        async puzzleMenuClosedListener(){
+            // resume puzzle timer
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+        },
+
+        /**
+         * method is used to listen for when the app notifies that it wants to exit
+         * @param event
+         * @returns {Promise<void>}
+         */
+        async appWillExitListener(event){
+            // check if event has been canceled
+            if(event.isCanceled !== true){ // event has not been canceled
+                // check if puzzle has been completed
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                    puzzleCompleted !== true){ // puzzle level has not been completed
+                    // pause puzzle timer
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+                    // since user has not completed the puzzle, try to prevent app exit using a warning
+                    event.cancel = true;
+                    // attach the warning message for preventing exit
+                    event.warningMessage = "All progress on this puzzle will be lost if you exit now."
+                }
+            }
+        },
+
+        /**
+         * method is listener for when the APP WILL NO LONGER BE EXITED
+         * @returns {Promise<void>}
+         */
+        async appNoExitListener(){
             // resume puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
         }

@@ -22,7 +22,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     /**
      * create the LifeCycle object for managing different app states
      */
-    appLifeCycleObservable: new Lifecycle({}, ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked", "app:will-exit"], {
+    appLifeCycleObservable: new Lifecycle({}, ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked", "app:will-exit", "app:no-exit", "app:exited"], {
         autoStart: false, autoEmit: false, autoEnd: false }).start(),
 
     /**
@@ -221,7 +221,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         exitButtonClicked: function () {
             var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-                var exitIndex;
+                var exitIndex, willExitEvent;
                 return regeneratorRuntime.wrap(function _callee5$(_context5) {
                     while (1) {
                         switch (_context5.prev = _context5.next) {
@@ -240,38 +240,100 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
 
                             case 3:
-                                _context5.next = 5;
-                                return ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
-                                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
+                                exitIndex = -1; // holds the exit index gotten from the user's confirmation of exit
 
-                            case 5:
-                                exitIndex = _context5.sent;
-
-                                if (!(exitIndex === 1)) {
-                                    _context5.next = 11;
-                                    break;
-                                }
-
-                                // user want to exit
 
                                 // flag that the app will soon exit if the listeners do not prevent it
+
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:will-exit");
 
                                 // call all the listeners registered for this lifecycle stage
-                                _context5.next = 10;
+                                _context5.next = 7;
                                 return new Promise(function (resolve, reject) {
-
                                     setTimeout(function () {
-                                        // return the values gotten from the registered listeners as the resolved value of the Promise
-                                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:will-exit", []));
-                                    }, 0);
+                                        // lifecycle event object.
+                                        // listeners can cancel the event that logically follows by setting its cancel property to true
+                                        var eventObject = {};
+                                        // define properties for the event object
+                                        eventObject = Object.defineProperties(eventObject, {
+                                            "canCancel": {
+                                                value: true,
+                                                enumerable: true,
+                                                configurable: false,
+                                                writable: false
+                                            },
+                                            "isCanceled": {
+                                                get: function () {
+                                                    return typeof this.cancel === "boolean" ? this.cancel : new Boolean(this.cancel).valueOf();
+                                                }.bind(eventObject),
+                                                set: function set(cancellation) {},
+                                                enumerable: true,
+                                                configurable: false
+                                            },
+                                            "cancel": {
+                                                enumerable: true,
+                                                configurable: false,
+                                                writable: true
+                                            },
+                                            "warningMessage": {
+                                                enumerable: true,
+                                                configurable: false,
+                                                writable: true
+                                            }
+                                        });
+
+                                        // emit the lifecycle stage event to the listeners
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:will-exit", [eventObject]);
+                                        // resolve this promise with the event object
+                                        resolve(eventObject);
+                                    }, 0); // end of setTimeout
                                 });
 
-                            case 10:
+                            case 7:
+                                willExitEvent = _context5.sent;
 
-                                navigator.app.exitApp(); // close the app
+                                if (!(willExitEvent.isCanceled === true)) {
+                                    _context5.next = 14;
+                                    break;
+                                }
+
+                                _context5.next = 11;
+                                return ons.notification.confirm('', { title: '<ons-icon icon="md-alert-triangle" style="color: #3f51b5" size="33px"></ons-icon> <span style="color: #3f51b5; display: inline-block; margin-left: 1em;">Warning</span>',
+                                    messageHTML: willExitEvent.warningMessage + "<br><br>Do you want to close the app?",
+                                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
 
                             case 11:
+                                exitIndex = _context5.sent;
+                                _context5.next = 17;
+                                break;
+
+                            case 14:
+                                _context5.next = 16;
+                                return ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
+                                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' });
+
+                            case 16:
+                                exitIndex = _context5.sent;
+
+                            case 17:
+
+                                // check if the user decided to exit the app
+                                if (exitIndex === 1) {
+                                    // user want to exit
+                                    // flag that the app has exited
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:exited");
+                                    // notify all listeners that app has exited
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:exited", []);
+                                    navigator.app.exitApp(); // close/exit the app
+                                } else {
+                                    // user does not want to exit
+                                    // flag that the app NOT EXITED
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:no-exit");
+                                    // notify all listeners that app NOT EXITED
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("app:no-exit", []);
+                                }
+
+                            case 18:
                             case "end":
                                 return _context5.stop();
                         }
@@ -434,43 +496,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {
-            // disable the swipeable feature for the app splitter
-            $('ons-splitter-side').removeAttr("swipeable");
-
-            // adjust the window/view-port settings for when the soft keyboard is displayed
-            //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
-
-            // check that audio is ready
-            if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true) {
-                // play audio
-                new Promise(function (resolve, reject) {
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
-                });
-            }
-        },
-
-        /**
-         * method is triggered when page is hidden
-         */
-        pageHide: function () {
+        pageShow: function () {
             var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
                 return regeneratorRuntime.wrap(function _callee8$(_context8) {
                     while (1) {
                         switch (_context8.prev = _context8.next) {
                             case 0:
-                                _context8.next = 2;
-                                return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
-                                });
+                                // disable the swipeable feature for the app splitter
+                                $('ons-splitter-side').removeAttr("swipeable");
 
-                            case 2:
+                                // adjust the window/view-port settings for when the soft keyboard is displayed
+                                //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+
+                                // check that audio is ready
+
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true)) {
+                                    _context8.next = 6;
+                                    break;
+                                }
+
                                 _context8.next = 4;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
+                                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 4:
+                                _context8.next = 6;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                                });
+
+                            case 6:
                             case "end":
                                 return _context8.stop();
                         }
@@ -478,8 +534,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee8, this);
             }));
 
-            function pageHide() {
+            function pageShow() {
                 return _ref8.apply(this, arguments);
+            }
+
+            return pageShow;
+        }(),
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: function () {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                    while (1) {
+                        switch (_context9.prev = _context9.next) {
+                            case 0:
+                                _context9.next = 2;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                                });
+
+                            case 2:
+                                _context9.next = 4;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
+                                });
+
+                            case 4:
+                            case "end":
+                                return _context9.stop();
+                        }
+                    }
+                }, _callee9, this);
+            }));
+
+            function pageHide() {
+                return _ref9.apply(this, arguments);
             }
 
             return pageHide;
@@ -494,24 +585,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked: function () {
-            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
-                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+                return regeneratorRuntime.wrap(function _callee10$(_context10) {
                     while (1) {
-                        switch (_context9.prev = _context9.next) {
+                        switch (_context10.prev = _context10.next) {
                             case 0:
-                                _context9.next = 2;
+                                _context10.next = 2;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
 
                             case 2:
                             case "end":
-                                return _context9.stop();
+                                return _context10.stop();
                         }
                     }
-                }, _callee9, this);
+                }, _callee10, this);
             }));
 
             function backButtonClicked() {
-                return _ref9.apply(this, arguments);
+                return _ref10.apply(this, arguments);
             }
 
             return backButtonClicked;
@@ -522,43 +613,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is used to load the puzzle level details
          */
         loadPuzzleLevel: function () {
-            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(levelNumber) {
-                return regeneratorRuntime.wrap(function _callee10$(_context10) {
+            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(levelNumber) {
+                return regeneratorRuntime.wrap(function _callee11$(_context11) {
                     while (1) {
-                        switch (_context10.prev = _context10.next) {
+                        switch (_context11.prev = _context11.next) {
                             case 0:
                                 // displaying prepping message
                                 $('#loader-modal-message').html("Loading Puzzle Level...");
-                                _context10.next = 3;
+                                _context11.next = 3;
                                 return $('#loader-modal').get(0).show();
 
                             case 3:
-                                _context10.next = 5;
+                                _context11.next = 5;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 5:
-                                _context10.next = 7;
+                                _context11.next = 7;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 7:
-                                _context10.next = 9;
+                                _context11.next = 9;
                                 return $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
                                     data: { puzzleData: { levelNumber: levelNumber } } });
 
                             case 9:
                             case "end":
-                                return _context10.stop();
+                                return _context11.stop();
                         }
                     }
-                }, _callee10, this);
+                }, _callee11, this);
             }));
 
             function loadPuzzleLevel(_x) {
-                return _ref10.apply(this, arguments);
+                return _ref11.apply(this, arguments);
             }
 
             return loadPuzzleLevel;
@@ -586,19 +677,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
+                var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
                     var index;
-                    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                    return regeneratorRuntime.wrap(function _callee12$(_context12) {
                         while (1) {
-                            switch (_context11.prev = _context11.next) {
+                            switch (_context12.prev = _context12.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context11.next = 3;
+                                        _context12.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context11.abrupt("return");
+                                    return _context12.abrupt("return");
 
                                 case 3:
 
@@ -611,19 +702,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for when the puzzle menu is closed
                                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:closed", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuClosedListener);
 
+                                    // listen for when the app desires/wants to exit
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("app:will-exit", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.appWillExitListener);
+
+                                    // listen for when the app is NO LONGER EXITING
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.appNoExitListener);
+
                                     // add puzzle level background tune
-                                    _context11.next = 8;
+                                    _context12.next = 10;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
-                                case 8:
-                                    _context11.next = 10;
+                                case 10:
+                                    _context12.next = 12;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                     });
 
-                                case 10:
+                                case 12:
 
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#puzzle-page .puzzle-pieces-container').get())), {
@@ -741,20 +838,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#puzzle-level-complete-modal').get(0).show();
                                     });
 
+                                    // flag that puzzle has not been completed
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+
                                     // pause the puzzle level in order to begin. level starts when user hits "Continue" button
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 20:
+                                case 23:
                                 case "end":
-                                    return _context11.stop();
+                                    return _context12.stop();
                             }
                         }
-                    }, _callee11, this);
+                    }, _callee12, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref11.apply(this, arguments);
+                    return _ref12.apply(this, arguments);
                 };
             }();
 
@@ -789,55 +889,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {},
+        pageDestroy: function pageDestroy() {
+            // flag that puzzle has been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
+        },
 
         /**
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked: function () {
-            var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
-                return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+                return regeneratorRuntime.wrap(function _callee13$(_context13) {
                     while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context13.prev = _context13.next) {
                             case 0:
-                                if (!$('ons-splitter').get(0).right.isOpen) {
-                                    _context12.next = 3;
-                                    break;
-                                }
 
-                                // side menu open, so close it
-                                $('ons-splitter').get(0).right.close();
-                                return _context12.abrupt("return");
-
-                            case 3:
-
-                                // todo REMOVE THIS NEXT LINE LATER flag that puzzle has NOT been completed
+                                // flag that the puzzle has not been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+
                                 // pause puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
 
-                                ons.notification.confirm('Do you want to close the app?', { title: 'Exit App',
-                                    buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog' }) // Ask for confirmation
-                                .then(function (index) {
-                                    if (index === 1) {
-                                        // OK button
-                                        navigator.app.exitApp(); // Close the app
-                                    } else {
-                                        // resume the puzzle timer
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
-                                    }
-                                });
+                                // toggle the puzzle menu
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
 
-                            case 6:
+                            case 3:
                             case "end":
-                                return _context12.stop();
+                                return _context13.stop();
                         }
                     }
-                }, _callee12, this);
+                }, _callee13, this);
             }));
 
             function backButtonClicked() {
-                return _ref12.apply(this, arguments);
+                return _ref13.apply(this, arguments);
             }
 
             return backButtonClicked;
@@ -850,77 +935,77 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         checkAnswerSheet: function () {
-            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
                 var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, entry;
 
-                return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                return regeneratorRuntime.wrap(function _callee14$(_context14) {
                     while (1) {
-                        switch (_context13.prev = _context13.next) {
+                        switch (_context14.prev = _context14.next) {
                             case 0:
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                 _iteratorNormalCompletion = true;
                                 _didIteratorError = false;
                                 _iteratorError = undefined;
-                                _context13.prev = 3;
+                                _context14.prev = 3;
                                 _iterator = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap[Symbol.iterator]();
 
                             case 5:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context13.next = 13;
+                                    _context14.next = 13;
                                     break;
                                 }
 
                                 entry = _step.value;
 
                                 if (!(entry[1] === false)) {
-                                    _context13.next = 10;
+                                    _context14.next = 10;
                                     break;
                                 }
 
                                 // an answer is still wrong
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
-                                return _context13.abrupt("return");
+                                return _context14.abrupt("return");
 
                             case 10:
                                 _iteratorNormalCompletion = true;
-                                _context13.next = 5;
+                                _context14.next = 5;
                                 break;
 
                             case 13:
-                                _context13.next = 19;
+                                _context14.next = 19;
                                 break;
 
                             case 15:
-                                _context13.prev = 15;
-                                _context13.t0 = _context13["catch"](3);
+                                _context14.prev = 15;
+                                _context14.t0 = _context14["catch"](3);
                                 _didIteratorError = true;
-                                _iteratorError = _context13.t0;
+                                _iteratorError = _context14.t0;
 
                             case 19:
-                                _context13.prev = 19;
-                                _context13.prev = 20;
+                                _context14.prev = 19;
+                                _context14.prev = 20;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
                             case 22:
-                                _context13.prev = 22;
+                                _context14.prev = 22;
 
                                 if (!_didIteratorError) {
-                                    _context13.next = 25;
+                                    _context14.next = 25;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
                             case 25:
-                                return _context13.finish(22);
+                                return _context14.finish(22);
 
                             case 26:
-                                return _context13.finish(19);
+                                return _context14.finish(19);
 
                             case 27:
 
@@ -928,63 +1013,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
                                 // stop the entire to indicate that puzzle has completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
-                                return _context13.abrupt("return");
+                                return _context14.abrupt("return");
 
                             case 30:
                             case "end":
-                                return _context13.stop();
+                                return _context14.stop();
                         }
                     }
-                }, _callee13, this, [[3, 15, 19, 27], [20,, 22, 26]]);
+                }, _callee14, this, [[3, 15, 19, 27], [20,, 22, 26]]);
             }));
 
             function checkAnswerSheet() {
-                return _ref13.apply(this, arguments);
+                return _ref14.apply(this, arguments);
             }
 
             return checkAnswerSheet;
         }(),
         pausePuzzleLevel: function () {
-            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
-                return regeneratorRuntime.wrap(function _callee14$(_context14) {
-                    while (1) {
-                        switch (_context14.prev = _context14.next) {
-                            case 0:
-
-                                // pause puzzle timer
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
-                                // show the pause-puzzle-modal
-                                _context14.next = 3;
-                                return $('#pause-puzzle-modal').get(0).show();
-
-                            case 3:
-                            case "end":
-                                return _context14.stop();
-                        }
-                    }
-                }, _callee14, this);
-            }));
-
-            function pausePuzzleLevel() {
-                return _ref14.apply(this, arguments);
-            }
-
-            return pausePuzzleLevel;
-        }(),
-        resumePuzzleLevel: function () {
             var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
                 return regeneratorRuntime.wrap(function _callee15$(_context15) {
                     while (1) {
                         switch (_context15.prev = _context15.next) {
                             case 0:
-                                _context15.next = 2;
-                                return $('#pause-puzzle-modal').get(0).hide();
 
-                            case 2:
-                                // resume puzzle timer
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+                                // flag that the puzzle has not been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                                // pause puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+                                // show the pause-puzzle-modal
+                                _context15.next = 4;
+                                return $('#pause-puzzle-modal').get(0).show();
 
-                            case 3:
+                            case 4:
                             case "end":
                                 return _context15.stop();
                         }
@@ -992,8 +1052,39 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee15, this);
             }));
 
-            function resumePuzzleLevel() {
+            function pausePuzzleLevel() {
                 return _ref15.apply(this, arguments);
+            }
+
+            return pausePuzzleLevel;
+        }(),
+        resumePuzzleLevel: function () {
+            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
+                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+                    while (1) {
+                        switch (_context16.prev = _context16.next) {
+                            case 0:
+
+                                // flag that the puzzle has not been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                                // hide the pause-puzzle-modal
+                                _context16.next = 3;
+                                return $('#pause-puzzle-modal').get(0).hide();
+
+                            case 3:
+                                // resume puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+
+                            case 4:
+                            case "end":
+                                return _context16.stop();
+                        }
+                    }
+                }, _callee16, this);
+            }));
+
+            function resumePuzzleLevel() {
+                return _ref16.apply(this, arguments);
             }
 
             return resumePuzzleLevel;
@@ -1005,10 +1096,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuOpenedListener: function () {
-            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
-                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+            var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+                return regeneratorRuntime.wrap(function _callee17$(_context17) {
                     while (1) {
-                        switch (_context16.prev = _context16.next) {
+                        switch (_context17.prev = _context17.next) {
                             case 0:
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
@@ -1017,22 +1108,118 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context16.stop();
+                                return _context17.stop();
                         }
                     }
-                }, _callee16, this);
+                }, _callee17, this);
             }));
 
             function puzzleMenuOpenedListener() {
-                return _ref16.apply(this, arguments);
+                return _ref17.apply(this, arguments);
             }
 
             return puzzleMenuOpenedListener;
         }(),
-        puzzleMenuClosedListener: function puzzleMenuClosedListener() {
-            // resume puzzle timer
-            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
-        }
+
+
+        /**
+         * method is used to listen for when the puzzle menu is opened
+         * @returns {Promise<void>}
+         */
+        puzzleMenuClosedListener: function () {
+            var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
+                return regeneratorRuntime.wrap(function _callee18$(_context18) {
+                    while (1) {
+                        switch (_context18.prev = _context18.next) {
+                            case 0:
+                                // resume puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+
+                            case 1:
+                            case "end":
+                                return _context18.stop();
+                        }
+                    }
+                }, _callee18, this);
+            }));
+
+            function puzzleMenuClosedListener() {
+                return _ref18.apply(this, arguments);
+            }
+
+            return puzzleMenuClosedListener;
+        }(),
+
+
+        /**
+         * method is used to listen for when the app notifies that it wants to exit
+         * @param event
+         * @returns {Promise<void>}
+         */
+        appWillExitListener: function () {
+            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(event) {
+                return regeneratorRuntime.wrap(function _callee19$(_context19) {
+                    while (1) {
+                        switch (_context19.prev = _context19.next) {
+                            case 0:
+                                // check if event has been canceled
+                                if (event.isCanceled !== true) {
+                                    // event has not been canceled
+                                    // check if puzzle has been completed
+                                    if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted !== true) {
+                                        // puzzle level has not been completed
+                                        // pause puzzle timer
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+                                        // since user has not completed the puzzle, try to prevent app exit using a warning
+                                        event.cancel = true;
+                                        // attach the warning message for preventing exit
+                                        event.warningMessage = "All progress on this puzzle will be lost if you exit now.";
+                                    }
+                                }
+
+                            case 1:
+                            case "end":
+                                return _context19.stop();
+                        }
+                    }
+                }, _callee19, this);
+            }));
+
+            function appWillExitListener(_x2) {
+                return _ref19.apply(this, arguments);
+            }
+
+            return appWillExitListener;
+        }(),
+
+
+        /**
+         * method is listener for when the APP WILL NO LONGER BE EXITED
+         * @returns {Promise<void>}
+         */
+        appNoExitListener: function () {
+            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
+                return regeneratorRuntime.wrap(function _callee20$(_context20) {
+                    while (1) {
+                        switch (_context20.prev = _context20.next) {
+                            case 0:
+                                // resume puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+
+                            case 1:
+                            case "end":
+                                return _context20.stop();
+                        }
+                    }
+                }, _callee20, this);
+            }));
+
+            function appNoExitListener() {
+                return _ref20.apply(this, arguments);
+            }
+
+            return appNoExitListener;
+        }()
     }
 
 };
