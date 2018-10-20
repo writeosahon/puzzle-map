@@ -77,7 +77,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // load the game settings data stored in the app database
                 try{
-                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.gameSettings =
+                    utopiasoftware[utopiasoftware_app_namespace].model.gameSettings =
                         await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
                 }
                 catch(err2){}

@@ -96,7 +96,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
 
                         case 17:
-                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.gameSettings = _context.sent;
+                            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
                             _context.next = 22;
                             break;
 

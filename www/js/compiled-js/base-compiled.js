@@ -75,48 +75,45 @@ var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
          */
         saveGameSettingsData: function () {
             var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(gameSettings) {
-                var _rev;
-
+                var previousSavedData;
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.prev = 0;
-
-                                // define the _rev property used in saving the game settings data to the app database
-                                _rev = undefined;
-                                _context2.prev = 2;
-                                _context2.next = 5;
+                                _context2.prev = 1;
+                                _context2.next = 4;
                                 return utopiasoftware[utopiasoftware_app_namespace].loadGameSettingsData();
 
-                            case 5:
-                                _rev = _context2.sent._rev;
+                            case 4:
+                                previousSavedData = _context2.sent;
+
+                                // get the last _rev property that was used to save the game settings data
+                                gameSettings._rev = previousSavedData._rev;
                                 _context2.next = 10;
                                 break;
 
                             case 8:
                                 _context2.prev = 8;
-                                _context2.t0 = _context2["catch"](2);
+                                _context2.t0 = _context2["catch"](1);
 
                             case 10:
-
-                                gameSettings._rev = _rev;
-                                _context2.next = 13;
+                                _context2.next = 12;
                                 return utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.put(gameSettings);
 
-                            case 13:
+                            case 12:
                                 return _context2.abrupt("return", _context2.sent);
 
-                            case 14:
-                                _context2.prev = 14;
-                                return _context2.finish(14);
+                            case 13:
+                                _context2.prev = 13;
+                                return _context2.finish(13);
 
-                            case 16:
+                            case 15:
                             case "end":
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, this, [[0,, 14, 16], [2, 8]]);
+                }, _callee2, this, [[0,, 13, 15], [1, 8]]);
             }));
 
             function saveGameSettingsData(_x) {
