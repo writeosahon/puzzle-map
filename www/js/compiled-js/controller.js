@@ -80,7 +80,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].model.gameSettings =
                         await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
                 }
-                catch(err2){}
+                catch(err2){
+                    console.log("ERROR GAME SETTINGS",
+                        utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+                }
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
