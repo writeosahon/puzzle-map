@@ -54,6 +54,7 @@ const utopiasoftware = {
                         // get the last _rev property that was used to save the game settings data
                         gameSettings._rev =
                             (await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData())._rev;
+                        console.log("GAME SETTINGS", gameSettings);
                     }
                     catch(err){}
 
