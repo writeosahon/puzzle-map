@@ -18,7 +18,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     appLifeCycleObservable: new Lifecycle({},
                                     ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked",
-                                    "app:will-exit", "app:no-exit", "app:exited"], {
+                                     "puzzle-menu:background-music-clicked",
+
+                                     "app:will-exit", "app:no-exit", "app:exited"], {
                                     autoStart: false, autoEmit: false, autoEnd: false}).start(),
 
     /**
@@ -74,7 +76,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 });
 
                 // load the game settings data stored in the app database
-
+                try{
+                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.gameSettings =
+                        await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
+                }
+                catch(err2){}
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
@@ -101,6 +107,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * event is triggered when page is initialised
          */
         pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // show page process loader
+                $('#puzzle-menu-page .process-loader').css("display", "block");
+                // update the Puzzle Menu Settings using the game settings saved by the user
+                $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked =
+                    utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn;
+                $('#puzzle-menu-page #puzzle-menu-sound-effects-switch').get(0).checked =
+                    utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn;
+                $('#puzzle-menu-page #puzzle-menu-puzzle-hints-switch').get(0).checked =
+                    utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn;
+
+                // hide page process loader
+                $('#puzzle-menu-page .process-loader').css("display", "none");
+            }
 
         },
 
@@ -160,7 +193,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to listener for when the Exit Button on the menu is clicked
+         * method is used to listen for when the Exit Button on the menu is clicked
          * @returns {Promise<void>}
          */
         async exitButtonClicked(){
@@ -257,6 +290,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is used to listen for when the Background Music switch is clicked
+         * @returns {Promise<void>}
+         */
+        async backgroundMusicSwitchClicked(){
+
+            // get the current state/status of the background music switch
+            var switchOn =  $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked;
+            // update the transient and persistent game settings data with the current state of the switch
+            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
+
+            utopiasoftware[utopiasoftware_app_namespace].gameSettings.
+            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+            // flag that Background Music Switch on the puzzle menu has been clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            goto("puzzle-menu:background-music-clicked");
+
+            // call all the listeners registered for this lifecycle stage
+            return new Promise(function(resolve, reject){
+
+                    setTimeout(function(){
+                        // return the values gotten from the registered listeners as the resolved value of the Promise
+                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                        emit("puzzle-menu:background-music-clicked", [{switchOn}]));
+                    }, 0);
+            });
+        },
+
+        /**
          * method is used to safely toggle the Puzzle Menu open or close
          */
         async tooglePuzzleMenu(){
@@ -306,6 +368,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
 
+                // listen for when the background music switch on the puzzle menu is clicked
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
+
                 // get the app game config from the stored json data
                 let serverResponse = await Promise.resolve($.ajax(
                     {
@@ -335,7 +402,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <img src="game-puzzle/level-${index}-puzzle-completed.png" style="width: 90%; height: auto;">
                             <span style="display: block; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;
                             text-shadow: -1px -1px 2px #000000;">
-                            LEVEL 1
+                            LEVEL ${index}
                             </span>
                         </div>`;
                 }
@@ -343,16 +410,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#puzzle-levels-page #puzzle-levels-container').html(puzzleLevelContent); // append the content to the page
 
 
-                // add background tune
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
-                        1, 1, 0, resolve, resolve);
-                });
+                // check if background music has been enabled
+                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true){ // background music is on
+                    // add background tune
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
+                            1, 1, 0, resolve, resolve);
+                    });
 
-                // start playing background tune in a loop
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
-                });
+                    // start playing background tune in a loop
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                    });
+                }
 
                 await $('#loader-modal').get(0).hide(); // hide loader
 
@@ -376,16 +446,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // check that audio is ready
             if(utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzleLevelsPageViewModel.isAudioReady === true){
-                // add background tune
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3',
-                        1, 1, 0, resolve, resolve);
-                });
+                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true){ // background music is on
+                    // add background tune
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadComplex('puzzle-levels-background',
+                            'audio/puzzles-select-level-background.mp3',
+                            1, 1, 0, resolve, resolve);
+                    });
 
-                // play audio
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
-                });
+                    // start playing background tune in a loop
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                    });
+                }
             }
         },
 
@@ -397,14 +470,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
 
-            // stop playing the background music
-            await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
-            });
-            // unload playing the background music
-            await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
-            });
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
+                // stop playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                });
+                // unload playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
+                });
+            }
+
         },
 
         /**
@@ -431,19 +507,59 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#loader-modal-message').html("Loading Puzzle Level...");
             await $('#loader-modal').get(0).show(); // show loader
 
-            // stop playing the background music
-            await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
-            });
-            // unload the background music
-            await new Promise(function(resolve, reject){
-                window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
-            });
+            // check if background music is enabled
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
+                // stop playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                });
+                // unload the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
+                });
+            }
 
             // load the puzzle level page with the required page data
             await $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
                 data: {puzzleData: {levelNumber: levelNumber}}});
-        }
+        },
+
+        /**
+         * method id used to listen got
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        async backgroundMusicSwitchClickedListener(eventArgs){
+
+            var event = eventArgs[0]; // get the event object from eventArgs array
+
+            // check if background sound is being turned on or off
+            if(event.switchOn === true){ // background music is being turned on
+                // add background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-levels-background',
+                        'audio/puzzles-select-level-background.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
+
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
+                });
+            }
+            else{ // background music is being turned off
+                // stop playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
+                });
+                // unload the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
+                });
+            }
+
+
+        },
     },
 
 
@@ -507,16 +623,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 on("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.appNoExitListener);
 
-                // add puzzle level background tune
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
-                        1, 1, 0, resolve, resolve);
-                });
+                // check if background music is enabled
+                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
+                    // add puzzle level background tune
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
+                            1, 1, 0, resolve, resolve);
+                    });
 
-                // start playing background tune in a loop
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
-                });
+                    // start playing background tune in a loop
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                    });
+                }
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =

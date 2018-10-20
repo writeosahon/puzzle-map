@@ -49,6 +49,18 @@ $(document).on("postopen", "#side-menu", utopiasoftware[utopiasoftware_app_names
 // listen for when the SIDE-MENU is closed
 $(document).on("postclose", "#side-menu", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.puzzleMenuClosed);
 
+// listen for the initialisation of the PUZZLE-MENU page
+$(document).on("init", "#puzzle-menu-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.pageInit);
+
+// listen for when the PUZZLE-MENU page is shown
+$(document).on("show", "#puzzle-menu-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.pageShow);
+
+// listen for when the PUZZLE-MENU page is hidden
+$(document).on("hide", "#puzzle-menu-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.pageHide);
+
+// listen for when the PUZZLE-MENU page is destroyed
+$(document).on("destroy", "#puzzle-menu-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.pageDestroy);
+
 // listen for the initialisation of the PUZZLE-LEVELS page
 $(document).on("init", "#puzzle-levels-page", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.pageInit);
 
