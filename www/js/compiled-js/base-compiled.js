@@ -75,27 +75,48 @@ var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
          */
         saveGameSettingsData: function () {
             var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(gameSettings) {
+                var _rev;
+
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.prev = 0;
-                                _context2.next = 3;
+
+                                // define the _rev property used in saving the game settings data to the app database
+                                _rev = undefined;
+                                _context2.prev = 2;
+                                _context2.next = 5;
+                                return utopiasoftware[utopiasoftware_app_namespace].loadGameSettingsData();
+
+                            case 5:
+                                _rev = _context2.sent._rev;
+                                _context2.next = 10;
+                                break;
+
+                            case 8:
+                                _context2.prev = 8;
+                                _context2.t0 = _context2["catch"](2);
+
+                            case 10:
+
+                                gameSettings._rev = _rev;
+                                _context2.next = 13;
                                 return utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.put(gameSettings);
 
-                            case 3:
+                            case 13:
                                 return _context2.abrupt("return", _context2.sent);
 
-                            case 4:
-                                _context2.prev = 4;
-                                return _context2.finish(4);
+                            case 14:
+                                _context2.prev = 14;
+                                return _context2.finish(14);
 
-                            case 6:
+                            case 16:
                             case "end":
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, this, [[0,, 4, 6]]);
+                }, _callee2, this, [[0,, 14, 16], [2, 8]]);
             }));
 
             function saveGameSettingsData(_x) {

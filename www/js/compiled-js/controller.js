@@ -368,11 +368,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
 
-                // listen for when the background music switch on the puzzle menu is clicked
-                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
-                on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
-                    puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
-
                 // get the app game config from the stored json data
                 let serverResponse = await Promise.resolve($.ajax(
                     {
@@ -443,6 +438,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // adjust the window/view-port settings for when the soft keyboard is displayed
             //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
 
+            // listen for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
+
             // check that audio is ready
             if(utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzleLevelsPageViewModel.isAudioReady === true){
@@ -469,6 +469,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: async function(){
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+            // remove listener for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
 
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
                 // stop playing the background music

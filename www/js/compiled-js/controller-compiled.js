@@ -548,11 +548,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
 
-                                    // listen for when the background music switch on the puzzle menu is clicked
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
-
                                     // get the app game config from the stored json data
-                                    _context9.next = 7;
+                                    _context9.next = 6;
                                     return Promise.resolve($.ajax({
                                         url: "game-config.json",
                                         type: "get",
@@ -562,7 +559,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         processData: false
                                     }));
 
-                                case 7:
+                                case 6:
                                     serverResponse = _context9.sent;
 
 
@@ -582,32 +579,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music has been enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context9.next = 17;
+                                        _context9.next = 16;
                                         break;
                                     }
 
-                                    _context9.next = 15;
+                                    _context9.next = 14;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
-                                case 15:
-                                    _context9.next = 17;
+                                case 14:
+                                    _context9.next = 16;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                     });
 
-                                case 17:
-                                    _context9.next = 19;
+                                case 16:
+                                    _context9.next = 18;
                                     return $('#loader-modal').get(0).hide();
 
-                                case 19:
+                                case 18:
                                     // hide loader
 
                                     // set that audio use is ready
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady = true;
 
-                                case 20:
+                                case 19:
                                 case "end":
                                     return _context9.stop();
                             }
@@ -644,30 +641,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // adjust the window/view-port settings for when the soft keyboard is displayed
                                 //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
 
+                                // listen for when the background music switch on the puzzle menu is clicked
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
+
                                 // check that audio is ready
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true)) {
-                                    _context10.next = 7;
+                                    _context10.next = 8;
                                     break;
                                 }
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                    _context10.next = 7;
+                                    _context10.next = 8;
                                     break;
                                 }
 
-                                _context10.next = 5;
+                                _context10.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
-                            case 5:
-                                _context10.next = 7;
+                            case 6:
+                                _context10.next = 8;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                 });
 
-                            case 7:
+                            case 8:
                             case "end":
                                 return _context10.stop();
                         }
@@ -691,23 +691,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context11.prev = _context11.next) {
                             case 0:
+                                // adjust the window/view-port settings for when the soft keyboard is displayed
+                                // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+                                // remove listener for when the background music switch on the puzzle menu is clicked
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
+
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                    _context11.next = 5;
+                                    _context11.next = 6;
                                     break;
                                 }
 
-                                _context11.next = 3;
+                                _context11.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
                                 });
 
-                            case 3:
-                                _context11.next = 5;
+                            case 4:
+                                _context11.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
                                 });
 
-                            case 5:
+                            case 6:
                             case "end":
                                 return _context11.stop();
                         }
