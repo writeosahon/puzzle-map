@@ -184,6 +184,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 };
             }();
 
+            console.log("PAGE INITIALISED");
+
             var $thisPage = $(event.target); // get the current page shown
 
             // call the function used to initialise the app page if the app is fully loaded

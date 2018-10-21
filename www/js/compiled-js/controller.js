@@ -109,6 +109,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * event is triggered when page is initialised
          */
         pageInit: function(event){
+            console.log("PAGE INITIALISED");
 
             var $thisPage = $(event.target); // get the current page shown
 

@@ -33,9 +33,7 @@
             display: block; width: 115%;">
                 <ons-list-item modifier="longdivider" tappable lock-on-drag tap-background-color="#ffce25"
                                style="border: none; border-bottom: 4px solid #3F51B5; border-radius: 10px 10px 10px 10px;
-                               margin-bottom: 1em; color: #3F51B5; background-color: #F4C724;"
-                               onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                                 puzzleMenuPageViewModel.backgroundMusicSwitchClicked();">
+                               margin-bottom: 1em; color: #3F51B5; background-color: #F4C724;">
                     <div class="left">
                         <ons-icon icon="md-audio" size="36px" class="list-item__icon"
                                   style="text-shadow: -1px -1px 2px #000000;" fixed-width></ons-icon>
@@ -47,7 +45,9 @@
                     </div>
                     <div class="right">
                         <ons-switch id="puzzle-menu-background-music-switch"
-                                    input-id="puzzle-menu-background-music-switch-input" checked></ons-switch>
+                                    input-id="puzzle-menu-background-music-switch-input" checked
+                                    onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                 puzzleMenuPageViewModel.backgroundMusicSwitchClicked();"></ons-switch>
                     </div>
                 </ons-list-item>
 
