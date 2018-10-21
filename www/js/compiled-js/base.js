@@ -25,7 +25,7 @@ const utopiasoftware = {
         /**
          * object is responsible for handling operations on the "game settings" data
          */
-        gameSettings: {
+        gameSettingsOperations: {
 
             /**
              * method loads the game settings data from the app database
@@ -53,7 +53,7 @@ const utopiasoftware = {
                     try{
                         // get the last _rev property that was used to save the game settings data
                         gameSettings._rev =
-                            (await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData())._rev;
+                            (await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData())._rev;
                         console.log("GAME SETTINGS", gameSettings);
                     }
                     catch(err){}

@@ -78,7 +78,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // load the game settings data stored in the app database
                 try{
                     utopiasoftware[utopiasoftware_app_namespace].model.gameSettings =
-                        await utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
+                        await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
                 }
                 catch(err2){
                     console.log("ERROR GAME SETTINGS",
@@ -303,7 +303,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update the transient and persistent game settings data with the current state of the switch
             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
-            utopiasoftware[utopiasoftware_app_namespace].gameSettings.
+            utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
             saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
 
             // flag that Background Music Switch on the puzzle menu has been clicked

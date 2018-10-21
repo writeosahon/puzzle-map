@@ -93,7 +93,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // load the game settings data stored in the app database
                             _context.prev = 14;
                             _context.next = 17;
-                            return utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
+                            return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
 
                         case 17:
                             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
@@ -448,7 +448,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
-                                utopiasoftware[utopiasoftware_app_namespace].gameSettings.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+                                utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
 
                                 // flag that Background Music Switch on the puzzle menu has been clicked
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:background-music-clicked");

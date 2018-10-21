@@ -29,7 +29,7 @@ var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
     /**
      * object is responsible for handling operations on the "game settings" data
      */
-    gameSettings: {
+    gameSettingsOperations: {
 
         /**
          * method loads the game settings data from the app database
@@ -82,7 +82,7 @@ var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
                                 _context2.prev = 0;
                                 _context2.prev = 1;
                                 _context2.next = 4;
-                                return utopiasoftware[utopiasoftware_app_namespace].gameSettings.loadGameSettingsData();
+                                return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
 
                             case 4:
                                 gameSettings._rev = _context2.sent._rev;
