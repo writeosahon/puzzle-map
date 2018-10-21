@@ -47,15 +47,13 @@ const utopiasoftware = {
              * @returns {Promise<void>}
              */
             async saveGameSettingsData(gameSettings){
-                console.log("SAVE GAME CALLED");
+
 
                 try{
-
                     try{
                         // get the last _rev property that was used to save the game settings data
                         gameSettings._rev =
                             (await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData())._rev;
-                        console.log("GAME SETTINGS", gameSettings);
                     }
                     catch(err){}
 

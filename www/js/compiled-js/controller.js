@@ -80,9 +80,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].model.gameSettings =
                         await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
                 }
-                catch(err2){
-                    console.log("ERROR GAME SETTINGS", err2);
-                }
+                catch(err2){}
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
@@ -109,7 +107,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * event is triggered when page is initialised
          */
         pageInit: function(event){
-            console.log("PAGE INITIALISED");
 
             var $thisPage = $(event.target); // get the current page shown
 
@@ -297,30 +294,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async backgroundMusicSwitchClicked(){
-            console.log("MUSIC CLICKED");
 
             // get the current state/status of the background music switch
             var switchOn =  $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked;
             // update the transient and persistent game settings data with the current state of the switch
             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
+            utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
+            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
 
             // flag that Background Music Switch on the puzzle menu has been clicked
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
             goto("puzzle-menu:background-music-clicked");
 
             // call all the listeners registered for this lifecycle stage
-            await new Promise(function(resolve, reject){
+            return new Promise(function(resolve, reject){
 
                     setTimeout(function(){
                         // return the values gotten from the registered listeners as the resolved value of the Promise
                         resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
-                        emit("puzzle-menu:background-music-clicked", [{switchOn: switchOn}]));
+                        emit("puzzle-menu:background-music-clicked", [{switchOn}]));
                     }, 0);
             });
 
-            await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
-            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
         },
 
         /**

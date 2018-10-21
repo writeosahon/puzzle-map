@@ -97,40 +97,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         case 17:
                             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
-                            _context.next = 23;
+                            _context.next = 22;
                             break;
 
                         case 20:
                             _context.prev = 20;
                             _context.t1 = _context["catch"](14);
 
-                            console.log("ERROR GAME SETTINGS", _context.t1);
-
-                        case 23:
-                            _context.next = 28;
+                        case 22:
+                            _context.next = 27;
                             break;
 
-                        case 25:
-                            _context.prev = 25;
+                        case 24:
+                            _context.prev = 24;
                             _context.t2 = _context["catch"](12);
 
                             console.log("APP LOADING ERROR", _context.t2);
 
-                        case 28:
-                            _context.prev = 28;
+                        case 27:
+                            _context.prev = 27;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(28);
+                            return _context.finish(27);
 
-                        case 33:
+                        case 32:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[5, 10], [12, 25, 28, 33], [14, 20]]);
+            }, _callee, this, [[5, 10], [12, 24, 27, 32], [14, 20]]);
         }))); // end of ons.ready()
     },
 
@@ -183,8 +181,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return _ref2.apply(this, arguments);
                 };
             }();
-
-            console.log("PAGE INITIALISED");
 
             var $thisPage = $(event.target); // get the current page shown
 
@@ -443,7 +439,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
-                                console.log("MUSIC CLICKED");
 
                                 // get the current state/status of the background music switch
                                 switchOn = $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked;
@@ -451,24 +446,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
+                                utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
                                 // flag that Background Music Switch on the puzzle menu has been clicked
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:background-music-clicked");
 
                                 // call all the listeners registered for this lifecycle stage
-                                _context7.next = 6;
-                                return new Promise(function (resolve, reject) {
+                                return _context7.abrupt("return", new Promise(function (resolve, reject) {
 
                                     setTimeout(function () {
                                         // return the values gotten from the registered listeners as the resolved value of the Promise
                                         resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("puzzle-menu:background-music-clicked", [{ switchOn: switchOn }]));
                                     }, 0);
-                                });
+                                }));
 
-                            case 6:
-                                _context7.next = 8;
-                                return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
-
-                            case 8:
+                            case 5:
                             case "end":
                                 return _context7.stop();
                         }
