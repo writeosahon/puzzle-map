@@ -81,8 +81,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
                 }
                 catch(err2){
-                    console.log("ERROR GAME SETTINGS",
-                        utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+                    console.log("ERROR GAME SETTINGS", err2);
                 }
             }
             catch(err){
@@ -297,21 +296,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async backgroundMusicSwitchClicked(){
+            console.log("MUSIC CLICKED");
 
             // get the current state/status of the background music switch
             var switchOn =  $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked;
             // update the transient and persistent game settings data with the current state of the switch
             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
-            await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
-            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
 
             // flag that Background Music Switch on the puzzle menu has been clicked
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
             goto("puzzle-menu:background-music-clicked");
 
             // call all the listeners registered for this lifecycle stage
-            return new Promise(function(resolve, reject){
+            await new Promise(function(resolve, reject){
 
                     setTimeout(function(){
                         // return the values gotten from the registered listeners as the resolved value of the Promise
@@ -319,6 +317,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         emit("puzzle-menu:background-music-clicked", [{switchOn: switchOn}]));
                     }, 0);
             });
+
+            await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
+            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
         },
 
         /**

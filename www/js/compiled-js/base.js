@@ -47,6 +47,7 @@ const utopiasoftware = {
              * @returns {Promise<void>}
              */
             async saveGameSettingsData(gameSettings){
+                console.log("SAVE GAME CALLED");
 
                 try{
 
