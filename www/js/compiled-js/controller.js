@@ -631,7 +631,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // check if background music is enabled
                 if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
-                    // add puzzle level background tune
+                    // add puzzle background tune
                     await new Promise(function(resolve, reject){
                         window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
                             1, 1, 0, resolve, resolve);
@@ -831,6 +831,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // adjust the window/view-port settings for when the soft keyboard is displayed
             //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+
+            // listen for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.backgroundMusicSwitchClickedListener);
         },
 
 
@@ -840,6 +845,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: function(){
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+            // remove listener for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.backgroundMusicSwitchClickedListener);
         },
 
         /**
@@ -966,8 +976,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async appNoExitListener(){
             // do nothing for now
-        }
+        },
 
+        /**
+         * method id used to listen got
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        async backgroundMusicSwitchClickedListener(eventArgs){
+
+            var event = eventArgs[0]; // get the event object from eventArgs array
+
+            // check if background sound is being turned on or off
+            if(event.switchOn === true){ // background music is being turned on
+                // add puzzle background tune
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
+
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                });
+            }
+            else{ // background music is being turned off
+                // stop playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
+                });
+                // unload the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
+                });
+            }
+
+
+        }
     }
 
 };

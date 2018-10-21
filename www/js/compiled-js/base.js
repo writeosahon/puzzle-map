@@ -34,6 +34,7 @@ const utopiasoftware = {
             async loadGameSettingsData(){
 
                 try{
+                    // get the game settings data
                     return await utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.get("gameSettings");
                 }
                 finally{
@@ -48,7 +49,6 @@ const utopiasoftware = {
              */
             async saveGameSettingsData(gameSettings){
 
-
                 try{
                     try{
                         // get the last _rev property that was used to save the game settings data
@@ -57,6 +57,7 @@ const utopiasoftware = {
                     }
                     catch(err){}
 
+                    // return the game settings data
                     return await utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.put(gameSettings);
                 }
                 finally{

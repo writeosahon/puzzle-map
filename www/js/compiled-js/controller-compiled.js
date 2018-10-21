@@ -1103,6 +1103,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // adjust the window/view-port settings for when the soft keyboard is displayed
             //window.SoftInputMode.set('adjustPan'); // let the window/view-port 'pan' when the soft keyboard is displayed
+
+            // listen for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backgroundMusicSwitchClickedListener);
         },
 
         /**
@@ -1111,6 +1114,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: function pageHide() {
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
+
+            // remove listener for when the background music switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backgroundMusicSwitchClickedListener);
         },
 
         /**
@@ -1444,6 +1450,70 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return appNoExitListener;
+        }(),
+
+
+        /**
+         * method id used to listen got
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        backgroundMusicSwitchClickedListener: function () {
+            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24(eventArgs) {
+                var event;
+                return regeneratorRuntime.wrap(function _callee24$(_context24) {
+                    while (1) {
+                        switch (_context24.prev = _context24.next) {
+                            case 0:
+                                event = eventArgs[0]; // get the event object from eventArgs array
+
+                                // check if background sound is being turned on or off
+
+                                if (!(event.switchOn === true)) {
+                                    _context24.next = 8;
+                                    break;
+                                }
+
+                                _context24.next = 4;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
+                                });
+
+                            case 4:
+                                _context24.next = 6;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                                });
+
+                            case 6:
+                                _context24.next = 12;
+                                break;
+
+                            case 8:
+                                _context24.next = 10;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
+                                });
+
+                            case 10:
+                                _context24.next = 12;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
+                                });
+
+                            case 12:
+                            case "end":
+                                return _context24.stop();
+                        }
+                    }
+                }, _callee24, this);
+            }));
+
+            function backgroundMusicSwitchClickedListener(_x4) {
+                return _ref24.apply(this, arguments);
+            }
+
+            return backgroundMusicSwitchClickedListener;
         }()
     }
 
