@@ -448,7 +448,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
-                                utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+                                _context7.next = 4;
+                                return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+                            case 4:
 
                                 // flag that Background Music Switch on the puzzle menu has been clicked
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:background-music-clicked");
@@ -462,7 +465,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }, 0);
                                 }));
 
-                            case 5:
+                            case 6:
                             case "end":
                                 return _context7.stop();
                         }

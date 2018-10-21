@@ -22,7 +22,7 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
 
     gameSettings: {
         _id: "gameSettings",
-        type: "GAME SETTINGS",
+        doctype: "GAME SETTINGS",
         backgroundMusicOn: true,
         soundEffectsOn: true,
         puzzleHintsOn: true

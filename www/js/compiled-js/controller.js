@@ -303,7 +303,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update the transient and persistent game settings data with the current state of the switch
             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn = switchOn;
 
-            utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
+            await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
             saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
 
             // flag that Background Music Switch on the puzzle menu has been clicked
@@ -316,7 +316,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     setTimeout(function(){
                         // return the values gotten from the registered listeners as the resolved value of the Promise
                         resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
-                        emit("puzzle-menu:background-music-clicked", [{switchOn}]));
+                        emit("puzzle-menu:background-music-clicked", [{switchOn: switchOn}]));
                     }, 0);
             });
         },
