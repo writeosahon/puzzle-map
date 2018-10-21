@@ -18,7 +18,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     appLifeCycleObservable: new Lifecycle({},
                                     ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked",
-                                     "puzzle-menu:background-music-clicked",
+                                     "puzzle-menu:background-music-clicked", "puzzle-menu:sound-effects-clicked",
+                                     "puzzle-menu:puzzle-hints-clicked",
 
                                      "app:will-exit", "app:no-exit", "app:exited"], {
                                     autoStart: false, autoEmit: false, autoEnd: false}).start(),
@@ -315,6 +316,66 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                         emit("puzzle-menu:background-music-clicked", [{switchOn}]));
                     }, 0);
+            });
+
+        },
+
+        /**
+         * method is used to listen for when the Sound Effects switch is clicked
+         * @returns {Promise<void>}
+         */
+        async soundEffectsSwitchClicked(){
+
+            // get the current state/status of the Sound Effects switch
+            var switchOn =  $('#puzzle-menu-page #puzzle-menu-sound-effects-switch').get(0).checked;
+            // update the transient and persistent game settings data with the current state of the switch
+            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn = switchOn;
+
+            utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
+            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+            // flag that Sound Effects Switch on the puzzle menu has been clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            goto("puzzle-menu:sound-effects-clicked");
+
+            // call all the listeners registered for this lifecycle stage
+            return new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:sound-effects-clicked", [{switchOn}]));
+                }, 0);
+            });
+
+        },
+
+        /**
+         * method is used to listen for when the Puzzle Hints switch is clicked
+         * @returns {Promise<void>}
+         */
+        async puzzleHintsSwitchClicked(){
+
+            // get the current state/status of the Puzzle Hints switch
+            var switchOn =  $('#puzzle-menu-page #puzzle-menu-puzzle-hints-switch').get(0).checked;
+            // update the transient and persistent game settings data with the current state of the switch
+            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn = switchOn;
+
+            utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.
+            saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+            // flag that Puzzle Hints Switch on the puzzle menu has been clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            goto("puzzle-menu:puzzle-hints-clicked");
+
+            // call all the listeners registered for this lifecycle stage
+            return new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:puzzle-hints-clicked", [{switchOn}]));
+                }, 0);
             });
 
         },

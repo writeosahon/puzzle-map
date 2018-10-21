@@ -22,7 +22,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     /**
      * create the LifeCycle object for managing different app states
      */
-    appLifeCycleObservable: new Lifecycle({}, ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked", "puzzle-menu:background-music-clicked", "app:will-exit", "app:no-exit", "app:exited"], {
+    appLifeCycleObservable: new Lifecycle({}, ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked", "puzzle-menu:background-music-clicked", "puzzle-menu:sound-effects-clicked", "puzzle-menu:puzzle-hints-clicked", "app:will-exit", "app:no-exit", "app:exited"], {
         autoStart: false, autoEmit: false, autoEnd: false }).start(),
 
     /**
@@ -477,21 +477,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
-         * method is used to safely toggle the Puzzle Menu open or close
+         * method is used to listen for when the Sound Effects switch is clicked
+         * @returns {Promise<void>}
          */
-        tooglePuzzleMenu: function () {
+        soundEffectsSwitchClicked: function () {
             var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+                var switchOn;
                 return regeneratorRuntime.wrap(function _callee8$(_context8) {
                     while (1) {
                         switch (_context8.prev = _context8.next) {
                             case 0:
-                                _context8.next = 2;
-                                return $('#side-menu').get(0).toggle();
 
-                            case 2:
-                                return _context8.abrupt("return", _context8.sent);
+                                // get the current state/status of the Sound Effects switch
+                                switchOn = $('#puzzle-menu-page #puzzle-menu-sound-effects-switch').get(0).checked;
+                                // update the transient and persistent game settings data with the current state of the switch
 
-                            case 3:
+                                utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn = switchOn;
+
+                                utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+                                // flag that Sound Effects Switch on the puzzle menu has been clicked
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:sound-effects-clicked");
+
+                                // call all the listeners registered for this lifecycle stage
+                                return _context8.abrupt("return", new Promise(function (resolve, reject) {
+
+                                    setTimeout(function () {
+                                        // return the values gotten from the registered listeners as the resolved value of the Promise
+                                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("puzzle-menu:sound-effects-clicked", [{ switchOn: switchOn }]));
+                                    }, 0);
+                                }));
+
+                            case 5:
                             case "end":
                                 return _context8.stop();
                         }
@@ -499,8 +516,87 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee8, this);
             }));
 
-            function tooglePuzzleMenu() {
+            function soundEffectsSwitchClicked() {
                 return _ref8.apply(this, arguments);
+            }
+
+            return soundEffectsSwitchClicked;
+        }(),
+
+
+        /**
+         * method is used to listen for when the Puzzle Hints switch is clicked
+         * @returns {Promise<void>}
+         */
+        puzzleHintsSwitchClicked: function () {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                var switchOn;
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                    while (1) {
+                        switch (_context9.prev = _context9.next) {
+                            case 0:
+
+                                // get the current state/status of the Puzzle Hints switch
+                                switchOn = $('#puzzle-menu-page #puzzle-menu-puzzle-hints-switch').get(0).checked;
+                                // update the transient and persistent game settings data with the current state of the switch
+
+                                utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn = switchOn;
+
+                                utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.saveGameSettingsData(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings);
+
+                                // flag that Puzzle Hints Switch on the puzzle menu has been clicked
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:puzzle-hints-clicked");
+
+                                // call all the listeners registered for this lifecycle stage
+                                return _context9.abrupt("return", new Promise(function (resolve, reject) {
+
+                                    setTimeout(function () {
+                                        // return the values gotten from the registered listeners as the resolved value of the Promise
+                                        resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("puzzle-menu:puzzle-hints-clicked", [{ switchOn: switchOn }]));
+                                    }, 0);
+                                }));
+
+                            case 5:
+                            case "end":
+                                return _context9.stop();
+                        }
+                    }
+                }, _callee9, this);
+            }));
+
+            function puzzleHintsSwitchClicked() {
+                return _ref9.apply(this, arguments);
+            }
+
+            return puzzleHintsSwitchClicked;
+        }(),
+
+
+        /**
+         * method is used to safely toggle the Puzzle Menu open or close
+         */
+        tooglePuzzleMenu: function () {
+            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+                return regeneratorRuntime.wrap(function _callee10$(_context10) {
+                    while (1) {
+                        switch (_context10.prev = _context10.next) {
+                            case 0:
+                                _context10.next = 2;
+                                return $('#side-menu').get(0).toggle();
+
+                            case 2:
+                                return _context10.abrupt("return", _context10.sent);
+
+                            case 3:
+                            case "end":
+                                return _context10.stop();
+                        }
+                    }
+                }, _callee10, this);
+            }));
+
+            function tooglePuzzleMenu() {
+                return _ref10.apply(this, arguments);
             }
 
             return tooglePuzzleMenu;
@@ -529,19 +625,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
                     var serverResponse, puzzleLevelContent, index;
-                    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                    return regeneratorRuntime.wrap(function _callee11$(_context11) {
                         while (1) {
-                            switch (_context9.prev = _context9.next) {
+                            switch (_context11.prev = _context11.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context9.next = 3;
+                                        _context11.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context9.abrupt("return");
+                                    return _context11.abrupt("return");
 
                                 case 3:
 
@@ -549,7 +645,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
 
                                     // get the app game config from the stored json data
-                                    _context9.next = 6;
+                                    _context11.next = 6;
                                     return Promise.resolve($.ajax({
                                         url: "game-config.json",
                                         type: "get",
@@ -560,7 +656,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }));
 
                                 case 6:
-                                    serverResponse = _context9.sent;
+                                    serverResponse = _context11.sent;
 
 
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject = JSON.parse(serverResponse); // convert the response to JSON object
@@ -579,23 +675,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music has been enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context9.next = 16;
+                                        _context11.next = 16;
                                         break;
                                     }
 
-                                    _context9.next = 14;
+                                    _context11.next = 14;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
                                 case 14:
-                                    _context9.next = 16;
+                                    _context11.next = 16;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                     });
 
                                 case 16:
-                                    _context9.next = 18;
+                                    _context11.next = 18;
                                     return $('#loader-modal').get(0).hide();
 
                                 case 18:
@@ -606,14 +702,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 19:
                                 case "end":
-                                    return _context9.stop();
+                                    return _context11.stop();
                             }
                         }
-                    }, _callee9, this);
+                    }, _callee11, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref9.apply(this, arguments);
+                    return _ref11.apply(this, arguments);
                 };
             }();
 
@@ -630,10 +726,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function () {
-            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
-                return regeneratorRuntime.wrap(function _callee10$(_context10) {
+            var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
+                return regeneratorRuntime.wrap(function _callee12$(_context12) {
                     while (1) {
-                        switch (_context10.prev = _context10.next) {
+                        switch (_context12.prev = _context12.next) {
                             case 0:
                                 // disable the swipeable feature for the app splitter
                                 $('ons-splitter-side').removeAttr("swipeable");
@@ -647,36 +743,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // check that audio is ready
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady === true)) {
-                                    _context10.next = 8;
+                                    _context12.next = 8;
                                     break;
                                 }
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                    _context10.next = 8;
+                                    _context12.next = 8;
                                     break;
                                 }
 
-                                _context10.next = 6;
+                                _context12.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 6:
-                                _context10.next = 8;
+                                _context12.next = 8;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 8:
                             case "end":
-                                return _context10.stop();
+                                return _context12.stop();
                         }
                     }
-                }, _callee10, this);
+                }, _callee12, this);
             }));
 
             function pageShow() {
-                return _ref10.apply(this, arguments);
+                return _ref12.apply(this, arguments);
             }
 
             return pageShow;
@@ -686,10 +782,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
-                return regeneratorRuntime.wrap(function _callee11$(_context11) {
+            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+                return regeneratorRuntime.wrap(function _callee13$(_context13) {
                     while (1) {
-                        switch (_context11.prev = _context11.next) {
+                        switch (_context13.prev = _context13.next) {
                             case 0:
                                 // adjust the window/view-port settings for when the soft keyboard is displayed
                                 // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
@@ -698,31 +794,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backgroundMusicSwitchClickedListener);
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                    _context11.next = 6;
+                                    _context13.next = 6;
                                     break;
                                 }
 
-                                _context11.next = 4;
+                                _context13.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 4:
-                                _context11.next = 6;
+                                _context13.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 6:
                             case "end":
-                                return _context11.stop();
+                                return _context13.stop();
                         }
                     }
-                }, _callee11, this);
+                }, _callee13, this);
             }));
 
             function pageHide() {
-                return _ref11.apply(this, arguments);
+                return _ref13.apply(this, arguments);
             }
 
             return pageHide;
@@ -737,24 +833,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked: function () {
-            var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
-                return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+                return regeneratorRuntime.wrap(function _callee14$(_context14) {
                     while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context14.prev = _context14.next) {
                             case 0:
-                                _context12.next = 2;
+                                _context14.next = 2;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
 
                             case 2:
                             case "end":
-                                return _context12.stop();
+                                return _context14.stop();
                         }
                     }
-                }, _callee12, this);
+                }, _callee14, this);
             }));
 
             function backButtonClicked() {
-                return _ref12.apply(this, arguments);
+                return _ref14.apply(this, arguments);
             }
 
             return backButtonClicked;
@@ -765,48 +861,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is used to load the puzzle level details
          */
         loadPuzzleLevel: function () {
-            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(levelNumber) {
-                return regeneratorRuntime.wrap(function _callee13$(_context13) {
+            var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15(levelNumber) {
+                return regeneratorRuntime.wrap(function _callee15$(_context15) {
                     while (1) {
-                        switch (_context13.prev = _context13.next) {
+                        switch (_context15.prev = _context15.next) {
                             case 0:
                                 // displaying prepping message
                                 $('#loader-modal-message').html("Loading Puzzle Level...");
-                                _context13.next = 3;
+                                _context15.next = 3;
                                 return $('#loader-modal').get(0).show();
 
                             case 3:
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                    _context13.next = 8;
+                                    _context15.next = 8;
                                     break;
                                 }
 
-                                _context13.next = 6;
+                                _context15.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 6:
-                                _context13.next = 8;
+                                _context15.next = 8;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 8:
-                                _context13.next = 10;
+                                _context15.next = 10;
                                 return $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
                                     data: { puzzleData: { levelNumber: levelNumber } } });
 
                             case 10:
                             case "end":
-                                return _context13.stop();
+                                return _context15.stop();
                         }
                     }
-                }, _callee13, this);
+                }, _callee15, this);
             }));
 
             function loadPuzzleLevel(_x) {
-                return _ref13.apply(this, arguments);
+                return _ref15.apply(this, arguments);
             }
 
             return loadPuzzleLevel;
@@ -819,58 +915,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         backgroundMusicSwitchClickedListener: function () {
-            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(eventArgs) {
+            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee14$(_context14) {
+                return regeneratorRuntime.wrap(function _callee16$(_context16) {
                     while (1) {
-                        switch (_context14.prev = _context14.next) {
+                        switch (_context16.prev = _context16.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
 
                                 // check if background sound is being turned on or off
 
                                 if (!(event.switchOn === true)) {
-                                    _context14.next = 8;
+                                    _context16.next = 8;
                                     break;
                                 }
 
-                                _context14.next = 4;
+                                _context16.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 4:
-                                _context14.next = 6;
+                                _context16.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 6:
-                                _context14.next = 12;
+                                _context16.next = 12;
                                 break;
 
                             case 8:
-                                _context14.next = 10;
+                                _context16.next = 10;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 10:
-                                _context14.next = 12;
+                                _context16.next = 12;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-levels-background', resolve, resolve);
                                 });
 
                             case 12:
                             case "end":
-                                return _context14.stop();
+                                return _context16.stop();
                         }
                     }
-                }, _callee14, this);
+                }, _callee16, this);
             }));
 
             function backgroundMusicSwitchClickedListener(_x2) {
-                return _ref14.apply(this, arguments);
+                return _ref16.apply(this, arguments);
             }
 
             return backgroundMusicSwitchClickedListener;
@@ -898,19 +994,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+                var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
                     var index;
-                    return regeneratorRuntime.wrap(function _callee15$(_context15) {
+                    return regeneratorRuntime.wrap(function _callee17$(_context17) {
                         while (1) {
-                            switch (_context15.prev = _context15.next) {
+                            switch (_context17.prev = _context17.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context15.next = 3;
+                                        _context17.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context15.abrupt("return");
+                                    return _context17.abrupt("return");
 
                                 case 3:
 
@@ -932,17 +1028,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music is enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context15.next = 13;
+                                        _context17.next = 13;
                                         break;
                                     }
 
-                                    _context15.next = 11;
+                                    _context17.next = 11;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
                                 case 11:
-                                    _context15.next = 13;
+                                    _context17.next = 13;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                     });
@@ -1074,14 +1170,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 24:
                                 case "end":
-                                    return _context15.stop();
+                                    return _context17.stop();
                             }
                         }
-                    }, _callee15, this);
+                    }, _callee17, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref15.apply(this, arguments);
+                    return _ref17.apply(this, arguments);
                 };
             }();
 
@@ -1131,10 +1227,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked: function () {
-            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
-                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+            var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
+                return regeneratorRuntime.wrap(function _callee18$(_context18) {
                     while (1) {
-                        switch (_context16.prev = _context16.next) {
+                        switch (_context18.prev = _context18.next) {
                             case 0:
 
                                 // flag that the puzzle has not been completed
@@ -1148,14 +1244,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 3:
                             case "end":
-                                return _context16.stop();
+                                return _context18.stop();
                         }
                     }
-                }, _callee16, this);
+                }, _callee18, this);
             }));
 
             function backButtonClicked() {
-                return _ref16.apply(this, arguments);
+                return _ref18.apply(this, arguments);
             }
 
             return backButtonClicked;
@@ -1168,77 +1264,77 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         checkAnswerSheet: function () {
-            var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
                 var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, entry;
 
-                return regeneratorRuntime.wrap(function _callee17$(_context17) {
+                return regeneratorRuntime.wrap(function _callee19$(_context19) {
                     while (1) {
-                        switch (_context17.prev = _context17.next) {
+                        switch (_context19.prev = _context19.next) {
                             case 0:
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                 _iteratorNormalCompletion = true;
                                 _didIteratorError = false;
                                 _iteratorError = undefined;
-                                _context17.prev = 3;
+                                _context19.prev = 3;
                                 _iterator = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap[Symbol.iterator]();
 
                             case 5:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context17.next = 13;
+                                    _context19.next = 13;
                                     break;
                                 }
 
                                 entry = _step.value;
 
                                 if (!(entry[1] === false)) {
-                                    _context17.next = 10;
+                                    _context19.next = 10;
                                     break;
                                 }
 
                                 // an answer is still wrong
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
-                                return _context17.abrupt("return");
+                                return _context19.abrupt("return");
 
                             case 10:
                                 _iteratorNormalCompletion = true;
-                                _context17.next = 5;
+                                _context19.next = 5;
                                 break;
 
                             case 13:
-                                _context17.next = 19;
+                                _context19.next = 19;
                                 break;
 
                             case 15:
-                                _context17.prev = 15;
-                                _context17.t0 = _context17["catch"](3);
+                                _context19.prev = 15;
+                                _context19.t0 = _context19["catch"](3);
                                 _didIteratorError = true;
-                                _iteratorError = _context17.t0;
+                                _iteratorError = _context19.t0;
 
                             case 19:
-                                _context17.prev = 19;
-                                _context17.prev = 20;
+                                _context19.prev = 19;
+                                _context19.prev = 20;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
                             case 22:
-                                _context17.prev = 22;
+                                _context19.prev = 22;
 
                                 if (!_didIteratorError) {
-                                    _context17.next = 25;
+                                    _context19.next = 25;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
                             case 25:
-                                return _context17.finish(22);
+                                return _context19.finish(22);
 
                             case 26:
-                                return _context17.finish(19);
+                                return _context19.finish(19);
 
                             case 27:
 
@@ -1246,27 +1342,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
                                 // stop the entire to indicate that puzzle has completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
-                                return _context17.abrupt("return");
+                                return _context19.abrupt("return");
 
                             case 30:
                             case "end":
-                                return _context17.stop();
+                                return _context19.stop();
                         }
                     }
-                }, _callee17, this, [[3, 15, 19, 27], [20,, 22, 26]]);
+                }, _callee19, this, [[3, 15, 19, 27], [20,, 22, 26]]);
             }));
 
             function checkAnswerSheet() {
-                return _ref17.apply(this, arguments);
+                return _ref19.apply(this, arguments);
             }
 
             return checkAnswerSheet;
         }(),
         pausePuzzleLevel: function () {
-            var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
-                return regeneratorRuntime.wrap(function _callee18$(_context18) {
+            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
+                return regeneratorRuntime.wrap(function _callee20$(_context20) {
                     while (1) {
-                        switch (_context18.prev = _context18.next) {
+                        switch (_context20.prev = _context20.next) {
                             case 0:
 
                                 // flag that the puzzle has not been completed
@@ -1274,34 +1370,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // pause puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
                                 // show the pause-puzzle-modal
-                                _context18.next = 4;
+                                _context20.next = 4;
                                 return $('#pause-puzzle-modal').get(0).show();
 
                             case 4:
                             case "end":
-                                return _context18.stop();
+                                return _context20.stop();
                         }
                     }
-                }, _callee18, this);
+                }, _callee20, this);
             }));
 
             function pausePuzzleLevel() {
-                return _ref18.apply(this, arguments);
+                return _ref20.apply(this, arguments);
             }
 
             return pausePuzzleLevel;
         }(),
         resumePuzzleLevel: function () {
-            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
-                return regeneratorRuntime.wrap(function _callee19$(_context19) {
+            var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
+                return regeneratorRuntime.wrap(function _callee21$(_context21) {
                     while (1) {
-                        switch (_context19.prev = _context19.next) {
+                        switch (_context21.prev = _context21.next) {
                             case 0:
 
                                 // flag that the puzzle has not been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
                                 // hide the pause-puzzle-modal
-                                _context19.next = 3;
+                                _context21.next = 3;
                                 return $('#pause-puzzle-modal').get(0).hide();
 
                             case 3:
@@ -1310,14 +1406,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 4:
                             case "end":
-                                return _context19.stop();
+                                return _context21.stop();
                         }
                     }
-                }, _callee19, this);
+                }, _callee21, this);
             }));
 
             function resumePuzzleLevel() {
-                return _ref19.apply(this, arguments);
+                return _ref21.apply(this, arguments);
             }
 
             return resumePuzzleLevel;
@@ -1329,10 +1425,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuOpenedListener: function () {
-            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
-                return regeneratorRuntime.wrap(function _callee20$(_context20) {
+            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
+                return regeneratorRuntime.wrap(function _callee22$(_context22) {
                     while (1) {
-                        switch (_context20.prev = _context20.next) {
+                        switch (_context22.prev = _context22.next) {
                             case 0:
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
@@ -1341,14 +1437,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context20.stop();
+                                return _context22.stop();
                         }
                     }
-                }, _callee20, this);
+                }, _callee22, this);
             }));
 
             function puzzleMenuOpenedListener() {
-                return _ref20.apply(this, arguments);
+                return _ref22.apply(this, arguments);
             }
 
             return puzzleMenuOpenedListener;
@@ -1360,24 +1456,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuClosedListener: function () {
-            var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
-                return regeneratorRuntime.wrap(function _callee21$(_context21) {
+            var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
+                return regeneratorRuntime.wrap(function _callee23$(_context23) {
                     while (1) {
-                        switch (_context21.prev = _context21.next) {
+                        switch (_context23.prev = _context23.next) {
                             case 0:
                                 // resume puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
 
                             case 1:
                             case "end":
-                                return _context21.stop();
+                                return _context23.stop();
                         }
                     }
-                }, _callee21, this);
+                }, _callee23, this);
             }));
 
             function puzzleMenuClosedListener() {
-                return _ref21.apply(this, arguments);
+                return _ref23.apply(this, arguments);
             }
 
             return puzzleMenuClosedListener;
@@ -1390,11 +1486,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appWillExitListener: function () {
-            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22(eventArgs) {
+            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee22$(_context22) {
+                return regeneratorRuntime.wrap(function _callee24$(_context24) {
                     while (1) {
-                        switch (_context22.prev = _context22.next) {
+                        switch (_context24.prev = _context24.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
                                 // check if event has been canceled
@@ -1414,14 +1510,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context22.stop();
+                                return _context24.stop();
                         }
                     }
-                }, _callee22, this);
+                }, _callee24, this);
             }));
 
             function appWillExitListener(_x3) {
-                return _ref22.apply(this, arguments);
+                return _ref24.apply(this, arguments);
             }
 
             return appWillExitListener;
@@ -1433,20 +1529,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appNoExitListener: function () {
-            var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
-                return regeneratorRuntime.wrap(function _callee23$(_context23) {
+            var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25() {
+                return regeneratorRuntime.wrap(function _callee25$(_context25) {
                     while (1) {
-                        switch (_context23.prev = _context23.next) {
+                        switch (_context25.prev = _context25.next) {
                             case 0:
                             case "end":
-                                return _context23.stop();
+                                return _context25.stop();
                         }
                     }
-                }, _callee23, this);
+                }, _callee25, this);
             }));
 
             function appNoExitListener() {
-                return _ref23.apply(this, arguments);
+                return _ref25.apply(this, arguments);
             }
 
             return appNoExitListener;
@@ -1459,58 +1555,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         backgroundMusicSwitchClickedListener: function () {
-            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24(eventArgs) {
+            var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee24$(_context24) {
+                return regeneratorRuntime.wrap(function _callee26$(_context26) {
                     while (1) {
-                        switch (_context24.prev = _context24.next) {
+                        switch (_context26.prev = _context26.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
 
                                 // check if background sound is being turned on or off
 
                                 if (!(event.switchOn === true)) {
-                                    _context24.next = 8;
+                                    _context26.next = 8;
                                     break;
                                 }
 
-                                _context24.next = 4;
+                                _context26.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 4:
-                                _context24.next = 6;
+                                _context26.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                 });
 
                             case 6:
-                                _context24.next = 12;
+                                _context26.next = 12;
                                 break;
 
                             case 8:
-                                _context24.next = 10;
+                                _context26.next = 10;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
                                 });
 
                             case 10:
-                                _context24.next = 12;
+                                _context26.next = 12;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
                                 });
 
                             case 12:
                             case "end":
-                                return _context24.stop();
+                                return _context26.stop();
                         }
                     }
-                }, _callee24, this);
+                }, _callee26, this);
             }));
 
             function backgroundMusicSwitchClickedListener(_x4) {
-                return _ref24.apply(this, arguments);
+                return _ref26.apply(this, arguments);
             }
 
             return backgroundMusicSwitchClickedListener;
