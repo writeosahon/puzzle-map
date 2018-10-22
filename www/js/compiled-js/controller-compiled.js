@@ -1152,8 +1152,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 addClass("animated pulse");
                                             }
                                         }*/
-                                    }).on("droppable:dropped", function (droppableDroppedEvent) {
-                                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+                                    }).on("droppable:stop", function (droppableStopEvent) {
+                                        console.log("DROP ZONE", droppableStopEvent.dropzone);
 
                                         // increase the move counter value by 1
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter += 1;
