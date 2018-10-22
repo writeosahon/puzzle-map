@@ -1078,6 +1078,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 13:
 
+                                    // flag that puzzle has not been completed
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#puzzle-page .puzzle-pieces-container').get())), {
                                         draggable: 'img.puzzle-pieces',
@@ -1090,44 +1093,95 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             appendTo: 'body'
                                         },
                                         dropzone: '#puzzle-page .puzzle-drop-zone'
-                                    }).removePlugin(Draggable.Plugins.Focusable).on("drag:start", function (dragStartEvent) {
+                                    }).removePlugin(Draggable.Plugins.Focusable);
+
+                                    /**
+                                     * function uses the "drag:start" event to track which
+                                     * exact puzzle piece is being moved.
+                                     */
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("drag:start", function (dragStartEvent) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
-                                    }).on("droppable:start", function (droppableStartEvent) {
+                                    });
+
+                                    /**
+                                     * function uses the "droppable:start" event to track when a puzzle piece has started to get dropped.
+                                     * The method is used to check the puzzle movements of puzzle pieces
+                                     */
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("droppable:start", function (droppableStartEvent) {
+                                        // get the initial container the element/puzzle piece being dropped originates from
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
+
+                                        // mark the exact time the drop-start commenced
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp = Date.now();
+                                        // flag that the puzzle piece has NOT been dropped yet
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDropped = false;
 
+                                        // check that the initial container for the puzzle piece is NOT a 'puzzle-pieces-tray'
                                         if (!utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')) {
+                                            // initial container is NOT a 'puzzle-pieces-tray'
+                                            // get the puzzle slot value attached to the puzzle piece container.
+                                            // the value represents the position of the correct puzzle piece needed to complete the puzzle
                                             var puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
-                                            // remove all animation from the container
+
+                                            // remove all puzzle hint animations from the container
                                             $(".puzzle-drop-zone[data-puzzle-slot=\"" + puzzleSlotValue + "\"]", $thisPage).removeClass("animated shake pulse");
                                         }
-                                    }).on("droppable:dropped", function (droppableDroppedEvent) {
-                                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+                                    });
 
+                                    /**
+                                     * function uses the "droppable:dropped" event to track when a puzzle piece has been dropped.
+                                     * The method is used to check the puzzle movements of puzzle pieces
+                                     */
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("droppable:dropped", function (droppableDroppedEvent) {
+
+                                        // get the container which the element/puzzle piece is being dropped into
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone = $(droppableDroppedEvent.dropzone);
-                                        var puzzleSlotValue = null;
 
+                                        // check if the puzzle piece is being dropped in a puzzle-pieces-tray
                                         if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')) {
-                                            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true;
-
+                                            // the puzzle-piece is being dropped in a puzzle-pieces-tray
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true; // flag that the puzzle-piece was dropped in a puzzle-pieces-tray
+                                            // flag the a valid puzzle movement drop has NOT taken place. Because the puzzle piece was moved to a tray
                                             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDropped = false;
+                                            // set the puzzle dropped time stamp to zero, since a valid puzzle move did NOT take place
                                             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = 0;
                                         } else {
-                                            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // flag that the puzzle-piece was NOT dropped in a puzzle-pieces-tray
 
+                                            // flag the a valid puzzle movement drop has taken place
                                             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDropped = true;
+                                            // set the time the puzzle-piece was dropped to the same drop-start time.
+                                            // THIS LOGIC IS VERY IMPORTANT TO ENABLING THE COMPLETION OF A VALID PUZZLE MOVEMENT TRACKING
                                             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp;
                                         }
-                                    }).on("droppable:stop", function (droppableStopEvent) {
+                                    });
 
+                                    /**
+                                     * function uses the "droppable:stop" event to track when a puzzle piece has been finished been dropped.
+                                     * The method is used to check the puzzle movements of puzzle pieces
+                                     */
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("droppable:stop", function (droppableStopEvent) {
+
+                                        // check if this is the completion of a valid puzzle movement
+                                        // This is done by check that the movement was flagged as a puzzleDropped action and
+                                        // that the puzzle start-drop and puzzle dropped time stamps are exactly the same value
                                         if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDropped === true && utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp === utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp) {
+                                            // this is the completion of a valid puzzle movement
 
+                                            // get the puzzle slot value attached to the container where the puzzle piece was finally dropped
                                             var puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
 
+                                            // check if the puzzle slot value attached to the puzzle piece AND
+                                            // the puzzle slot value gotten from the puzzle final drop container are equal
                                             if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue) {
-                                                // add positive animation to container
-                                                $(".puzzle-drop-zone[data-puzzle-slot=\"" + puzzleSlotValue + "\"]", $thisPage).addClass("animated pulse");
+                                                // the puzzle slot values are equal
+                                                // since the values match, this is the correct puzzle piece movement
+
+                                                // check if user wants puzzle-hints
+                                                if (utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn === true) {
+                                                    // add positive animation to container
+                                                    $(".puzzle-drop-zone[data-puzzle-slot=\"" + puzzleSlotValue + "\"]", $thisPage).addClass("animated pulse");
+                                                }
 
                                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.set(puzzleSlotValue, true);
@@ -1135,8 +1189,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 // call the method to check the users answer sheet
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.checkAnswerSheet();
                                             } else {
-                                                // add negative animation to container
-                                                $(".puzzle-drop-zone[data-puzzle-slot=\"" + puzzleSlotValue + "\"]", $thisPage).addClass("animated shake");
+                                                // check if user wants puzzle-hints
+                                                if (utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn === true) {
+                                                    // add negative animation to container
+                                                    $(".puzzle-drop-zone[data-puzzle-slot=\"" + puzzleSlotValue + "\"]", $thisPage).addClass("animated shake");
+                                                }
 
                                                 // update the puzzleAnswerSheet map object to indicate this answer was wrong
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.set(puzzleSlotValue, false);
@@ -1152,8 +1209,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 addClass("animated pulse");
                                             }
                                         }*/
-                                    }).on("droppable:stop", function (droppableStopEvent) {
-                                        console.log("DROP ZONE", droppableStopEvent.dropzone);
+                                    });
+
+                                    /**
+                                     * function uses the "droppable:stop" event to track the
+                                     * total number of puzzle moves the user makes, whether valid or invalid.
+                                     */
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("droppable:stop", function (droppableStopEvent) {
 
                                         // increase the move counter value by 1
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter += 1;
@@ -1175,33 +1237,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // add event listener for when timer value is updated
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.addEventListener("secondTenthsUpdated", function (timer) {
+                                        // update the timer counter display on the puzzle
                                         $('#puzzle-page .puzzle-timer-counter').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                                     });
 
-                                    // add event listener for when timer value is stopped
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.addEventListener("paused", function (timer) {
-
-                                        // check if puzzle has been completed
-                                        if (utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted !== true) {
-                                            // puzzle has not been completed, so exit method
-                                            return;
-                                        }
-                                        // update the contents of the level completed modal
-                                        $('#puzzle-level-complete-modal .level-time').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
-                                        $('#puzzle-level-complete-modal .level-moves').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
-
-                                        // show the level completed modal
-                                        $('#puzzle-level-complete-modal').get(0).show();
-                                    });
-
-                                    // flag that puzzle has not been completed
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                                    // add event listener for when timer value is paused
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.addEventListener("paused", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimerPausedListener);
 
                                     // pause the puzzle level in order to begin. level starts when user hits "Continue" button
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 24:
+                                case 29:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1292,82 +1339,126 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
+         * method is used to listen for when the puzzle timer is paused
+         *
+         * @param timer
+         * @returns {Promise<void>}
+         */
+        puzzleTimerPausedListener: function () {
+            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(timer) {
+                return regeneratorRuntime.wrap(function _callee19$(_context19) {
+                    while (1) {
+                        switch (_context19.prev = _context19.next) {
+                            case 0:
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted !== true)) {
+                                    _context19.next = 2;
+                                    break;
+                                }
+
+                                return _context19.abrupt("return");
+
+                            case 2:
+
+                                // update the contents of the level completed modal
+                                $('#puzzle-level-complete-modal .level-time').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+                                $('#puzzle-level-complete-modal .level-moves').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
+
+                                // show the level completed modal
+                                $('#puzzle-level-complete-modal').get(0).show();
+
+                            case 5:
+                            case "end":
+                                return _context19.stop();
+                        }
+                    }
+                }, _callee19, this);
+            }));
+
+            function puzzleTimerPausedListener(_x3) {
+                return _ref19.apply(this, arguments);
+            }
+
+            return puzzleTimerPausedListener;
+        }(),
+
+
+        /**
          * method is used to check the status of the users puzzle answer sheet.
          * if all puzzle pieces have been place correctly, then the level is completed
          * @returns {Promise<void>}
          */
         checkAnswerSheet: function () {
-            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
+            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
                 var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, entry;
 
-                return regeneratorRuntime.wrap(function _callee19$(_context19) {
+                return regeneratorRuntime.wrap(function _callee20$(_context20) {
                     while (1) {
-                        switch (_context19.prev = _context19.next) {
+                        switch (_context20.prev = _context20.next) {
                             case 0:
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                 _iteratorNormalCompletion = true;
                                 _didIteratorError = false;
                                 _iteratorError = undefined;
-                                _context19.prev = 3;
+                                _context20.prev = 3;
                                 _iterator = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap[Symbol.iterator]();
 
                             case 5:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context19.next = 13;
+                                    _context20.next = 13;
                                     break;
                                 }
 
                                 entry = _step.value;
 
                                 if (!(entry[1] === false)) {
-                                    _context19.next = 10;
+                                    _context20.next = 10;
                                     break;
                                 }
 
                                 // an answer is still wrong
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
-                                return _context19.abrupt("return");
+                                return _context20.abrupt("return");
 
                             case 10:
                                 _iteratorNormalCompletion = true;
-                                _context19.next = 5;
+                                _context20.next = 5;
                                 break;
 
                             case 13:
-                                _context19.next = 19;
+                                _context20.next = 19;
                                 break;
 
                             case 15:
-                                _context19.prev = 15;
-                                _context19.t0 = _context19["catch"](3);
+                                _context20.prev = 15;
+                                _context20.t0 = _context20["catch"](3);
                                 _didIteratorError = true;
-                                _iteratorError = _context19.t0;
+                                _iteratorError = _context20.t0;
 
                             case 19:
-                                _context19.prev = 19;
-                                _context19.prev = 20;
+                                _context20.prev = 19;
+                                _context20.prev = 20;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
                             case 22:
-                                _context19.prev = 22;
+                                _context20.prev = 22;
 
                                 if (!_didIteratorError) {
-                                    _context19.next = 25;
+                                    _context20.next = 25;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
                             case 25:
-                                return _context19.finish(22);
+                                return _context20.finish(22);
 
                             case 26:
-                                return _context19.finish(19);
+                                return _context20.finish(19);
 
                             case 27:
 
@@ -1375,52 +1466,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
                                 // stop the entire to indicate that puzzle has completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
-                                return _context19.abrupt("return");
+                                return _context20.abrupt("return");
 
                             case 30:
                             case "end":
-                                return _context19.stop();
+                                return _context20.stop();
                         }
                     }
-                }, _callee19, this, [[3, 15, 19, 27], [20,, 22, 26]]);
+                }, _callee20, this, [[3, 15, 19, 27], [20,, 22, 26]]);
             }));
 
             function checkAnswerSheet() {
-                return _ref19.apply(this, arguments);
+                return _ref20.apply(this, arguments);
             }
 
             return checkAnswerSheet;
         }(),
         pausePuzzleLevel: function () {
-            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
-                return regeneratorRuntime.wrap(function _callee20$(_context20) {
-                    while (1) {
-                        switch (_context20.prev = _context20.next) {
-                            case 0:
-
-                                // flag that the puzzle has not been completed
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
-                                // pause puzzle timer
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
-                                // show the pause-puzzle-modal
-                                _context20.next = 4;
-                                return $('#pause-puzzle-modal').get(0).show();
-
-                            case 4:
-                            case "end":
-                                return _context20.stop();
-                        }
-                    }
-                }, _callee20, this);
-            }));
-
-            function pausePuzzleLevel() {
-                return _ref20.apply(this, arguments);
-            }
-
-            return pausePuzzleLevel;
-        }(),
-        resumePuzzleLevel: function () {
             var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
                 return regeneratorRuntime.wrap(function _callee21$(_context21) {
                     while (1) {
@@ -1429,13 +1491,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 // flag that the puzzle has not been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
-                                // hide the pause-puzzle-modal
-                                _context21.next = 3;
-                                return $('#pause-puzzle-modal').get(0).hide();
-
-                            case 3:
-                                // resume puzzle timer
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+                                // pause puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
+                                // show the pause-puzzle-modal
+                                _context21.next = 4;
+                                return $('#pause-puzzle-modal').get(0).show();
 
                             case 4:
                             case "end":
@@ -1445,8 +1505,39 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee21, this);
             }));
 
-            function resumePuzzleLevel() {
+            function pausePuzzleLevel() {
                 return _ref21.apply(this, arguments);
+            }
+
+            return pausePuzzleLevel;
+        }(),
+        resumePuzzleLevel: function () {
+            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
+                return regeneratorRuntime.wrap(function _callee22$(_context22) {
+                    while (1) {
+                        switch (_context22.prev = _context22.next) {
+                            case 0:
+
+                                // flag that the puzzle has not been completed
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                                // hide the pause-puzzle-modal
+                                _context22.next = 3;
+                                return $('#pause-puzzle-modal').get(0).hide();
+
+                            case 3:
+                                // resume puzzle timer
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+
+                            case 4:
+                            case "end":
+                                return _context22.stop();
+                        }
+                    }
+                }, _callee22, this);
+            }));
+
+            function resumePuzzleLevel() {
+                return _ref22.apply(this, arguments);
             }
 
             return resumePuzzleLevel;
@@ -1458,10 +1549,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuOpenedListener: function () {
-            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
-                return regeneratorRuntime.wrap(function _callee22$(_context22) {
+            var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
+                return regeneratorRuntime.wrap(function _callee23$(_context23) {
                     while (1) {
-                        switch (_context22.prev = _context22.next) {
+                        switch (_context23.prev = _context23.next) {
                             case 0:
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
@@ -1470,14 +1561,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context22.stop();
+                                return _context23.stop();
                         }
                     }
-                }, _callee22, this);
+                }, _callee23, this);
             }));
 
             function puzzleMenuOpenedListener() {
-                return _ref22.apply(this, arguments);
+                return _ref23.apply(this, arguments);
             }
 
             return puzzleMenuOpenedListener;
@@ -1489,24 +1580,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuClosedListener: function () {
-            var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
-                return regeneratorRuntime.wrap(function _callee23$(_context23) {
+            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
+                return regeneratorRuntime.wrap(function _callee24$(_context24) {
                     while (1) {
-                        switch (_context23.prev = _context23.next) {
+                        switch (_context24.prev = _context24.next) {
                             case 0:
                                 // resume puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
 
                             case 1:
                             case "end":
-                                return _context23.stop();
+                                return _context24.stop();
                         }
                     }
-                }, _callee23, this);
+                }, _callee24, this);
             }));
 
             function puzzleMenuClosedListener() {
-                return _ref23.apply(this, arguments);
+                return _ref24.apply(this, arguments);
             }
 
             return puzzleMenuClosedListener;
@@ -1519,11 +1610,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appWillExitListener: function () {
-            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24(eventArgs) {
+            var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee24$(_context24) {
+                return regeneratorRuntime.wrap(function _callee25$(_context25) {
                     while (1) {
-                        switch (_context24.prev = _context24.next) {
+                        switch (_context25.prev = _context25.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
                                 // check if event has been canceled
@@ -1543,14 +1634,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context24.stop();
+                                return _context25.stop();
                         }
                     }
-                }, _callee24, this);
+                }, _callee25, this);
             }));
 
-            function appWillExitListener(_x3) {
-                return _ref24.apply(this, arguments);
+            function appWillExitListener(_x4) {
+                return _ref25.apply(this, arguments);
             }
 
             return appWillExitListener;
@@ -1562,20 +1653,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appNoExitListener: function () {
-            var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25() {
-                return regeneratorRuntime.wrap(function _callee25$(_context25) {
+            var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26() {
+                return regeneratorRuntime.wrap(function _callee26$(_context26) {
                     while (1) {
-                        switch (_context25.prev = _context25.next) {
+                        switch (_context26.prev = _context26.next) {
                             case 0:
                             case "end":
-                                return _context25.stop();
+                                return _context26.stop();
                         }
                     }
-                }, _callee25, this);
+                }, _callee26, this);
             }));
 
             function appNoExitListener() {
-                return _ref25.apply(this, arguments);
+                return _ref26.apply(this, arguments);
             }
 
             return appNoExitListener;
@@ -1588,58 +1679,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         backgroundMusicSwitchClickedListener: function () {
-            var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26(eventArgs) {
+            var _ref27 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee26$(_context26) {
+                return regeneratorRuntime.wrap(function _callee27$(_context27) {
                     while (1) {
-                        switch (_context26.prev = _context26.next) {
+                        switch (_context27.prev = _context27.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
 
                                 // check if background sound is being turned on or off
 
                                 if (!(event.switchOn === true)) {
-                                    _context26.next = 8;
+                                    _context27.next = 8;
                                     break;
                                 }
 
-                                _context26.next = 4;
+                                _context27.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 4:
-                                _context26.next = 6;
+                                _context27.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                 });
 
                             case 6:
-                                _context26.next = 12;
+                                _context27.next = 12;
                                 break;
 
                             case 8:
-                                _context26.next = 10;
+                                _context27.next = 10;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
                                 });
 
                             case 10:
-                                _context26.next = 12;
+                                _context27.next = 12;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
                                 });
 
                             case 12:
                             case "end":
-                                return _context26.stop();
+                                return _context27.stop();
                         }
                     }
-                }, _callee26, this);
+                }, _callee27, this);
             }));
 
-            function backgroundMusicSwitchClickedListener(_x4) {
-                return _ref26.apply(this, arguments);
+            function backgroundMusicSwitchClickedListener(_x5) {
+                return _ref27.apply(this, arguments);
             }
 
             return backgroundMusicSwitchClickedListener;

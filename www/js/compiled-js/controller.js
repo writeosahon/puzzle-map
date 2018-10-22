@@ -737,6 +737,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
                 }
 
+
+                // flag that puzzle has not been completed
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =
                     new Draggable.Droppable([...$('#puzzle-page .puzzle-pieces-container').get()],
@@ -752,74 +756,121 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             },
                             dropzone: '#puzzle-page .puzzle-drop-zone'
                         }).
-                    removePlugin(Draggable.Plugins.Focusable).
+                    removePlugin(Draggable.Plugins.Focusable);
+
+                    /**
+                     * function uses the "drag:start" event to track which
+                     * exact puzzle piece is being moved.
+                     */
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
                     on("drag:start", function(dragStartEvent){
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
-                    }).
+                    });
+
+                /**
+                 * function uses the "droppable:start" event to track when a puzzle piece has started to get dropped.
+                 * The method is used to check the puzzle movements of puzzle pieces
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
                     on("droppable:start", function(droppableStartEvent){
+                        // get the initial container the element/puzzle piece being dropped originates from
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.dragStartContainer = $(droppableStartEvent.dropzone);
+
+                        // mark the exact time the drop-start commenced
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp = Date.now();
+                        // flag that the puzzle piece has NOT been dropped yet
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.dragStartContainer.puzzleDropped = false;
 
+                        // check that the initial container for the puzzle piece is NOT a 'puzzle-pieces-tray'
                         if(! utopiasoftware[utopiasoftware_app_namespace].controller.
-                        puzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')){
+                        puzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')){ // initial container is NOT a 'puzzle-pieces-tray'
+                            // get the puzzle slot value attached to the puzzle piece container.
+                            // the value represents the position of the correct puzzle piece needed to complete the puzzle
                             let puzzleSlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot');
-                            // remove all animation from the container
+
+                            // remove all puzzle hint animations from the container
                             $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                             removeClass("animated shake pulse");
                         }
-                    }).
-                    on("droppable:dropped", function(droppableDroppedEvent){
-                        console.log("DROP ZONE", droppableDroppedEvent.dropzone);
+                    });
 
+
+                /**
+                 * function uses the "droppable:dropped" event to track when a puzzle piece has been dropped.
+                 * The method is used to check the puzzle movements of puzzle pieces
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
+                    on("droppable:dropped", function(droppableDroppedEvent){
+
+                        // get the container which the element/puzzle piece is being dropped into
                         utopiasoftware[utopiasoftware_app_namespace].controller.
                             puzzlePageViewModel.jqueryDropZone = $(droppableDroppedEvent.dropzone);
-                        let puzzleSlotValue = null;
 
+                        // check if the puzzle piece is being dropped in a puzzle-pieces-tray
                         if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                        puzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')){
+                        puzzlePageViewModel.jqueryDropZone.is('.puzzle-pieces-tray')){ // the puzzle-piece is being dropped in a puzzle-pieces-tray
                             utopiasoftware[utopiasoftware_app_namespace].controller.
-                                puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true;
-
+                                puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = true; // flag that the puzzle-piece was dropped in a puzzle-pieces-tray
+                            // flag the a valid puzzle movement drop has NOT taken place. Because the puzzle piece was moved to a tray
                             utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDropped = false;
+                            // set the puzzle dropped time stamp to zero, since a valid puzzle move did NOT take place
                             utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp = 0;
                         }
                         else{
                             utopiasoftware[utopiasoftware_app_namespace].controller.
-                                puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // set puzzle tray to false
+                                puzzlePageViewModel.jqueryDropZone.isPuzzlePieceTray = false; // flag that the puzzle-piece was NOT dropped in a puzzle-pieces-tray
 
+                            // flag the a valid puzzle movement drop has taken place
                             utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDropped = true;
+                            // set the time the puzzle-piece was dropped to the same drop-start time.
+                            // THIS LOGIC IS VERY IMPORTANT TO ENABLING THE COMPLETION OF A VALID PUZZLE MOVEMENT TRACKING
                             utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp =
                                 utopiasoftware[utopiasoftware_app_namespace].controller.
                                     puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp;
                         }
-                    }).
+                    });
+
+                /**
+                 * function uses the "droppable:stop" event to track when a puzzle piece has been finished been dropped.
+                 * The method is used to check the puzzle movements of puzzle pieces
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
                     on("droppable:stop", function(droppableStopEvent){
 
+                        // check if this is the completion of a valid puzzle movement
+                        // This is done by check that the movement was flagged as a puzzleDropped action and
+                        // that the puzzle start-drop and puzzle dropped time stamps are exactly the same value
                         if(utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDropped === true &&
                             utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp ===
                             utopiasoftware[utopiasoftware_app_namespace].controller.
-                                puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp){
+                                puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp){ // this is the completion of a valid puzzle movement
 
+                            // get the puzzle slot value attached to the container where the puzzle piece was finally dropped
                             let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
 
-
+                            // check if the puzzle slot value attached to the puzzle piece AND
+                            // the puzzle slot value gotten from the puzzle final drop container are equal
                             if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                            puzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
-                                // add positive animation to container
-                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                addClass("animated pulse");
+                            puzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){ // the puzzle slot values are equal
+                                // since the values match, this is the correct puzzle piece movement
+
+                                // check if user wants puzzle-hints
+                                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn === true){
+                                    // add positive animation to container
+                                    $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                    addClass("animated pulse");
+                                }
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
@@ -829,9 +880,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.checkAnswerSheet();
                             }
                             else{
-                                // add negative animation to container
-                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                addClass("animated shake");
+                                // check if user wants puzzle-hints
+                                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.puzzleHintsOn === true){
+                                    // add negative animation to container
+                                    $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
+                                    addClass("animated shake");
+                                }
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was wrong
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
@@ -850,9 +904,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 addClass("animated pulse");
                             }
                         }*/
-                    }).
+                    });
+
+                /**
+                 * function uses the "droppable:stop" event to track the
+                 * total number of puzzle moves the user makes, whether valid or invalid.
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
                     on("droppable:stop", function(droppableStopEvent){
-                        console.log("DROP ZONE", droppableStopEvent.dropzone);
 
                         // increase the move counter value by 1
                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter += 1;
@@ -860,6 +919,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         $('#puzzle-page .puzzle-moves-counter').
                         html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
                     });
+
 
                 // instantiate the puzzleAnswerSheet js Map
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap =
@@ -879,35 +939,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // add event listener for when timer value is updated
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
                 addEventListener("secondTenthsUpdated", function(timer){
+                    // update the timer counter display on the puzzle
                     $('#puzzle-page .puzzle-timer-counter').
                     html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
                     getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                 });
 
-                // add event listener for when timer value is stopped
+                // add event listener for when timer value is paused
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
-                addEventListener("paused", function(timer){
-
-                    // check if puzzle has been completed
-                    if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
-                        puzzleCompleted !== true){ // puzzle has not been completed, so exit method
-                        return;
-                    }
-                    // update the contents of the level completed modal
-                    $('#puzzle-level-complete-modal .level-time').html(
-                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
-                        getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths'])
-                    );
-                    $('#puzzle-level-complete-modal .level-moves').html(
-                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter
-                    );
-
-                    // show the level completed modal
-                    $('#puzzle-level-complete-modal').get(0).show();
-                });
-
-                // flag that puzzle has not been completed
-                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                addEventListener("paused", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleTimerPausedListener);
 
                 // pause the puzzle level in order to begin. level starts when user hits "Continue" button
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
@@ -971,6 +1012,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // toggle the puzzle menu
             utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzleMenuPageViewModel.tooglePuzzleMenu();
+        },
+
+        /**
+         * method is used to listen for when the puzzle timer is paused
+         *
+         * @param timer
+         * @returns {Promise<void>}
+         */
+        async puzzleTimerPausedListener(timer){
+
+            // check if puzzle has been completed
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzleCompleted !== true){ // puzzle has not been completed, so exit method
+                return;
+            }
+
+            // update the contents of the level completed modal
+            $('#puzzle-level-complete-modal .level-time').html(
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
+                getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths'])
+            );
+            $('#puzzle-level-complete-modal .level-moves').html(
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter
+            );
+
+            // show the level completed modal
+            $('#puzzle-level-complete-modal').get(0).show();
         },
 
         /**
