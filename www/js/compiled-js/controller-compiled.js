@@ -978,13 +978,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     puzzlePageViewModel: {
 
+        /**
+         * property is the Draggable-Droppable object used for the puzzle
+         */
         draggableDroppableObject: null,
+
+        /**
+         * property is used to hold the element that is being dragged
+         */
         dragStartSource: null,
+
         jqueryDropZone: null,
+
+        /**
+         * property is used to hold the container for the element that is being dragged
+         */
         dragStartContainer: null,
+
+        /**
+         * property is used to keep track of the total number of moves used to
+         * complete a puzzle
+         */
         moveCounter: 0,
+
+        /**
+         * property holds an instance of EasyTimer which is the timer used to track
+         * how long it takes the user to complete a puzzle
+         */
         puzzleTimer: null,
+
+        /**
+         * property holds a Map object that is used to keep track of the
+         * user;s puzzle answer sheet i.e. if the user has completed the puzzle
+         */
         puzzleAnswerSheetMap: null,
+
+        /**
+         * property is a flag that indicates if the user has completed the level.
+         * A value of true means the user has completed the level or a value of
+         * false means the level has not been completed
+         */
         puzzleCompleted: false,
 
         /**
@@ -1056,7 +1089,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             constrainDimensions: false,
                                             appendTo: 'body'
                                         },
-                                        dropzone: $('#puzzle-page .puzzle-drop-zone').get()
+                                        dropzone: '#puzzle-page .puzzle-drop-zone'
                                     }).removePlugin(Draggable.Plugins.Focusable).on("drag:start", function (dragStartEvent) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
                                     }).on("droppable:start", function (droppableStartEvent) {
