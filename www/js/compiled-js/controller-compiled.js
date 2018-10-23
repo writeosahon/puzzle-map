@@ -988,6 +988,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         dragStartSource: null,
 
+        /**
+         * properety is used to hold the dropzone container for the
+         * element that was being dragged
+         */
         jqueryDropZone: null,
 
         /**
@@ -1000,6 +1004,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * complete a puzzle
          */
         moveCounter: 0,
+
+        /**
+         * property holds the level number for the current puzzle level being played
+         */
+        levelNumber: 0,
 
         /**
          * property holds an instance of EasyTimer which is the timer used to track
@@ -1046,6 +1055,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backButtonClicked;
 
+                                    // set the level number of the puzzle to be loaded
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber = window.parseInt($('#app-main-navigator').get(0).topPage.data.levelNumber);
+
+                                    $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
+                                        data: { puzzleData: { levelNumber: levelNumber } } });
+
                                     // listen for when the puzzle menu is opened
                                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:opened", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuOpenedListener);
 
@@ -1061,22 +1076,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music is enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context17.next = 13;
+                                        _context17.next = 15;
                                         break;
                                     }
 
-                                    _context17.next = 11;
+                                    _context17.next = 13;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
-                                case 11:
-                                    _context17.next = 13;
+                                case 13:
+                                    _context17.next = 15;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                     });
 
-                                case 13:
+                                case 15:
 
                                     // flag that puzzle has not been completed
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
@@ -1248,7 +1263,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 29:
+                                case 31:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1299,8 +1314,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function pageDestroy() {
-            // flag that puzzle has been completed
-            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
+            // destroy Draggable.Droppable object
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.destroy();
+            // destroy the dragged elements references & all dragged elements containers references
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartSource = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.jqueryDropZone = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartContainer = null;
+            // destroy the puzzle timer object
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.stop();
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = null;
+            // destroy the answer sheet map object
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.clear();
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap = null;
+            // set the puzzle move counter to zero
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
+            // set the puzzle level number to zero
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber = 0;
+            // flag that puzzle has NOT been completed
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
         },
 
         /**
