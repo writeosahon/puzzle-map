@@ -1157,7 +1157,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     /**
-                                     * function uses the "droppable:stop" event to track when a puzzle piece has been finished been dropped.
+                                     * function uses the "droppable:stop" event to track when a puzzle piece has finished been dropped.
                                      * The method is used to check the puzzle movements of puzzle pieces
                                      */
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("droppable:stop", function (droppableStopEvent) {
@@ -1674,7 +1674,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
-         * method id used to listen got
+         * method id used to listen for when the background music switch on the puzzle menu is clicked
          * @param eventArgs
          * @returns {Promise<void>}
          */
