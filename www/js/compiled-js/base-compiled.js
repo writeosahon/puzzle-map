@@ -27,6 +27,11 @@ var utopiasoftware_app_namespace = 'puzzle';
 var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
 
     /**
+     * holds the randomisation engine used by Random.Js
+     */
+    randomisationEngine: Random.engines.browserCrypto,
+
+    /**
      * object is responsible for handling operations on the "game settings" data
      */
     gameSettingsOperations: {

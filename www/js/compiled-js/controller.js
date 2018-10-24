@@ -675,9 +675,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * property holds a Map object that is used to keep track of the
-         * user;s puzzle answer sheet i.e. if the user has completed the puzzle
+         * user's puzzle answer sheet i.e. if the user has completed the puzzle
          */
         puzzleAnswerSheetMap: null,
+
+        /**
+         * property holds a Map object that is used to keep track of
+         * all image assets used by this puzzle
+         */
+        puzzleImageAssetsMap: null,
 
         /**
          * property is a flag that indicates if the user has completed the level.
@@ -714,10 +720,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // set the level number of the puzzle to be loaded
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber =
-                    window.parseInt($('#app-main-navigator').get(0).topPage.data.levelNumber);
-
-                $('#app-main-navigator').get(0).pushPage("puzzle-page.html", {
-                    data: {puzzleData: {levelNumber: levelNumber}}});
+                    window.parseInt($('#app-main-navigator').get(0).topPage.data.puzzleData.levelNumber);
+                // flag that puzzle has not been completed
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                // set the puzzle move counter to zero
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
 
                 // listen for when the puzzle menu is opened
                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
@@ -753,8 +760,147 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
                 }
 
-                // flag that puzzle has not been completed
-                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
+                // instantiate the puzzleAnswerSheet js Map
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap =
+                    new Map();
+                // use a for loop to set all the answers in the puzzleAnswerSheet to false
+                for(let index = 0; index < utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                    ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                    ["total_puzzle_pieces"]; index++){
+
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
+                    set(("" + (index + 1)), false);
+                }
+
+                // instantiate the puzzle image assets js Map
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap =
+                    new Map();
+                // set the puzzle-completed image assets
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                set("puzzle-completed", new Image());
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                get("puzzle-completed").decoding){
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-completed").decoding = 'async';
+                }
+
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                get("puzzle-completed").src =
+                    `game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-puzzle-completed.png`;
+
+                // set the arrays used for loading all required puzzle 'blank' and 'answer' pieces
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                set("puzzle-block-pieces", []).set("puzzle-answer-pieces", []);
+                // initialise the puzzle 'block' & 'answer' pieces arrays with their image assets
+                for(let index = 0; index < utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                    ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                    ["total_puzzle_pieces"]; index++){
+
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-block-pieces")[index] = new Image();
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-answer-pieces")[index] = new Image();
+
+                    if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-completed").decoding){
+                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                        get("puzzle-block-pieces")[index].decoding = 'async';
+                        utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                        get("puzzle-answer-pieces")[index].decoding = 'async';
+                    }
+
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-block-pieces")[index].src =
+                        `game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-block-${index + 1}-puzzle.png`;
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-answer-pieces")[index].src =
+                        `game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-block-${index + 1}-answer.png`;
+                    // identify the puzzle slot value for each 'answer' puzzle piece
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-answer-pieces")[index].puzzleSlotValue = index + 1;
+                }
+
+                // randomise the created 'answer' puzzle pieces so they don't arrive in puzzle in correct order/sequence
+                Random.shuffle(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine,
+                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-answer-pieces"));
+
+                // calculate the dimensions of the puzzle display area on the user's device
+                let puzzleDisplayHeight = Math.floor($('#puzzle-page #puzzle-page-puzzle-display-area').height());
+                let puzzleDisplayWidth = Math.floor($('#puzzle-page #puzzle-page-puzzle-display-area').width());
+                // get a variable to hold the puzzle piece single dimension. Since ALL puzzle pieces are square, dimensions are equal
+                let puzzlePieceDimension = 0;
+
+                // check if the puzzle display Height is larger than or equal to the display width
+                if(puzzleDisplayHeight >= puzzleDisplayWidth){ // height is >= width
+                    // get the space difference between the height and width and use to set appropriate padding for the puzzle content
+                    $('#puzzle-page #puzzle-page-puzzle-display-area').css({
+                        "padding-top": (puzzleDisplayHeight - puzzleDisplayWidth) + "px",
+                        "padding-bottom": (puzzleDisplayHeight - puzzleDisplayWidth) + "px"
+                    });
+                    // get the dimension for the puzzle pieces
+                    puzzlePieceDimension = Math.floor(puzzleDisplayWidth / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                        ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                        ["total_puzzle_pieces"]));
+                }
+                else{ // height is < width
+                    // get the space difference between the width and height and use to set appropriate padding for the puzzle content
+                    $('#puzzle-page #puzzle-page-puzzle-display-area').css({
+                        "padding-left": (puzzleDisplayWidth - puzzleDisplayHeight) + "px",
+                        "padding-right": (puzzleDisplayWidth - puzzleDisplayHeight) + "px"
+                    });
+                    // get the dimension for the puzzle pieces
+                    puzzlePieceDimension = Math.floor(puzzleDisplayHeight / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                        ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                        ["total_puzzle_pieces"]));
+                }
+
+                // append the 'blank' puzzle pieces to the puzzle display content
+                for(let puzzlePiecesCounter = 0, rowCounter = 0,
+                        totalRows = Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                    ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                    ["total_puzzle_pieces"]); rowCounter < totalRows; rowCounter++){ // for loop to generate puzzle display rows
+
+                    let puzzleRowContent = '<div style="display: block; margin:0; padding: 0; width: 100%; white-space: nowrap">';
+
+                    // for loop to generate puzzle display columns
+                    for(let columnCounter = 0, totalColumns = totalRows; columnCounter < totalColumns; columnCounter++){
+                        let puzzleColumnContent =
+                            `<span class="puzzle-pieces-container puzzle-drop-zone"
+                                style="display: inline-block; margin: 0; padding: 0; width: ${puzzlePieceDimension}px; 
+                                height: ${puzzlePieceDimension}px;"
+                                data-puzzle-slot="${puzzlePiecesCounter + 1}">
+                            <img src="${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
+                            get("puzzle-block-pieces")[puzzlePiecesCounter].src}" class="puzzle-piece-holder" style="width: 100%; height: auto;">
+                        </span>`;
+
+                        // add the column content to the row content
+                        puzzleRowContent += puzzleColumnContent;
+                        // increase the puzzle pieces counter by 1
+                        puzzlePiecesCounter += 1;
+                    } // end of column generator for-loop
+
+                    // complete the row content
+                    puzzleRowContent += '</div>';
+                    // append the generate row content to the puzzle-display-area
+                    $('#puzzle-page #puzzle-page-puzzle-display-area').append(puzzleRowContent);
+
+                } // end of row generator for-loop
+
+
+                let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.puzzleImageAssetsMap.
+                            get("puzzle-answer-pieces").pop();
+
+                // insert two 'answer' puzzle pieces into two puzzle trays
+                $('#puzzle-page .puzzle-pieces-tray').eq(0).
+                html(`<img src="" class="puzzle-pieces" style="height: 100%; width: auto" 
+                         data-puzzle-slot="3">`);
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =
@@ -936,14 +1082,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
 
 
-                // instantiate the puzzleAnswerSheet js Map
-                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap =
-                    new Map();
-                for(let index = 0; index < 3; index++){
-                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
-                    set(("" + (index + 1)), false);
-                }
-
                 // create the Puzzle Timer object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
@@ -1018,6 +1156,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // destroy the answer sheet map object
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.clear();
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap = null;
+            // destroy the puzzle image asserts map object
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.clear();
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap = null;
             // set the puzzle move counter to zero
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
             // set the puzzle level number to zero
