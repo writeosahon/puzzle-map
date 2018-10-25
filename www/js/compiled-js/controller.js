@@ -838,8 +838,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 if(puzzleDisplayHeight >= puzzleDisplayWidth){ // height is >= width
                     // get the space difference between the height and width and use to set appropriate padding for the puzzle content
                     $('#puzzle-page #puzzle-page-puzzle-display-area').css({
-                        "padding-top": (puzzleDisplayHeight - puzzleDisplayWidth) + "px",
-                        "padding-bottom": (puzzleDisplayHeight - puzzleDisplayWidth) + "px"
+                        "padding-top": Math.floor((puzzleDisplayHeight - puzzleDisplayWidth) / 2) + "px",
+                        "padding-bottom": Math.floor((puzzleDisplayHeight - puzzleDisplayWidth) / 2) + "px"
                     });
                     // get the dimension for the puzzle pieces
                     puzzlePieceDimension = Math.floor(puzzleDisplayWidth / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -850,8 +850,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 else{ // height is < width
                     // get the space difference between the width and height and use to set appropriate padding for the puzzle content
                     $('#puzzle-page #puzzle-page-puzzle-display-area').css({
-                        "padding-left": (puzzleDisplayWidth - puzzleDisplayHeight) + "px",
-                        "padding-right": (puzzleDisplayWidth - puzzleDisplayHeight) + "px"
+                        "padding-left": Math.floor((puzzleDisplayWidth - puzzleDisplayHeight) / 2) + "px",
+                        "padding-right": Math.floor((puzzleDisplayWidth - puzzleDisplayHeight) / 2) + "px"
                     });
                     // get the dimension for the puzzle pieces
                     puzzlePieceDimension = Math.floor(puzzleDisplayHeight / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -873,8 +873,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     for(let columnCounter = 0, totalColumns = totalRows; columnCounter < totalColumns; columnCounter++){
                         let puzzleColumnContent =
                             `<span class="puzzle-pieces-container puzzle-drop-zone"
-                                style="display: inline-block; margin: 0; padding: 0; width: ${puzzlePieceDimension}px; 
-                                height: ${puzzlePieceDimension}px;"
+                                style="display: inline-block; margin: 0; padding: 0; width: ${puzzlePieceDimension}px;"
                                 data-puzzle-slot="${puzzlePiecesCounter + 1}">
                             <img src="${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
                             get("puzzle-block-pieces")[puzzlePiecesCounter].src}" class="puzzle-piece-holder" style="width: 100%; height: auto;">

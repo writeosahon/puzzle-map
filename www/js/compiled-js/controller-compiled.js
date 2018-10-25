@@ -1155,8 +1155,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // height is >= width
                                         // get the space difference between the height and width and use to set appropriate padding for the puzzle content
                                         $('#puzzle-page #puzzle-page-puzzle-display-area').css({
-                                            "padding-top": puzzleDisplayHeight - puzzleDisplayWidth + "px",
-                                            "padding-bottom": puzzleDisplayHeight - puzzleDisplayWidth + "px"
+                                            "padding-top": Math.floor((puzzleDisplayHeight - puzzleDisplayWidth) / 2) + "px",
+                                            "padding-bottom": Math.floor((puzzleDisplayHeight - puzzleDisplayWidth) / 2) + "px"
                                         });
                                         // get the dimension for the puzzle pieces
                                         puzzlePieceDimension = Math.floor(puzzleDisplayWidth / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["levels"]["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]["total_puzzle_pieces"]));
@@ -1164,8 +1164,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // height is < width
                                         // get the space difference between the width and height and use to set appropriate padding for the puzzle content
                                         $('#puzzle-page #puzzle-page-puzzle-display-area').css({
-                                            "padding-left": puzzleDisplayWidth - puzzleDisplayHeight + "px",
-                                            "padding-right": puzzleDisplayWidth - puzzleDisplayHeight + "px"
+                                            "padding-left": Math.floor((puzzleDisplayWidth - puzzleDisplayHeight) / 2) + "px",
+                                            "padding-right": Math.floor((puzzleDisplayWidth - puzzleDisplayHeight) / 2) + "px"
                                         });
                                         // get the dimension for the puzzle pieces
                                         puzzlePieceDimension = Math.floor(puzzleDisplayHeight / Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["levels"]["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]["total_puzzle_pieces"]));
@@ -1180,7 +1180,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // for loop to generate puzzle display columns
 
                                         for (columnCounter = 0, totalColumns = totalRows; columnCounter < totalColumns; columnCounter++) {
-                                            puzzleColumnContent = "<span class=\"puzzle-pieces-container puzzle-drop-zone\"\n                                style=\"display: inline-block; margin: 0; padding: 0; width: " + puzzlePieceDimension + "px; \n                                height: " + puzzlePieceDimension + "px;\"\n                                data-puzzle-slot=\"" + (puzzlePiecesCounter + 1) + "\">\n                            <img src=\"" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-block-pieces")[puzzlePiecesCounter].src + "\" class=\"puzzle-piece-holder\" style=\"width: 100%; height: auto;\">\n                        </span>";
+                                            puzzleColumnContent = "<span class=\"puzzle-pieces-container puzzle-drop-zone\"\n                                style=\"display: inline-block; margin: 0; padding: 0; width: " + puzzlePieceDimension + "px;\"\n                                data-puzzle-slot=\"" + (puzzlePiecesCounter + 1) + "\">\n                            <img src=\"" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-block-pieces")[puzzlePiecesCounter].src + "\" class=\"puzzle-piece-holder\" style=\"width: 100%; height: auto;\">\n                        </span>";
 
                                             // add the column content to the row content
 
