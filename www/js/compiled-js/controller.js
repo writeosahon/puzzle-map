@@ -818,6 +818,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     get("puzzle-answer-pieces")[index].src =
                         `game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-block-${index + 1}-answer.png`;
                     // identify the puzzle slot value for each 'answer' puzzle piece
+                    // the puzzle slot value helps to identify if the puzzle piece has been placed in the right place
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.
                     get("puzzle-answer-pieces")[index].puzzleSlotValue = index + 1;
                 }
@@ -893,14 +894,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 } // end of row generator for-loop
 
 
-                let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
-                puzzlePageViewModel.puzzleImageAssetsMap.
-                            get("puzzle-answer-pieces").pop();
-
                 // insert two 'answer' puzzle pieces into two puzzle trays
-                $('#puzzle-page .puzzle-pieces-tray').eq(0).
-                html(`<img src="" class="puzzle-pieces" style="height: 100%; width: auto" 
-                         data-puzzle-slot="3">`);
+                for(let index =0; index < 2; index++){
+                    let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleImageAssetsMap.
+                    get("puzzle-answer-pieces").pop();
+
+                    $('#puzzle-page .puzzle-pieces-tray').eq(index).
+                    html(`<img src="${puzzleAnswerPiece.src}" class="puzzle-pieces" style="height: 100%; width: auto" 
+                         data-puzzle-slot="${puzzleAnswerPiece.puzzleSlotValue}">`);
+
+                }
 
                 // create the Draggable.Droppable object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject =

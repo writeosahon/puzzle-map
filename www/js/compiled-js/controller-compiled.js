@@ -1043,7 +1043,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
-                    var index, _index, puzzleDisplayHeight, puzzleDisplayWidth, puzzlePieceDimension, puzzlePiecesCounter, rowCounter, totalRows, puzzleRowContent, columnCounter, totalColumns, puzzleColumnContent, puzzleAnswerPiece;
+                    var index, _index, puzzleDisplayHeight, puzzleDisplayWidth, puzzlePieceDimension, puzzlePiecesCounter, rowCounter, totalRows, puzzleRowContent, columnCounter, totalColumns, puzzleColumnContent, _index2, puzzleAnswerPiece;
 
                     return regeneratorRuntime.wrap(function _callee17$(_context17) {
                         while (1) {
@@ -1135,6 +1135,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-block-pieces")[_index].src = "game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-block-" + (_index + 1) + "-puzzle.png";
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-answer-pieces")[_index].src = "game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-block-" + (_index + 1) + "-answer.png";
                                         // identify the puzzle slot value for each 'answer' puzzle piece
+                                        // the puzzle slot value helps to identify if the puzzle piece has been placed in the right place
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-answer-pieces")[_index].puzzleSlotValue = _index + 1;
                                     }
 
@@ -1195,11 +1196,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } // end of row generator for-loop
 
 
-                                    puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-answer-pieces").pop();
-
                                     // insert two 'answer' puzzle pieces into two puzzle trays
+                                    for (_index2 = 0; _index2 < 2; _index2++) {
+                                        puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-answer-pieces").pop();
 
-                                    $('#puzzle-page .puzzle-pieces-tray').eq(0).html("<img src=\"\" class=\"puzzle-pieces\" style=\"height: 100%; width: auto\" \n                         data-puzzle-slot=\"3\">");
+
+                                        $('#puzzle-page .puzzle-pieces-tray').eq(_index2).html("<img src=\"" + puzzleAnswerPiece.src + "\" class=\"puzzle-pieces\" style=\"height: 100%; width: auto\" \n                         data-puzzle-slot=\"" + puzzleAnswerPiece.puzzleSlotValue + "\">");
+                                    }
 
                                     // create the Draggable.Droppable object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject = new Draggable.Droppable([].concat(_toConsumableArray($('#puzzle-page .puzzle-pieces-container').get())), {
@@ -1362,7 +1365,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 45:
+                                case 44:
                                 case "end":
                                     return _context17.stop();
                             }
