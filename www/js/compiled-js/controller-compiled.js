@@ -1227,7 +1227,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("mirror:created", function (mirrorCreatedEvent) {
-                                        console.log("MIRROR CREATED", mirrorCreatedEvent.mirror);
+                                        $(mirrorCreatedEvent.mirror).css({ "width": "100% !important",
+                                            "height": "100% !important" });
                                     });
 
                                     /**

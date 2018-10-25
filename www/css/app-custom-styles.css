@@ -67,8 +67,8 @@
 }
 .draggable-mirror {
     z-index: 99999 !important;
-    width: calc(100vw / 2) !important;
-    height: auto !important;
+    /*width: calc(100vw / 2) !important;
+    height: auto !important;*/
 }
 .draggable-dropzone--occupied .puzzle-piece-holder {
     display: none;
