@@ -668,6 +668,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         levelNumber: 0,
 
         /**
+         * property holds the single-side dimension for a
+         * puzzle piece in the puzzle display area
+         */
+        puzzlePieceDimension: 0,
+
+        /**
          * property holds an instance of EasyTimer which is the timer used to track
          * how long it takes the user to complete a puzzle
          */
@@ -860,6 +866,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         ["total_puzzle_pieces"]));
                 }
 
+                // set the calculated puzzle piece dimension to the appropriate view-model property
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                    puzzlePieceDimension = puzzlePieceDimension;
+
                 // append the 'blank' puzzle pieces to the puzzle display content
                 for(let puzzlePiecesCounter = 0, rowCounter = 0,
                         totalRows = Math.sqrt(utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -894,11 +904,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                 // insert two 'answer' puzzle pieces into two puzzle trays
-                for(let index =0; index < 2; index++){
+                for(let index = 0; index < 2; index++){
+                    // get the puzzle 'answer' piece to be added
                     let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.puzzleImageAssetsMap.
                     get("puzzle-answer-pieces").pop();
 
+                    // add the puzzle 'answer' piece to the tray
                     $('#puzzle-page .puzzle-pieces-tray').eq(index).
                     html(`<img src="${puzzleAnswerPiece.src}" class="puzzle-pieces" style="height: 100%; width: auto" 
                          data-puzzle-slot="${puzzleAnswerPiece.puzzleSlotValue}">`);
@@ -922,21 +934,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).
                     removePlugin(Draggable.Plugins.Focusable);
 
-                    /**
-                     * function uses the "drag:start" event to track which
-                     * exact puzzle piece is being moved.
-                     */
-                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
-                    on("drag:start", function(dragStartEvent){
-                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                            puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
-                    });
+                /**
+                 * function uses the "drag:start" event to track which
+                 * exact puzzle piece is being moved.
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
+                on("drag:start", function(dragStartEvent){
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
+                });
 
+
+                /**
+                 * function uses the "mirror:created" event to dynamically
+                 * update the dimensions of the puzzle-piece "mirror" element
+                 */
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
                     on("mirror:created", function(mirrorCreatedEvent){
+                        // update the dimensions of the "mirror" element using the calculate puzzle piece dimension
                         $(mirrorCreatedEvent.mirror).css(
-                            {"width": "100% !important",
-                            "height": "100% !important"});
+                            {"width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                                    puzzlePieceDimension + "px !important",
+                            "height": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                                puzzlePieceDimension + "px !important"});
                 });
 
                 /**
@@ -967,6 +987,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // remove all puzzle hint animations from the container
                             $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                             removeClass("animated shake pulse");
+                        }
+                        else{ // initial container is a 'puzzle-pieces' tray
+                             // get the puzzle-tray-slot value attached to the puzzle-pieces-tray
+                            // the value identifies which puzzle tray is being accessed
+                            let puzzleTraySlotValue = utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.dragStartContainer.attr('data-puzzle-tray-slot');
+
+                            // remove all puzzle animations from the tray container
+                            $(`.puzzle-drop-zone.puzzle-pieces-tray[data-puzzle-tray-slot="${puzzleTraySlotValue}"]`, $thisPage).
+                            removeClass("animated flash");
                         }
                     });
 
@@ -1019,7 +1049,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // check if this is the completion of a valid puzzle movement
                         // This is done by check that the movement was flagged as a puzzleDropped action and
-                        // that the puzzle start-drop and puzzle dropped time stamps are exactly the same value
+                        // that the puzzle 'start-drop' and puzzle 'dropped' time stamps are exactly the same value
                         if(utopiasoftware[utopiasoftware_app_namespace].controller.
                                 puzzlePageViewModel.dragStartContainer.puzzleDropped === true &&
                             utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -1047,8 +1077,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
                                 set(puzzleSlotValue, true);
 
-                                // call the method to check the users answer sheet
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.checkAnswerSheet();
+                                // call the method to check the users answer sheet. Call in a separate event queue
+                                window.
+                                setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    puzzlePageViewModel.checkAnswerSheet, 0);
                             }
                             else{
                                 // check if user wants puzzle-hints
@@ -1076,6 +1108,52 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             }
                         }*/
                     });
+
+                /**
+                 * function uses the "droppable:stop" event to track whether it should request the
+                 * addition of a new puzzle-piece to the puzzle-pieces tray
+                 */
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
+                on("droppable:stop", function(droppableStopEvent){
+
+                    // check if this is the completion of a valid puzzle movement
+                    // This is done by check that the movement was flagged as a puzzleDropped action and
+                    // that the puzzle 'start-drop' and puzzle 'dropped' time stamps are exactly the same value
+                    if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.dragStartContainer.puzzleDropped === true &&
+                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.dragStartContainer.puzzleStartDropStamp ===
+                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.dragStartContainer.puzzleDroppedStamp) { // this is the completion of a valid puzzle movement
+
+                        // check if the dragStartContainer is a puzzle-pieces tray
+                        if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')){ // this is a puzzle-pieces tray
+
+                            // work in a separate event queue
+                            window.setTimeout(function(){
+                                // find a puzzle-pieces tray that is NOT occupied AND NOT the spare 3rd slot
+                                let emptyPuzzlePieceTray = $('#puzzle-page .puzzle-pieces-tray').get().
+                                find(function(arrayElem){
+                                    // check if puzzle tray is occupied
+                                    if($(arrayElem).children('.puzzle-pieces').length === 0){ // not occupied
+                                        if(! $(arrayElem).is('[data-puzzle-tray-slot="3"]')){ // this is not the 3rd spare slot
+                                            return true; // return this element
+                                        }
+                                    }
+                                }); // end of Array.find()
+
+                                // check if an empty puzzle-pieces tray that fits the criteria was found
+                                if(emptyPuzzlePieceTray) { // an empty puzzle-pieces tray which fits the criteria was found
+                                    // add a new puzzle piece to the tray
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        puzzlePageViewModel.addPuzzlePiece($(emptyPuzzlePieceTray).attr("data-puzzle-tray-slot"));
+                                }
+                            }, 0); // end of window.setTimeout()
+
+                        }
+                    }
+                });
 
                 /**
                  * function uses the "droppable:stop" event to track the
@@ -1173,6 +1251,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
             // set the puzzle level number to zero
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber = 0;
+            // set the puzzle piece dimension to zero
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                puzzlePieceDimension = 0;
             // flag that puzzle has NOT been completed
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleCompleted = false;
@@ -1249,7 +1330,52 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             return;
         },
 
+        /**
+         * method is used to add another 'answer' puzzle piece to the puzzle-pieces tray.
+         * This method is used AFTER the first 2 puzzle pieces have already been inserted.
+         * If there are no more puzzle pieces to add, this method does nothing
+         *
+         * @returns {Promise<void>}
+         */
+        async addPuzzlePiece(puzzleTraySlot){
 
+            // check if there are still puzzle pieces to add
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.
+            puzzlePageViewModel.puzzleImageAssetsMap.get("puzzle-answer-pieces").length === 0){ // no more puzzle pieces
+                return; // exit method
+            }
+
+            // get the puzzle-pieces tray where the puzzle piece is to be added
+            let puzzlePiecesTray = $(`#puzzle-page .puzzle-pieces-tray[data-puzzle-tray-slot="${puzzleTraySlot}"]`).eq(0);
+
+            // get the puzzle 'answer' piece to be added
+            let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
+            puzzlePageViewModel.puzzleImageAssetsMap.
+            get("puzzle-answer-pieces").pop();
+
+            // remove the retrieved puzzle-pieces tray form the collection of draggable containers
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.draggableDroppableObject.removeContainer(puzzlePiecesTray.get(0));
+
+            // add the puzzle 'answer' piece to the tray
+            puzzlePiecesTray.html(`<img src="${puzzleAnswerPiece.src}" class="puzzle-pieces" style="height: 100%; width: auto" 
+                         data-puzzle-slot="${puzzleAnswerPiece.puzzleSlotValue}">`);
+
+            // re-add the retrieved puzzle-pieces tray form the collection of draggable containers
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+            puzzlePageViewModel.draggableDroppableObject.addContainer(puzzlePiecesTray.get(0));
+
+            // add the puzzle animation fo a new puzzle piece inclusion
+            puzzlePiecesTray.addClass("animated flash");
+            return;
+        },
+
+        /**
+         * pauses the puzzle level. Suspends the puzzle timer and
+         * displays the pause-puzzle modal
+         *
+         * @returns {Promise<void>}
+         */
         async pausePuzzleLevel(){
 
             // flag that the puzzle has not been completed
@@ -1261,6 +1387,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             await $('#pause-puzzle-modal').get(0).show();
         },
 
+        /**
+         * resumes the puzzle level. Resumes the puzzle timer and
+         * hides the pause-puzzle modal
+         *
+         * @returns {Promise<void>}
+         */
         async resumePuzzleLevel(){
 
             // flag that the puzzle has not been completed
