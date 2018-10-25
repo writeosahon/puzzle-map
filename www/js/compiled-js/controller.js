@@ -932,6 +932,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
                     });
 
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.
+                    on("mirror:created", function(mirrorCreatedEvent){
+                        console.log("MIRROR CREATED", mirrorCreatedEvent.mirror);
+                });
+
                 /**
                  * function uses the "droppable:start" event to track when a puzzle piece has started to get dropped.
                  * The method is used to check the puzzle movements of puzzle pieces

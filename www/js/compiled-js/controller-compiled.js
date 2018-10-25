@@ -1226,6 +1226,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.dragStartSource = $(dragStartEvent.source);
                                     });
 
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("mirror:created", function (mirrorCreatedEvent) {
+                                        console.log("MIRROR CREATED", mirrorCreatedEvent.mirror);
+                                    });
+
                                     /**
                                      * function uses the "droppable:start" event to track when a puzzle piece has started to get dropped.
                                      * The method is used to check the puzzle movements of puzzle pieces
@@ -1365,7 +1369,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 44:
+                                case 45:
                                 case "end":
                                     return _context17.stop();
                             }
