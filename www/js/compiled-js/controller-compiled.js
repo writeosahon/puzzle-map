@@ -1238,13 +1238,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     /**
-                                     * function uses the "mirror:created" event to dynamically
+                                     * function uses the "mirror:attached" event to dynamically
                                      * update the dimensions of the puzzle-piece "mirror" element
                                      */
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("mirror:created", function (mirrorCreatedEvent) {
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("mirror:attached", function (mirrorAttachedEvent) {
                                         // update the dimensions of the "mirror" element using the calculate puzzle piece dimension
-                                        $(mirrorCreatedEvent.mirror).css({ "width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important",
-                                            "height": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important" });
+                                        $('.draggable-mirror').css({ "width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important",
+                                            "height": "auto !important" });
                                     });
 
                                     /**
