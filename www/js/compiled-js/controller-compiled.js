@@ -1245,6 +1245,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // update the dimensions of the "mirror" element using the calculate puzzle piece dimension
                                         $('.draggable-mirror').css({ "width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important",
                                             "height": "auto !important" });
+                                        console.log("MIRROR DIMENSION", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension);
                                     });
 
                                     /**

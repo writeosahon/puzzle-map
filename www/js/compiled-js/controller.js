@@ -956,6 +956,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             {"width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                                     puzzlePieceDimension + "px !important",
                             "height": "auto !important"});
+                        console.log("MIRROR DIMENSION", utopiasoftware[utopiasoftware_app_namespace].controller.
+                            puzzlePageViewModel.puzzlePieceDimension);
                 });
 
                 /**
