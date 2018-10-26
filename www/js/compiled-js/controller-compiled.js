@@ -1407,7 +1407,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     // append the style for the Draggable mirror element to the page
-                                    $('#puzzle-page').append("\n                <style>\n                    .draggable-mirror {\n                        width: " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px;\n                        height: auto;\n                    }\n                </style>");
+                                    $('#puzzle-page').append("\n                <style>\n                    .draggable-mirror {\n                        width: " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important;\n                        height: auto !important;\n                    }\n                </style>");
 
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();

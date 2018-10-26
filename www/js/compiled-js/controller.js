@@ -1159,8 +1159,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 <style>
                     .draggable-mirror {
                         width: ${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
-                        puzzlePieceDimension}px;
-                        height: auto;
+                        puzzlePieceDimension}px !important;
+                        height: auto !important;
                     }
                 </style>`);
 
