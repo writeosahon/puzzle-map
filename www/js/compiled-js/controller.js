@@ -1080,17 +1080,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             }
                         }
 
-                        /*if(! $(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')){
-                            let puzzleSlotValue = $(droppableStopEvent.dropzone).attr('data-puzzle-slot');
-
-
-                            if(utopiasoftware[utopiasoftware_app_namespace].controller.
-                                samplePuzzlePageViewModel.dragStartSource.attr('data-puzzle-slot') == puzzleSlotValue){
-                                // add positive animation to container
-                                $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
-                                addClass("animated pulse");
+                        else{ // this is NOT a valid puzzle movement
+                            // check if the container where the puzzle piece started moving from is not a puzzle-pieces tray and
+                            // the container where the the puzzle piece ended up is a puzzle-pieces tray
+                            if((! utopiasoftware[utopiasoftware_app_namespace].controller.
+                                puzzlePageViewModel.dragStartContainer.is('.puzzle-pieces-tray')) &&
+                                $(droppableStopEvent.dropzone).is('.puzzle-pieces-tray')){
+                                // since the user moved a puzzle piece from the puzzle display area back to the puzzle-pieces tray,
+                                // then, update the puzzleAnswerSheet map object to indicate this answer was wrong
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap.
+                                    set(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    puzzlePageViewModel.dragStartContainer.attr('data-puzzle-slot'), false);
                             }
-                        }*/
+                        }
+
+
                     });
 
                 /**
