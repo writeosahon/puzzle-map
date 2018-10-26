@@ -1309,6 +1309,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update the puzzleAnswerSheet map object to indicate this answer was correct
             for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleAnswerSheetMap){
+                console.log("CHECK ANSWER ENTRY", entry);
                 if(entry[1] === false){ // an answer is still wrong
                     // flag that puzzle has NOT been completed
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.

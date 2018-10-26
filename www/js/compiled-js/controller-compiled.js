@@ -1606,14 +1606,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context20.next = 13;
+                                    _context20.next = 14;
                                     break;
                                 }
 
                                 entry = _step.value;
 
+                                console.log("CHECK ANSWER ENTRY", entry);
+
                                 if (!(entry[1] === false)) {
-                                    _context20.next = 10;
+                                    _context20.next = 11;
                                     break;
                                 }
 
@@ -1622,46 +1624,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
                                 return _context20.abrupt("return");
 
-                            case 10:
+                            case 11:
                                 _iteratorNormalCompletion = true;
                                 _context20.next = 5;
                                 break;
 
-                            case 13:
-                                _context20.next = 19;
+                            case 14:
+                                _context20.next = 20;
                                 break;
 
-                            case 15:
-                                _context20.prev = 15;
+                            case 16:
+                                _context20.prev = 16;
                                 _context20.t0 = _context20["catch"](3);
                                 _didIteratorError = true;
                                 _iteratorError = _context20.t0;
 
-                            case 19:
-                                _context20.prev = 19;
+                            case 20:
                                 _context20.prev = 20;
+                                _context20.prev = 21;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
-                            case 22:
-                                _context20.prev = 22;
+                            case 23:
+                                _context20.prev = 23;
 
                                 if (!_didIteratorError) {
-                                    _context20.next = 25;
+                                    _context20.next = 26;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
-                            case 25:
-                                return _context20.finish(22);
-
                             case 26:
-                                return _context20.finish(19);
+                                return _context20.finish(23);
 
                             case 27:
+                                return _context20.finish(20);
+
+                            case 28:
 
                                 // flag that puzzle has been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
@@ -1669,12 +1671,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
                                 return _context20.abrupt("return");
 
-                            case 30:
+                            case 31:
                             case "end":
                                 return _context20.stop();
                         }
                     }
-                }, _callee20, this, [[3, 15, 19, 27], [20,, 22, 26]]);
+                }, _callee20, this, [[3, 16, 20, 28], [21,, 23, 27]]);
             }));
 
             function checkAnswerSheet() {
