@@ -1238,18 +1238,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     /**
-                                     * function uses the "mirror:attached" event to dynamically
-                                     * update the dimensions of the puzzle-piece "mirror" element
-                                     */
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.on("mirror:attached", function (mirrorAttachedEvent) {
-                                        // update the dimensions of the "mirror" element using the calculate puzzle piece dimension
-                                        $('.draggable-mirror').css({ "width": utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px",
-                                            "height": "auto !important" });
-                                        console.log("MIRROR DIMENSION", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension);
-                                        console.log("MIRROR CSS", $('.draggable-mirror').css("width"));
-                                    });
-
-                                    /**
                                      * function uses the "droppable:start" event to track when a puzzle piece has started to get dropped.
                                      * The method is used to check the puzzle movements of puzzle pieces
                                      */
@@ -1417,6 +1405,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // display the new value of the move counter to the user
                                         $('#puzzle-page .puzzle-moves-counter').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
                                     });
+
+                                    // append the style for the Draggable mirror element to the page
+                                    $('#puzzle-page').append("\n                <style>\n                    .draggable-mirror {\n                        width: " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px;\n                        height: auto;\n                    }\n                </style>");
 
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
