@@ -1405,6 +1405,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // append the style for the Draggable mirror element to the page
                                     $('#puzzle-page').append("\n                <style>\n                    .draggable-mirror {\n                        width: " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important;\n                        height: auto !important;\n                    }\n                </style>");
 
+                                    // update the contents of the contents of the pause-puzzle modal
+                                    $('#pause-puzzle-modal .level-name').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["levels"]["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]["level_name"]);
+
+                                    $('#pause-puzzle-modal .level-number').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber);
+
+                                    $('#pause-puzzle-modal .puzzle-image-container').html("<img src=\"game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-puzzle-completed.png\" alt=\"Puzzle Map\" style=\"width: 100%; height: auto\">");
+
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start({ startValues: { secondTenths: 0, seconds: 0, minutes: 0, hours: 0, days: 0 },
@@ -1424,7 +1431,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 47:
+                                case 50:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1687,6 +1694,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is used to add another 'answer' puzzle piece to the puzzle-pieces tray.
          * This method is used AFTER the first 2 puzzle pieces have already been inserted.
          * If there are no more puzzle pieces to add, this method does nothing
+         *
+         * @param puzzleTraySlot the puzzle-pieces tray slot value belonging to the
+         * puxxle-pieces tray where the new puzzle-piece will be added
          *
          * @returns {Promise<void>}
          */
