@@ -903,8 +903,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 } // end of row generator for-loop
 
 
-                // insert two 'answer' puzzle pieces into two puzzle trays
-                for(let index = 0; index < 2; index++){
+                // insert three 'answer' puzzle pieces into two puzzle trays
+                for(let index = 0; index < 3; index++){
                     // get the puzzle 'answer' piece to be added
                     let puzzleAnswerPiece = utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.puzzleImageAssetsMap.
@@ -1125,9 +1125,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 find(function(arrayElem){
                                     // check if puzzle tray is occupied
                                     if($(arrayElem).children('.puzzle-pieces').length === 0){ // not occupied
-                                        if(! $(arrayElem).is('[data-puzzle-tray-slot="3"]')){ // this is not the 3rd spare slot
-                                            return true; // return this element
-                                        }
+                                        return true; // return this element
                                     }
                                 }); // end of Array.find()
 
