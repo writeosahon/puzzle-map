@@ -1405,12 +1405,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // append the style for the Draggable mirror element to the page
                                     $('#puzzle-page').append("\n                <style>\n                    .draggable-mirror {\n                        width: " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzlePieceDimension + "px !important;\n                        height: auto !important;\n                    }\n                </style>");
 
-                                    // update the contents of the contents of the pause-puzzle modal
+                                    // update the contents of the pause-puzzle modal
                                     $('#pause-puzzle-modal .level-name').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["levels"]["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]["level_name"]);
 
                                     $('#pause-puzzle-modal .level-number').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber);
 
                                     $('#pause-puzzle-modal .puzzle-image-container').html("<img src=\"game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-puzzle-completed.png\" alt=\"Puzzle Map\" style=\"width: 100%; height: auto\">");
+
+                                    // update the contents of the level-complete modal
+                                    $('#puzzle-level-complete-modal .puzzle-image-container').html("<img src=\"game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-puzzle-completed.png\" alt=\"Puzzle Map\" style=\"width: 100%; height: auto\">");
 
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
@@ -1431,7 +1434,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 50:
+                                case 51:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1566,11 +1569,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the contents of the level completed modal
                                 $('#puzzle-level-complete-modal .level-time').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                                 $('#puzzle-level-complete-modal .level-moves').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
+                                $('#puzzle-level-complete-modal .level-name').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["levels"]["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]["level_name"]);
+                                $('#puzzle-level-complete-modal .level-number').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber);
 
                                 // show the level completed modal
                                 $('#puzzle-level-complete-modal').get(0).show();
 
-                            case 5:
+                            case 7:
                             case "end":
                                 return _context19.stop();
                         }

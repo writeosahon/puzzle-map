@@ -1166,7 +1166,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 </style>`);
 
-                // update the contents of the contents of the pause-puzzle modal
+                // update the contents of the pause-puzzle modal
                 $('#pause-puzzle-modal .level-name').
                 html(utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzleLevelsPageViewModel.gameConfigObject["levels"]
@@ -1177,6 +1177,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber);
 
                 $('#pause-puzzle-modal .puzzle-image-container').
+                html(`<img src="game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-puzzle-completed.png" alt="Puzzle Map" style="width: 100%; height: auto">`);
+
+                // update the contents of the level-complete modal
+                $('#puzzle-level-complete-modal .puzzle-image-container').
                 html(`<img src="game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-puzzle-completed.png" alt="Puzzle Map" style="width: 100%; height: auto">`);
 
                 // create the Puzzle Timer object
@@ -1307,6 +1311,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             );
             $('#puzzle-level-complete-modal .level-moves').html(
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter
+            );
+            $('#puzzle-level-complete-modal .level-name').html(
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.gameConfigObject["levels"]
+                    ["" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber]
+                    ["level_name"]
+            );
+            $('#puzzle-level-complete-modal .level-number').html(
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber
             );
 
             // show the level completed modal
