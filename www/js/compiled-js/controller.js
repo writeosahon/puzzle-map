@@ -1341,7 +1341,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             await $('#puzzle-level-complete-modal').get(0).show();
             // start the confetti animation
             // create the Puzzle-Level-Completed Confetti
-            /*utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.start();*/
+            window.generatePuzzleConfetti();
         },
 
         /**

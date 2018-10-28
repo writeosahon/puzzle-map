@@ -1591,6 +1591,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return $('#puzzle-level-complete-modal').get(0).show();
 
                             case 8:
+                                // start the confetti animation
+                                // create the Puzzle-Level-Completed Confetti
+                                window.generatePuzzleConfetti();
+
+                            case 9:
                             case "end":
                                 return _context19.stop();
                         }
