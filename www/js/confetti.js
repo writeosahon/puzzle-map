@@ -337,6 +337,7 @@ $(document).on("postshow", "#puzzle-level-complete-modal", function() {
     confetti = {};
     confetti.Context = function(id) {
         var i = 0;
+        var currentObject = this;
         var canvas = document.getElementById(id);
         var canvasParent = canvas.parentNode;
         var canvasWidth = canvasParent.offsetWidth;
@@ -383,7 +384,7 @@ $(document).on("postshow", "#puzzle-level-complete-modal", function() {
                 confettiRibbons[i].Draw(context);
             }
             this.interval = rAF(function() {
-                confetti.update();
+                currentObject.update();
             });
         }
     }
