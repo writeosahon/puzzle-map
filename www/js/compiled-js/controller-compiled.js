@@ -1421,9 +1421,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // update the contents of the level-complete modal
                                     $('#puzzle-level-complete-modal .puzzle-image-container').html("<img src=\"game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-puzzle-completed.png\" alt=\"Puzzle Map\" style=\"width: 100%; height: auto\">");
 
-                                    // create the Puzzle-Level-Completed Confetti
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti();
-
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start({ startValues: { secondTenths: 0, seconds: 0, minutes: 0, hours: 0, days: 0 },
@@ -1443,7 +1440,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 52:
+                                case 51:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1590,9 +1587,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return $('#puzzle-level-complete-modal').get(0).show();
 
                             case 8:
-                                // start the confetti animation
-                                // create the Puzzle-Level-Completed Confetti
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.start();
+                                // create and the Puzzle-Level-Completed Confetti
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti();
 
                             case 9:
                             case "end":

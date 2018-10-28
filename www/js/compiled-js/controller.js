@@ -1189,11 +1189,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#puzzle-level-complete-modal .puzzle-image-container').
                 html(`<img src="game-puzzle/level-${utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber}-puzzle-completed.png" alt="Puzzle Map" style="width: 100%; height: auto">`);
 
-                // create the Puzzle-Level-Completed Confetti
-                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
-                    window.generatePuzzleConfetti();
-
-
                 // create the Puzzle Timer object
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
@@ -1339,9 +1334,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // show the level completed modal
             await $('#puzzle-level-complete-modal').get(0).show();
-            // start the confetti animation
-            // create the Puzzle-Level-Completed Confetti
-            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.start();
+            // create and the Puzzle-Level-Completed Confetti
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
+                window.generatePuzzleConfetti();
         },
 
         /**
