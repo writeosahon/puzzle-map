@@ -1422,8 +1422,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#puzzle-level-complete-modal .puzzle-image-container').html("<img src=\"game-puzzle/level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + "-puzzle-completed.png\" alt=\"Puzzle Map\" style=\"width: 100%; height: auto\">");
 
                                     // create the Puzzle-Level-Completed Confetti
-                                    /*utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
-                                        new confetti.Context('puzzle-level-complete-confetti-canvas');*/
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti();
 
                                     // create the Puzzle Timer object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer = new Timer();
@@ -1444,7 +1443,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 51:
+                                case 52:
                                 case "end":
                                     return _context17.stop();
                             }
@@ -1511,8 +1510,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap.clear();
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleImageAssetsMap = null;
             // destroy the Puzzle-Level-Completed Confetti
-            /*utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.stop();
-            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = null;*/
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.stop();
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = null;
             // set the puzzle move counter to zero
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
             // set the puzzle level number to zero
@@ -1593,7 +1592,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 8:
                                 // start the confetti animation
                                 // create the Puzzle-Level-Completed Confetti
-                                window.generatePuzzleConfetti();
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.start();
 
                             case 9:
                             case "end":

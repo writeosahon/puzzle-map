@@ -389,8 +389,10 @@ window.generatePuzzleConfetti = function() {
         }
     }
     var confetti = new confetti.Context('puzzle-level-complete-confetti-canvas');
-    confetti.start();
+    //confetti.start();
     window.addEventListener('resize', function(event){
         confetti.resize();
     });
+
+    return confetti;
 };
