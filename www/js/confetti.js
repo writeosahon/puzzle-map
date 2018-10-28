@@ -388,9 +388,9 @@ $(document).on("preshow", "#puzzle-level-complete-modal", function() {
             });
         }
     }
-    var confettix = new confetti.Context('puzzle-level-complete-confetti-canvas');
-    confettix.start();
+    var confetti = new confetti.Context('puzzle-level-complete-confetti-canvas');
+    confetti.start();
     window.addEventListener('resize', function(event){
-        confettix.resize();
+        confetti.resize();
     });
 });
