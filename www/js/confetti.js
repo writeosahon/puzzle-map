@@ -337,6 +337,7 @@ var retina = window.devicePixelRatio,
     confettiNameSpace.confetti = {};
     confettiNameSpace.confetti.Context = function(id) {
         var i = 0;
+        var currentObject = this;
         var canvas = document.getElementById(id);
         var canvasParent = canvas.parentNode;
         var canvasWidth = canvasParent.offsetWidth;
@@ -383,8 +384,8 @@ var retina = window.devicePixelRatio,
                 confettiRibbons[i].Draw(context);
             }
             this.interval = rAF(function() {
-                this.update();
-            }.bind(this));
+                currentObject.update();
+            });
         }
     }
 
