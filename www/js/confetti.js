@@ -44,7 +44,7 @@ var retina = window.devicePixelRatio,
 }(window));
 
 // DEFINE THE CONFETTI CLASS
-(function(confettiNameSpace) {
+$(document).on("postshow", "#puzzle-level-complete-modal", function() {
     var speed = 50,
         duration = (1.0 / speed),
         confettiRibbonCount = 11,
@@ -334,10 +334,9 @@ var retina = window.devicePixelRatio,
         }
     }
     ConfettiRibbon.bounds = new Vector2(0, 0);
-    confettiNameSpace.confetti = {};
-    confettiNameSpace.confetti.Context = function(id) {
+    confetti = {};
+    confetti.Context = function(id) {
         var i = 0;
-        var currentObject = this;
         var canvas = document.getElementById(id);
         var canvasParent = canvas.parentNode;
         var canvasWidth = canvasParent.offsetWidth;
@@ -384,9 +383,13 @@ var retina = window.devicePixelRatio,
                 confettiRibbons[i].Draw(context);
             }
             this.interval = rAF(function() {
-                currentObject.update();
+                confetti.update();
             });
         }
     }
-
-})(window);
+    var confetti = new confetti.Context('puzzle-level-complete-confetti-canvas');
+    confetti.start();
+    window.addEventListener('resize', function(event){
+        confetti.resize();
+    });
+});
