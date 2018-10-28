@@ -44,7 +44,7 @@ var retina = window.devicePixelRatio,
 }(window));
 
 // DEFINE THE CONFETTI CLASS
-$(document).on("postshow", "#puzzle-level-complete-modal", function() {
+$(document).on("preshow", "#puzzle-level-complete-modal", function() {
     var speed = 50,
         duration = (1.0 / speed),
         confettiRibbonCount = 11,
@@ -388,9 +388,9 @@ $(document).on("postshow", "#puzzle-level-complete-modal", function() {
             });
         }
     }
-    var confetti = new confetti.Context('puzzle-level-complete-confetti-canvas');
-    confetti.start();
+    var confettix = new confetti.Context('puzzle-level-complete-confetti-canvas');
+    confettix.start();
     window.addEventListener('resize', function(event){
-        confetti.resize();
+        confettix.resize();
     });
 });
