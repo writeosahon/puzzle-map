@@ -384,7 +384,7 @@ var retina = window.devicePixelRatio,
             }
             this.interval = rAF(function() {
                 this.update();
-            });
+            }.bind(this));
         }
     }
 
