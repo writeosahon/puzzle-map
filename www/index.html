@@ -80,6 +80,9 @@
     <!-- EasyTimer JS library -->
     <script src="js/easytimer-3.4.0.min.js"></script>
 
+    <!-- Confetti JS library -->
+    <script src="js/confetti.js"></script>
+
     <!-- hybrid script libraries for cordova -->
     <script src="cordova.js"></script>
 
@@ -207,10 +210,15 @@
 <!-- puzzle-level-complete-modal -->
 <ons-modal id="puzzle-level-complete-modal" direction="up" style="background-color: rgba(0,0,0,0);">
     <div style="position: relative; display: block; top: 0; left: 0; width: 100vw; height: 100vh; margin: 0; padding: 0;">
+        <!-- confetti canvas -->
+        <canvas id="puzzle-level-complete-confetti-canvas" width="1" height="1"
+                style="position: absolute; z-index: 2; top: 0; left: 0; width: 100vw;
+                    height: calc(100vw + ((100vh - 100vw) / 2));"></canvas>
 
         <!-- header -->
-        <div class="puzzle-modal-header" style="position: absolute; display: block; top: 0; left: 0; margin: 0; padding: 0;
-         width: 100vw; height: calc((100vh - 100vw) / 2);">
+        <div class="puzzle-modal-header" style="position: absolute; display: block; z-index: 1;
+            top: 0; left: 0; margin: 0; padding: 0;
+            width: 100vw; height: calc((100vh - 100vw) / 2);">
             <!-- header content -->
             <div style="display: block; width: 100%; margin: 0; padding: 15px;
          text-align: center; font-size: 2em; color: #F4C724; text-shadow: -1px -1px 2px #000000;">
@@ -220,7 +228,7 @@
         </div>
 
         <!-- content block -->
-        <div class="puzzle-modal-content" style="position: absolute; display: block; top: calc((100vh - 100vw) / 2);
+        <div class="puzzle-modal-content" style="position: absolute; display: block; z-index: 1; top: calc((100vh - 100vw) / 2);
          left: 0; margin: 0; padding: 0; width: 100vw; height: calc(100vw);">
             <!-- display content-->
             <div class="puzzle-level-complete-content-container"
@@ -259,8 +267,9 @@
         </div>
 
         <!-- footer -->
-        <div class="puzzle-modal-footer" style="position: absolute; display: block; bottom: 0; left: 0; margin: 0; padding: 0;
-         width: 100vw; height: calc((100vh - 100vw) / 2);">
+        <div class="puzzle-modal-footer" style="position: absolute; display: block; z-index: 2;
+            bottom: 0; left: 0; margin: 0; padding: 0;
+            width: 100vw; height: calc((100vh - 100vw) / 2);">
             <!-- footer content -->
             <div style="display: block; width: 100%; margin: 0; padding: 15px; text-align: center;">
                 <ons-button style="width: 30%; background-color: rgba(63,81,181,1); color: #F4C724; border-radius: 21px;
