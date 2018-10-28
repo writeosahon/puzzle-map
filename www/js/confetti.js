@@ -44,7 +44,7 @@ var retina = window.devicePixelRatio,
 }(window));
 
 // DEFINE THE CONFETTI CLASS
-$(document).on("preshow", "#puzzle-level-complete-modal", function() {
+$(document).on("postshow", "#puzzle-level-complete-modal", function() {
     var speed = 50,
         duration = (1.0 / speed),
         confettiRibbonCount = 11,
