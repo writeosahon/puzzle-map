@@ -383,7 +383,7 @@ var retina = window.devicePixelRatio,
                 confettiRibbons[i].Draw(context);
             }
             this.interval = rAF(function() {
-                confetti.update();
+                this.update();
             });
         }
     }
