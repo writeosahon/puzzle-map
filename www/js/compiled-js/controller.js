@@ -1596,10 +1596,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             console.log("PHOTO PATH", res.filePath);
                             resolve(res.filePath); // resolve with the photo file path
                         }
-                    },'jpg', 80, `MapTEAZER-Level- ${utopiasoftware[utopiasoftware_app_namespace].controller.
+                    },'jpg', 80, `MapTEAZER-Level-${utopiasoftware[utopiasoftware_app_namespace].controller.
                         puzzlePageViewModel.levelNumber}${Date.now()}`);
                 });
 
+                console.log("SNAPSHOT URL", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleSnapshotFilePath);
                 // return the file path for the snapshot
                 return utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.puzzleSnapshotFilePath;

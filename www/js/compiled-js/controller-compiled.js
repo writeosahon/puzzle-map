@@ -2129,15 +2129,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             console.log("PHOTO PATH", res.filePath);
                                             resolve(res.filePath); // resolve with the photo file path
                                         }
-                                    }, 'jpg', 80, "MapTEAZER-Level- " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + Date.now());
+                                    }, 'jpg', 80, "MapTEAZER-Level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + Date.now());
                                 });
 
                             case 4:
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = _context30.sent;
+
+
+                                console.log("SNAPSHOT URL", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
+                                // return the file path for the snapshot
                                 return _context30.abrupt("return", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
 
-                            case 8:
-                                _context30.prev = 8;
+                            case 9:
+                                _context30.prev = 9;
                                 _context30.t0 = _context30["catch"](0);
 
                                 // inform the user that snapshot could not be taken
@@ -2158,19 +2162,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 });
 
-                            case 11:
-                                _context30.prev = 11;
+                            case 12:
+                                _context30.prev = 12;
 
                                 // show the footer buttons on the modal before taking snapshot
                                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
-                                return _context30.finish(11);
+                                return _context30.finish(12);
 
-                            case 14:
+                            case 15:
                             case "end":
                                 return _context30.stop();
                         }
                     }
-                }, _callee30, this, [[0, 8, 11, 14]]);
+                }, _callee30, this, [[0, 9, 12, 15]]);
             }));
 
             function snapshotButtonClicked() {
