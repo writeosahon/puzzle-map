@@ -2124,12 +2124,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
 
                             case 4:
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePathawait = _context30.sent;
-                                _context30.next = 10;
-                                break;
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = _context30.sent;
+                                return _context30.abrupt("return", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
 
-                            case 7:
-                                _context30.prev = 7;
+                            case 8:
+                                _context30.prev = 8;
                                 _context30.t0 = _context30["catch"](0);
 
                                 // inform the user that snapshot could not be taken
@@ -2150,19 +2149,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 });
 
-                            case 10:
-                                _context30.prev = 10;
+                            case 11:
+                                _context30.prev = 11;
 
                                 // show the footer buttons on the modal before taking snapshot
                                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
-                                return _context30.finish(10);
+                                return _context30.finish(11);
 
-                            case 13:
+                            case 14:
                             case "end":
                                 return _context30.stop();
                         }
                     }
-                }, _callee30, this, [[0, 7, 10, 13]]);
+                }, _callee30, this, [[0, 8, 11, 14]]);
             }));
 
             function snapshotButtonClicked() {
@@ -2182,11 +2181,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context31.prev = _context31.next) {
                             case 0:
+                                _context31.next = 2;
+                                return $('#puzzle-level-complete-modal').get(0).hide();
 
+                            case 2:
                                 // go back all the way to the Puzzle-Levels page i.e. the app's main page
                                 $('#app-main-navigator').get(0).popPage({ times: $('#app-main-navigator').get(0).pages.length - 1 });
 
-                            case 1:
+                            case 3:
                             case "end":
                                 return _context31.stop();
                         }
@@ -2199,6 +2201,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return continueButtonClicked;
+        }(),
+
+
+        /**
+         * method is triggered when the Share button on the Puzzle-Level-Complete modal is clicked
+         */
+        shareButtonClicked: function () {
+            var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32() {
+                return regeneratorRuntime.wrap(function _callee32$(_context32) {
+                    while (1) {
+                        switch (_context32.prev = _context32.next) {
+                            case 0:
+                                _context32.next = 2;
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.snapshotButtonClicked();
+
+                            case 2:
+                                _context32.next = 4;
+                                return new Promise(function (resolve, reject) {
+                                    // popup the share actionsheet widget
+                                    window.plugins.socialsharing.shareWithOptions({
+                                        message: "I just completed Level " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + " on Map TEAZER Puzzle.\nCome join me! #MapTEAZER #Puzzle",
+                                        files: [utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath],
+                                        subject: "Map TEAZER Level Completed",
+                                        chooserTitle: "share MapTEAZER level success with..."
+                                    }, resolve, reject);
+                                });
+
+                            case 4:
+                            case "end":
+                                return _context32.stop();
+                        }
+                    }
+                }, _callee32, this);
+            }));
+
+            function shareButtonClicked() {
+                return _ref32.apply(this, arguments);
+            }
+
+            return shareButtonClicked;
         }()
     }
 

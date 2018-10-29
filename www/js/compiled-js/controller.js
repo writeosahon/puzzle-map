@@ -1569,7 +1569,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // get the file path for the successfully taken snapshot
                 utopiasoftware[utopiasoftware_app_namespace].controller.
-                    puzzlePageViewModel.puzzleSnapshotFilePathawait =
+                    puzzlePageViewModel.puzzleSnapshotFilePath =
                     await new Promise(function(resolve, reject){
                     navigator.screenshot.save(function(error,res){
                         if(error){ // there is an error
@@ -1582,6 +1582,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     },'jpg', 80, `MapTEAZER-Level- ${utopiasoftware[utopiasoftware_app_namespace].controller.
                         puzzlePageViewModel.levelNumber}${Date.now()}`);
                 });
+
+                // return the file path for the snapshot
+                return utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleSnapshotFilePath;
             }
             catch(err){
                 // inform the user that snapshot could not be taken
@@ -1612,8 +1616,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async continueButtonClicked(){
 
+            // hide the Puzzle-Level-Complete modal
+            await $('#puzzle-level-complete-modal').get(0).hide();
             // go back all the way to the Puzzle-Levels page i.e. the app's main page
             $('#app-main-navigator').get(0).popPage({times: $('#app-main-navigator').get(0).pages.length - 1});
+        },
+
+        /**
+         * method is triggered when the Share button on the Puzzle-Level-Complete modal is clicked
+         */
+        async shareButtonClicked(){
+
+            // take a snapshot to 'share'
+            await utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.snapshotButtonClicked();
+
+            // share the snapshot
+            await new Promise(function(resolve, reject){
+                // popup the share actionsheet widget
+                window.plugins.socialsharing.shareWithOptions({
+                    message: `I just completed Level ${utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzlePageViewModel.levelNumber} on Map TEAZER Puzzle.\nCome join me! #MapTEAZER #Puzzle`,
+                    files: [utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzlePageViewModel.puzzleSnapshotFilePath],
+                    subject: "Map TEAZER Level Completed",
+                    chooserTitle: "share MapTEAZER level success with..."
+                }, resolve, reject);
+            });
         }
     }
 
