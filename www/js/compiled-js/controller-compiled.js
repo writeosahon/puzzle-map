@@ -1588,7 +1588,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 8:
                                 // create and the Puzzle-Level-Completed Confetti
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti();
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
 
                             case 9:
                             case "end":
@@ -1620,16 +1620,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         switch (_context20.prev = _context20.next) {
                             case 0:
 
+                                console.log("CHECK ANSWER ENTRY STARTED");
+
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
                                 _iteratorNormalCompletion = true;
                                 _didIteratorError = false;
                                 _iteratorError = undefined;
-                                _context20.prev = 3;
+                                _context20.prev = 4;
                                 _iterator = utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap[Symbol.iterator]();
 
-                            case 5:
+                            case 6:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context20.next = 14;
+                                    _context20.next = 15;
                                     break;
                                 }
 
@@ -1638,7 +1640,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 console.log("CHECK ANSWER ENTRY", entry);
 
                                 if (!(entry[1] === false)) {
-                                    _context20.next = 11;
+                                    _context20.next = 12;
                                     break;
                                 }
 
@@ -1647,46 +1649,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
                                 return _context20.abrupt("return");
 
-                            case 11:
+                            case 12:
                                 _iteratorNormalCompletion = true;
-                                _context20.next = 5;
+                                _context20.next = 6;
                                 break;
 
-                            case 14:
-                                _context20.next = 20;
+                            case 15:
+                                _context20.next = 21;
                                 break;
 
-                            case 16:
-                                _context20.prev = 16;
-                                _context20.t0 = _context20["catch"](3);
+                            case 17:
+                                _context20.prev = 17;
+                                _context20.t0 = _context20["catch"](4);
                                 _didIteratorError = true;
                                 _iteratorError = _context20.t0;
 
-                            case 20:
-                                _context20.prev = 20;
+                            case 21:
                                 _context20.prev = 21;
+                                _context20.prev = 22;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
-                            case 23:
-                                _context20.prev = 23;
+                            case 24:
+                                _context20.prev = 24;
 
                                 if (!_didIteratorError) {
-                                    _context20.next = 26;
+                                    _context20.next = 27;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
-                            case 26:
-                                return _context20.finish(23);
-
                             case 27:
-                                return _context20.finish(20);
+                                return _context20.finish(24);
 
                             case 28:
+                                return _context20.finish(21);
+
+                            case 29:
 
                                 // flag that puzzle has been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
@@ -1694,12 +1696,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
                                 return _context20.abrupt("return");
 
-                            case 31:
+                            case 32:
                             case "end":
                                 return _context20.stop();
                         }
                     }
-                }, _callee20, this, [[3, 16, 20, 28], [21,, 23, 27]]);
+                }, _callee20, this, [[4, 17, 21, 29], [22,, 24, 28]]);
             }));
 
             function checkAnswerSheet() {
@@ -2039,6 +2041,54 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return backgroundMusicSwitchClickedListener;
+        }(),
+
+
+        /**
+         * method is triggered when the Snapshot button on the Puzzle-Level-Complete modal is clicked
+         */
+        snapshotButtonClicked: function () {
+            var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
+                return regeneratorRuntime.wrap(function _callee29$(_context29) {
+                    while (1) {
+                        switch (_context29.prev = _context29.next) {
+                            case 0:
+                                _context29.prev = 0;
+                                _context29.next = 3;
+                                return new Promise(function (resolve, reject) {
+                                    navigator.screenshot.save(function (error, res) {
+                                        if (error) {
+                                            // there is an error
+                                            reject(error); // reject with the error
+                                        } else {
+                                            // no error
+                                            console.log("PHOTO PATH", res.filePath);
+                                            resolve(res.filePath); // resolve with the photo file path
+                                        }
+                                    }, 'jpg', 80, "MapTEAZER-Level- " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + Date.now());
+                                });
+
+                            case 3:
+                                _context29.next = 7;
+                                break;
+
+                            case 5:
+                                _context29.prev = 5;
+                                _context29.t0 = _context29["catch"](0);
+
+                            case 7:
+                            case "end":
+                                return _context29.stop();
+                        }
+                    }
+                }, _callee29, this, [[0, 5]]);
+            }));
+
+            function snapshotButtonClicked() {
+                return _ref29.apply(this, arguments);
+            }
+
+            return snapshotButtonClicked;
         }()
     }
 

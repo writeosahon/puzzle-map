@@ -1336,7 +1336,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             await $('#puzzle-level-complete-modal').get(0).show();
             // create and the Puzzle-Level-Completed Confetti
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
-                window.generatePuzzleConfetti();
+                window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
         },
 
         /**
@@ -1345,6 +1345,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async checkAnswerSheet(){
+
+            console.log("CHECK ANSWER ENTRY STARTED");
 
             // update the puzzleAnswerSheet map object to indicate this answer was correct
             for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
@@ -1527,6 +1529,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
 
+        },
+
+        /**
+         * method is triggered when the Snapshot button on the Puzzle-Level-Complete modal is clicked
+         */
+        async snapshotButtonClicked(){
+
+            // take the screenshot
+            try{
+                await new Promise(function(resolve, reject){
+                    navigator.screenshot.save(function(error,res){
+                        if(error){ // there is an error
+                            reject(error); // reject with the error
+                        }
+                        else{ // no error
+                            console.log("PHOTO PATH", res.filePath);
+                            resolve(res.filePath); // resolve with the photo file path
+                        }
+                    },'jpg', 80, `MapTEAZER-Level- ${utopiasoftware[utopiasoftware_app_namespace].controller.
+                        puzzlePageViewModel.levelNumber}${Date.now()}`);
+                });
+            }
+            catch(err){}
         }
     }
 
