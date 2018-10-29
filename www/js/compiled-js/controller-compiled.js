@@ -1474,6 +1474,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // listen for when the background music switch on the puzzle menu is clicked
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backgroundMusicSwitchClickedListener);
+
+            // keep the device awake through the duration of the puzzle
+            window.plugins.insomnia.keepAwake();
         },
 
         /**
@@ -1485,6 +1488,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // remove listener for when the background music switch on the puzzle menu is clicked
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.backgroundMusicSwitchClickedListener);
+
+            // the device can sleep at anytime
+            window.plugins.insomnia.allowSleepAgain();
         },
 
         /**
