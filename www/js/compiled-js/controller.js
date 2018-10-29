@@ -704,6 +704,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         puzzleCompletedConfetti: null,
 
+        /**
+         * property holds the file path for the puzzle completed snapshot
+         */
+        puzzleSnapshotFilePath: null,
+
 
         /**
          * event is triggered when page is initialised
@@ -1275,6 +1280,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // destroy the Puzzle-Level-Completed Confetti
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.stop();
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = null;
+            // destroy the puzzle snapshot file path
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = null;
             // set the puzzle move counter to zero
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
             // set the puzzle level number to zero
@@ -1319,7 +1326,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return;
             }
 
-            // IF CODE GET TO THIS POINT, THEN PUZZLE HAS BEEN CPMPLETED
+            // IF CODE GET TO THIS POINT, THEN PUZZLE HAS BEEN COMPLETED
             // update the contents of the level completed modal
             $('#puzzle-level-complete-modal .level-time').html(
                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.
@@ -1340,7 +1347,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // show the level completed modal
             await $('#puzzle-level-complete-modal').get(0).show();
-            // create and the Puzzle-Level-Completed Confetti
+            // create and start the Puzzle-Level-Completed Confetti
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
                 window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
         },
@@ -1544,7 +1551,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // take the screenshot
             try{
-                await new Promise(function(resolve, reject){
+                // hide the footer buttons on the modal before taking snapshot
+                $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "hidden");
+
+                // get the file path for the successfully taken snapshot
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.puzzleSnapshotFilePathawait =
+                    await new Promise(function(resolve, reject){
                     navigator.screenshot.save(function(error,res){
                         if(error){ // there is an error
                             reject(error); // reject with the error
@@ -1557,7 +1570,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         puzzlePageViewModel.levelNumber}${Date.now()}`);
                 });
             }
-            catch(err){}
+            catch(err){
+                // inform the user that snapshot could not be taken
+                window.plugins.toast.showWithOptions({
+                    message: "Error! Snapshot not taken",
+                    duration: 4000,
+                    position: "top",
+                    styling: {
+                        opacity: 1,
+                        backgroundColor: '#ff0000', //red
+                        textColor: '#FFFFFF',
+                        textSize: 14
+                    }
+                }, function(toastEvent){
+                    if(toastEvent && toastEvent.event == "touch"){ // user tapped the toast, so hide toast immediately
+                        window.plugins.toast.hide();
+                    }
+                });
+            }
+            finally{
+                // show the footer buttons on the modal before taking snapshot
+                $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
+            }
         }
     }
 

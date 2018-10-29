@@ -1048,6 +1048,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         puzzleCompletedConfetti: null,
 
         /**
+         * property holds the file path for the puzzle completed snapshot
+         */
+        puzzleSnapshotFilePath: null,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function pageInit(event) {
@@ -1515,6 +1520,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // destroy the Puzzle-Level-Completed Confetti
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti.stop();
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = null;
+            // destroy the puzzle snapshot file path
+            utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = null;
             // set the puzzle move counter to zero
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter = 0;
             // set the puzzle level number to zero
@@ -1581,7 +1588,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
 
-                                // IF CODE GET TO THIS POINT, THEN PUZZLE HAS BEEN CPMPLETED
+                                // IF CODE GET TO THIS POINT, THEN PUZZLE HAS BEEN COMPLETED
                                 // update the contents of the level completed modal
                                 $('#puzzle-level-complete-modal .level-time').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
                                 $('#puzzle-level-complete-modal .level-moves').html(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.moveCounter);
@@ -1593,7 +1600,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return $('#puzzle-level-complete-modal').get(0).show();
 
                             case 8:
-                                // create and the Puzzle-Level-Completed Confetti
+                                // create and start the Puzzle-Level-Completed Confetti
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
 
                             case 9:
@@ -2060,7 +2067,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         switch (_context29.prev = _context29.next) {
                             case 0:
                                 _context29.prev = 0;
-                                _context29.next = 3;
+
+                                // hide the footer buttons on the modal before taking snapshot
+                                $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "hidden");
+
+                                // get the file path for the successfully taken snapshot
+                                _context29.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     navigator.screenshot.save(function (error, res) {
                                         if (error) {
@@ -2074,20 +2086,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }, 'jpg', 80, "MapTEAZER-Level- " + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + Date.now());
                                 });
 
-                            case 3:
-                                _context29.next = 7;
+                            case 4:
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePathawait = _context29.sent;
+                                _context29.next = 10;
                                 break;
 
-                            case 5:
-                                _context29.prev = 5;
+                            case 7:
+                                _context29.prev = 7;
                                 _context29.t0 = _context29["catch"](0);
 
-                            case 7:
+                                // inform the user that snapshot could not be taken
+                                window.plugins.toast.showWithOptions({
+                                    message: "Error! Snapshot not taken",
+                                    duration: 4000,
+                                    position: "top",
+                                    styling: {
+                                        opacity: 1,
+                                        backgroundColor: '#ff0000', //red
+                                        textColor: '#FFFFFF',
+                                        textSize: 14
+                                    }
+                                }, function (toastEvent) {
+                                    if (toastEvent && toastEvent.event == "touch") {
+                                        // user tapped the toast, so hide toast immediately
+                                        window.plugins.toast.hide();
+                                    }
+                                });
+
+                            case 10:
+                                _context29.prev = 10;
+
+                                // show the footer buttons on the modal before taking snapshot
+                                $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
+                                return _context29.finish(10);
+
+                            case 13:
                             case "end":
                                 return _context29.stop();
                         }
                     }
-                }, _callee29, this, [[0, 5]]);
+                }, _callee29, this, [[0, 7, 10, 13]]);
             }));
 
             function snapshotButtonClicked() {
