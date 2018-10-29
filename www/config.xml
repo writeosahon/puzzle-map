@@ -18,6 +18,7 @@
     <allow-intent href="data:*"/>
     <allow-intent href="twitter:*"/>
     <allow-intent href="fb:*"/>
+    <allow-intent href="file:*"/>
     <allow-intent href="edpms:*"/>
 
     <access origin="*"/>
