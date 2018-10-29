@@ -1261,7 +1261,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function(){
+        pageDestroy: async function(){
+
+            // check if background music is enabled
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
+                // stop playing the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
+                });
+                // unload the background music
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
+                });
+            }
+
             // destroy Draggable.Droppable object
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.destroy();
             // destroy the dragged elements references & all dragged elements containers references
@@ -1592,6 +1605,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // show the footer buttons on the modal before taking snapshot
                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
             }
+        },
+
+        /**
+         * method is triggered when the Continue button on the Puzzle-Level-Complete modal is clicked
+         */
+        async continueButtonClicked(){
+
+            // go back all the way to the Puzzle-Levels page i.e. the app's main page
+            $('#app-main-navigator').get(0).popPage({times: $('#app-main-navigator').get(0).pages.length - 1});
         }
     }
 
