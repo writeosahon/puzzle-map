@@ -1525,6 +1525,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
 
+                                // remove app life-cycle management listeners
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:opened", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuOpenedListener);
+
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("puzzle-menu:closed", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleMenuClosedListener);
+
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("app:will-exit", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.appWillExitListener);
+
+                                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.off("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.appNoExitListener);
+
                                 // destroy Draggable.Droppable object
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.destroy();
                                 // destroy the dragged elements references & all dragged elements containers references
@@ -1554,7 +1563,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
 
-                            case 22:
+                            case 26:
                             case "end":
                                 return _context18.stop();
                         }
