@@ -1593,8 +1593,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             reject(error); // reject with the error
                         }
                         else{ // no error
-                            console.log("PHOTO PATH", res.filePath);
-                            resolve(res.filePath); // resolve with the photo file path
+                            console.log("PHOTO PATH", "file://" + res.filePath);
+                            resolve("file://" + res.filePath); // resolve with the photo file path
                         }
                     },'jpg', 80, `MapTEAZER-Level-${utopiasoftware[utopiasoftware_app_namespace].controller.
                         puzzlePageViewModel.levelNumber}${Date.now()}`);
