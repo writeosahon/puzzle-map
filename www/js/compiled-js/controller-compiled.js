@@ -458,7 +458,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context7.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -517,7 +517,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context8.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -534,15 +534,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:sound-effects-clicked");
 
                                 // call all the listeners registered for this lifecycle stage
-                                return _context8.abrupt("return", new Promise(function (resolve, reject) {
+                                _context8.next = 9;
+                                return new Promise(function (resolve, reject) {
 
                                     setTimeout(function () {
                                         // return the values gotten from the registered listeners as the resolved value of the Promise
                                         resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.emit("puzzle-menu:sound-effects-clicked", [{ switchOn: switchOn }]));
                                     }, 0);
-                                }));
+                                });
 
-                            case 8:
+                            case 9:
+                                return _context8.abrupt("return", _context8.sent);
+
+                            case 10:
                             case "end":
                                 return _context8.stop();
                         }
@@ -576,7 +580,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context9.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -2049,18 +2053,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context25.prev = _context25.next) {
                             case 0:
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
+                                    _context25.next = 3;
+                                    break;
+                                }
+
+                                _context25.next = 3;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                });
+
+                            case 3:
 
                                 // flag that the puzzle has not been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
                                 // hide the pause-puzzle-modal
-                                _context25.next = 3;
+                                _context25.next = 6;
                                 return $('#pause-puzzle-modal').get(0).hide();
 
-                            case 3:
+                            case 6:
                                 // resume puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
 
-                            case 4:
+                            case 7:
                             case "end":
                                 return _context25.stop();
                         }
@@ -2360,14 +2375,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context32.prev = _context32.next) {
                             case 0:
-                                _context32.next = 2;
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
+                                    _context32.next = 3;
+                                    break;
+                                }
+
+                                _context32.next = 3;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                });
+
+                            case 3:
+                                _context32.next = 5;
                                 return $('#puzzle-level-complete-modal').get(0).hide();
 
-                            case 2:
+                            case 5:
                                 // go back all the way to the Puzzle-Levels page i.e. the app's main page
                                 $('#app-main-navigator').get(0).popPage({ times: $('#app-main-navigator').get(0).pages.length - 1 });
 
-                            case 3:
+                            case 6:
                             case "end":
                                 return _context32.stop();
                         }

@@ -309,7 +309,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
                 // start playing background tune in a loop
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                 });
             }
 
@@ -347,7 +347,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
                 // start playing background tune in a loop
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                 });
             }
 
@@ -364,7 +364,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             goto("puzzle-menu:sound-effects-clicked");
 
             // call all the listeners registered for this lifecycle stage
-            return new Promise(function(resolve, reject){
+            return await new Promise(function(resolve, reject){
 
                 setTimeout(function(){
                     // return the values gotten from the registered listeners as the resolved value of the Promise
@@ -385,7 +385,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
                 // start playing background tune in a loop
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                 });
             }
 
@@ -1595,6 +1595,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async resumePuzzleLevel(){
 
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+
             // flag that the puzzle has not been completed
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleCompleted = false;
@@ -1750,6 +1758,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the Continue button on the Puzzle-Level-Complete modal is clicked
          */
         async continueButtonClicked(){
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
 
             // hide the Puzzle-Level-Complete modal
             await $('#puzzle-level-complete-modal').get(0).hide();
