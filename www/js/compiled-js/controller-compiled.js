@@ -626,13 +626,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context10.prev = _context10.next) {
                             case 0:
-                                _context10.next = 2;
-                                return $('#side-menu').get(0).toggle();
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
+                                    _context10.next = 3;
+                                    break;
+                                }
 
-                            case 2:
-                                return _context10.abrupt("return", _context10.sent);
+                                _context10.next = 3;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                                });
 
                             case 3:
+                                _context10.next = 5;
+                                return $('#side-menu').get(0).toggle();
+
+                            case 5:
+                                return _context10.abrupt("return", _context10.sent);
+
+                            case 6:
                             case "end":
                                 return _context10.stop();
                         }
@@ -689,11 +700,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
 
+                                    // check if sound effects are allowed
+
+                                    if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
+                                        _context11.next = 9;
+                                        break;
+                                    }
+
+                                    _context11.next = 7;
+                                    return new Promise(function (resolve, reject) {
+                                        window.plugins.NativeAudio.preloadSimple('button-sound', 'audio/button-sound.mp3', resolve, resolve);
+                                    });
+
+                                case 7:
+                                    _context11.next = 9;
+                                    return new Promise(function (resolve, reject) {
+                                        window.plugins.NativeAudio.preloadSimple('button-switch-sound', 'audio/button-switch-sound.mp3', resolve, resolve);
+                                    });
+
+                                case 9:
+
                                     // listen for when the sound effects switch on the puzzle menu is clicked
                                     utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.on("puzzle-menu:sound-effects-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.soundEffectsSwitchClickedListener);
 
                                     // get the app game config from the stored json data
-                                    _context11.next = 7;
+                                    _context11.next = 12;
                                     return Promise.resolve($.ajax({
                                         url: "game-config.json",
                                         type: "get",
@@ -703,7 +734,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         processData: false
                                     }));
 
-                                case 7:
+                                case 12:
                                     serverResponse = _context11.sent;
 
 
@@ -723,32 +754,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music has been enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context11.next = 17;
+                                        _context11.next = 22;
                                         break;
                                     }
 
-                                    _context11.next = 15;
+                                    _context11.next = 20;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.preloadComplex('puzzle-levels-background', 'audio/puzzles-select-level-background.mp3', 1, 1, 0, resolve, resolve);
                                     });
 
-                                case 15:
-                                    _context11.next = 17;
+                                case 20:
+                                    _context11.next = 22;
                                     return new Promise(function (resolve, reject) {
                                         window.plugins.NativeAudio.loop('puzzle-levels-background', resolve, resolve);
                                     });
 
-                                case 17:
-                                    _context11.next = 19;
+                                case 22:
+                                    _context11.next = 24;
                                     return $('#loader-modal').get(0).hide();
 
-                                case 19:
+                                case 24:
                                     // hide loader
 
                                     // set that audio use is ready
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.isAudioReady = true;
 
-                                case 20:
+                                case 25:
                                 case "end":
                                     return _context11.stop();
                             }
@@ -1056,13 +1087,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context17.next = 4;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.preloadComplex('button-sound', 'audio/button-sound.mp3', 1, 1, 0, resolve, resolve);
+                                    window.plugins.NativeAudio.preloadSimple('button-sound', 'audio/button-sound.mp3', resolve, resolve);
                                 });
 
                             case 4:
                                 _context17.next = 6;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.preloadComplex('button-switch-sound', 'audio/button-switch-sound.mp3', 1, 1, 0, resolve, resolve);
+                                    window.plugins.NativeAudio.preloadSimple('button-switch-sound', 'audio/button-switch-sound.mp3', resolve, resolve);
                                 });
 
                             case 6:

@@ -417,6 +417,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is used to safely toggle the Puzzle Menu open or close
          */
         async tooglePuzzleMenu(){
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start play sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+
             // toggle the side-menu i.e. the puzzle menu
             return await $('#side-menu').get(0).toggle();
         }
@@ -462,6 +470,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // listen for the back button event
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
+
+                // check if sound effects are allowed
+                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                    // add button sound
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadSimple('button-sound',
+                            'audio/button-sound.mp3', resolve, resolve);
+                    });
+
+                    // add button-switch sound
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadSimple('button-switch-sound',
+                            'audio/button-switch-sound.mp3', resolve, resolve);
+                    });
+                }
 
                 // listen for when the sound effects switch on the puzzle menu is clicked
                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
@@ -688,16 +711,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(event.switchOn === true){ // sound-effects is being turned on
                 // add button sound
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('button-sound',
-                        'audio/button-sound.mp3',
-                        1, 1, 0, resolve, resolve);
+                    window.plugins.NativeAudio.preloadSimple('button-sound',
+                        'audio/button-sound.mp3', resolve, resolve);
                 });
 
                 // add button-switch sound
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.preloadComplex('button-switch-sound',
-                        'audio/button-switch-sound.mp3',
-                        1, 1, 0, resolve, resolve);
+                    window.plugins.NativeAudio.preloadSimple('button-switch-sound',
+                        'audio/button-switch-sound.mp3', resolve, resolve);
                 });
             }
             else{ // sound-effects is being turned offed
@@ -1555,7 +1576,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                 });
             }
-            
+
             // flag that the puzzle has not been completed
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleCompleted = false;
