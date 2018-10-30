@@ -385,7 +385,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
                 // start playing background tune in a loop
                 await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, reject);
                 });
             }
 
@@ -479,7 +479,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         window.plugins.NativeAudio.preloadSimple('button-switch-sound',
                             'audio/button-switch-sound.mp3', resolve, resolve);
                     });
-                    
+
                     // add button sound
                     await new Promise(function(resolve, reject){
                         window.plugins.NativeAudio.preloadSimple('button-sound',
