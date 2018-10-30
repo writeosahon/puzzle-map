@@ -458,7 +458,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context7.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -517,7 +517,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context8.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -576,7 +576,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context9.next = 3;
                                 return new Promise(function (resolve, reject) {
-                                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                                 });
 
                             case 3:
@@ -709,13 +709,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     _context11.next = 7;
                                     return new Promise(function (resolve, reject) {
-                                        window.plugins.NativeAudio.preloadSimple('button-switch-sound', 'audio/button-switch-sound.mp3', resolve, resolve);
+                                        window.plugins.NativeAudio.preloadSimple('button-sound', 'audio/button-sound.mp3', resolve, resolve);
                                     });
 
                                 case 7:
                                     _context11.next = 9;
                                     return new Promise(function (resolve, reject) {
-                                        window.plugins.NativeAudio.preloadSimple('button-sound', 'audio/button-sound.mp3', resolve, resolve);
+                                        window.plugins.NativeAudio.preloadSimple('button-switch-sound', 'audio/button-switch-sound.mp3', resolve, resolve);
                                     });
 
                                 case 9:
