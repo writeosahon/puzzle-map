@@ -1174,6 +1174,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // add positive animation to container
                                     $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                                     addClass("animated pulse");
+
+                                    // check if sound effects are allowed
+                                    if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                                        // play sound
+                                        new Promise(function(resolve, reject){
+                                            window.plugins.NativeAudio.play('puzzle-positive-hint-sound', resolve, resolve);
+                                        });
+                                    }
                                 }
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was correct
@@ -1191,6 +1199,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // add negative animation to container
                                     $(`.puzzle-drop-zone[data-puzzle-slot="${puzzleSlotValue}"]`, $thisPage).
                                     addClass("animated shake");
+
+                                    // check if sound effects are allowed
+                                    if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                                        // play sound
+                                        new Promise(function(resolve, reject){
+                                            window.plugins.NativeAudio.play('puzzle-negative-hint-sound', resolve, resolve);
+                                        });
+                                    }
                                 }
 
                                 // update the puzzleAnswerSheet map object to indicate this answer was wrong
@@ -1333,7 +1349,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function(){
+        pageShow: async function(){
             // disable the swipeable feature for the app splitter
             $('ons-splitter-side').removeAttr("swipeable");
 
@@ -1345,6 +1361,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             on("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzlePageViewModel.backgroundMusicSwitchClickedListener);
 
+            // listen for when the sound effects on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            on("puzzle-menu:sound-effects-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.soundEffectsSwitchClickedListener);
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+
+                // add puzzle-positive-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('puzzle-positive-hint-sound',
+                        'audio/puzzle-positive-hint-sound.mp3', resolve, resolve);
+                });
+
+                // add puzzle-negative-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('puzzle-negative-hint-sound',
+                        'audio/puzzle-negative-hint-sound.mp3', resolve, resolve);
+                });
+            }
+
             // keep the device awake through the duration of the puzzle
             window.plugins.insomnia.keepAwake();
         },
@@ -1353,7 +1390,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is hidden
          */
-        pageHide: function(){
+        pageHide: async function(){
             // adjust the window/view-port settings for when the soft keyboard is displayed
             // window.SoftInputMode.set('adjustResize'); // let the view 'resize' when the soft keyboard is displayed
 
@@ -1361,6 +1398,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
             off("puzzle-menu:background-music-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzlePageViewModel.backgroundMusicSwitchClickedListener);
+
+            // remove listener for when the sound effects switch on the puzzle menu is clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            off("puzzle-menu:sound-effects-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.soundEffectsSwitchClickedListener);
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+
+                // remove puzzle-positive-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-positive-hint-sound', resolve, resolve);
+                });
+
+                // remove puzzle-negative-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-negative-hint-sound', resolve, resolve);
+                });
+            }
 
             // the device can sleep at anytime
             window.plugins.insomnia.allowSleepAgain();
@@ -1572,7 +1628,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // check if sound effects are allowed
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
-                // start playing background tune in a loop
+                // play sound
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                 });
@@ -1696,6 +1752,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
 
+        },
+
+        /**
+         * method id used to listen for when the sound effects switch on the puzzle menu is clicked
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        async soundEffectsSwitchClickedListener(eventArgs){
+
+            var event = eventArgs[0]; // get the event object from eventArgs array
+
+            // check if sound effects is being turned on or off
+            if(event.switchOn === true){ // sound-effects is being turned on
+                // add puzzle-positive-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('puzzle-positive-hint-sound',
+                        'audio/puzzle-positive-hint-sound.mp3', resolve, resolve);
+                });
+
+                // add puzzle-negative-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('puzzle-negative-hint-sound',
+                        'audio/puzzle-negative-hint-sound.mp3', resolve, resolve);
+                });
+            }
+            else{ // sound-effects is being turned offed
+
+                // remove puzzle-positive-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-positive-hint-sound', resolve, resolve);
+                });
+
+                // remove puzzle-negative-hint sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('puzzle-negative-hint-sound', resolve, resolve);
+                });
+            }
         },
 
         /**
