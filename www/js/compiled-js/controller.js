@@ -198,6 +198,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async exitButtonClicked(){
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+
             // flag that Exit Button on the puzzle menu has been clicked
             utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("puzzle-menu:exit-clicked");
 
@@ -296,6 +305,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async backgroundMusicSwitchClicked(){
 
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                });
+            }
+
             // get the current state/status of the background music switch
             var switchOn =  $('#puzzle-menu-page #puzzle-menu-background-music-switch').get(0).checked;
             // update the transient and persistent game settings data with the current state of the switch
@@ -326,6 +343,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async soundEffectsSwitchClicked(){
 
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                });
+            }
+
             // get the current state/status of the Sound Effects switch
             var switchOn =  $('#puzzle-menu-page #puzzle-menu-sound-effects-switch').get(0).checked;
             // update the transient and persistent game settings data with the current state of the switch
@@ -355,6 +380,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async puzzleHintsSwitchClicked(){
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
+                });
+            }
 
             // get the current state/status of the Puzzle Hints switch
             var switchOn =  $('#puzzle-menu-page #puzzle-menu-puzzle-hints-switch').get(0).checked;
@@ -429,6 +462,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // listen for the back button event
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.backButtonClicked;
+
+                // listen for when the sound effects switch on the puzzle menu is clicked
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("puzzle-menu:sound-effects-clicked", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzleLevelsPageViewModel.soundEffectsSwitchClickedListener);
 
                 // get the app game config from the stored json data
                 let serverResponse = await Promise.resolve($.ajax(
@@ -570,6 +608,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is used to load the puzzle level details
          */
         async loadPuzzleLevel(levelNumber){
+
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+
             // displaying prepping message
             $('#loader-modal-message').html("Loading Puzzle Level...");
             await $('#loader-modal').get(0).show(); // show loader
@@ -592,7 +639,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method id used to listen got
+         * method id used to listen for when the background music switch on the puzzle menu is clicked
          * @param eventArgs
          * @returns {Promise<void>}
          */
@@ -627,6 +674,45 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         },
+
+        /**
+         * method id used to listen for when the sound effects switch on the puzzle menu is clicked
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        async soundEffectsSwitchClickedListener(eventArgs){
+
+            var event = eventArgs[0]; // get the event object from eventArgs array
+
+            // check if sound effects is being turned on or off
+            if(event.switchOn === true){ // sound-effects is being turned on
+                // add button sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('button-sound',
+                        'audio/button-sound.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
+
+                // add button-switch sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('button-switch-sound',
+                        'audio/button-switch-sound.mp3',
+                        1, 1, 0, resolve, resolve);
+                });
+            }
+            else{ // sound-effects is being turned offed
+
+                // unload the sound effects
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('button-sound', resolve, resolve);
+                });
+
+                // unload the sound effects
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('button-switch-sound', resolve, resolve);
+                });
+            }
+        }
     },
 
 
@@ -1462,6 +1548,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async pausePuzzleLevel(){
 
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+            
             // flag that the puzzle has not been completed
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleCompleted = false;
