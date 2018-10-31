@@ -1548,6 +1548,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // show the level completed modal
             await $('#puzzle-level-complete-modal').get(0).show();
+
+            // start playing the cheering sound
+            await new Promise(function(resolve, reject){
+                window.plugins.NativeAudio.play('cheering-background-sound', resolve, resolve);
+            });
+
             // create and start the Puzzle-Level-Completed Confetti
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti =
                 window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');

@@ -1911,10 +1911,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return $('#puzzle-level-complete-modal').get(0).show();
 
                             case 8:
+                                _context23.next = 10;
+                                return new Promise(function (resolve, reject) {
+                                    window.plugins.NativeAudio.play('cheering-background-sound', resolve, resolve);
+                                });
+
+                            case 10:
+
                                 // create and start the Puzzle-Level-Completed Confetti
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
 
-                            case 9:
+                            case 11:
                             case "end":
                                 return _context23.stop();
                         }
