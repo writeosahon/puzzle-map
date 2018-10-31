@@ -1911,17 +1911,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return $('#puzzle-level-complete-modal').get(0).show();
 
                             case 8:
-                                _context23.next = 10;
+                                if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
+                                    _context23.next = 11;
+                                    break;
+                                }
+
+                                _context23.next = 11;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.play('cheering-background-sound', resolve, resolve);
                                 });
 
-                            case 10:
+                            case 11:
 
                                 // create and start the Puzzle-Level-Completed Confetti
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompletedConfetti = window.generatePuzzleConfetti('puzzle-level-complete-confetti-canvas');
 
-                            case 11:
+                            case 12:
                             case "end":
                                 return _context23.stop();
                         }
