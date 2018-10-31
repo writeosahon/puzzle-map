@@ -879,6 +879,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             1, 1, 0, resolve, resolve);
                     });
 
+                    // add puzzle background tune
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.preloadComplex('cheering-background-sound',
+                            'audio/cheering-background-sound.mp3',
+                            1, 3, 0, resolve, resolve);
+                    });
+
                     // start playing background tune in a loop
                     await new Promise(function(resolve, reject){
                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);

@@ -1260,7 +1260,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // check if background music is enabled
 
                                     if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true)) {
-                                        _context18.next = 16;
+                                        _context18.next = 18;
                                         break;
                                     }
 
@@ -1272,10 +1272,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 case 14:
                                     _context18.next = 16;
                                     return new Promise(function (resolve, reject) {
-                                        window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                                        window.plugins.NativeAudio.preloadComplex('cheering-background-sound', 'audio/cheering-background-sound.mp3', 1, 3, 0, resolve, resolve);
                                     });
 
                                 case 16:
+                                    _context18.next = 18;
+                                    return new Promise(function (resolve, reject) {
+                                        window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
+                                    });
+
+                                case 18:
 
                                     // instantiate the puzzleAnswerSheet js Map
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleAnswerSheetMap = new Map();
@@ -1620,7 +1626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
                                     $('#loader-modal').get(0).hide(); // hide loader
 
-                                case 51:
+                                case 53:
                                 case "end":
                                     return _context18.stop();
                             }
