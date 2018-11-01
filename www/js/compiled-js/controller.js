@@ -349,6 +349,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                 });
+                // wait for 1 sec for switch sound to play before proceeding
+                await new Promise(function(resolve, reject){window.setTimeout(function(){}, 1000)});
             }
 
             // get the current state/status of the Sound Effects switch
@@ -879,13 +881,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             1, 1, 0, resolve, resolve);
                     });
 
-                    // add puzzle background tune
-                    await new Promise(function(resolve, reject){
-                        window.plugins.NativeAudio.preloadComplex('cheering-background-sound',
-                            'audio/cheering-background-sound.mp3',
-                            1, 3, 0, resolve, resolve);
-                    });
-
                     // start playing background tune in a loop
                     await new Promise(function(resolve, reject){
                         window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
@@ -1347,7 +1342,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     puzzlePageViewModel.puzzleTimerPausedListener);
 
                 // pause the puzzle level in order to begin. level starts when user hits "Continue" button
-                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel();
+                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.pausePuzzleLevel(false);
                 $('#loader-modal').get(0).hide(); // hide loader
             }
 
@@ -1387,6 +1382,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     window.plugins.NativeAudio.preloadSimple('puzzle-negative-hint-sound',
                         'audio/puzzle-negative-hint-sound.mp3', resolve, resolve);
                 });
+
+                // add camera snapshot sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('camera-snapshot-sound',
+                        'audio/camera-snapshot-sound.mp3', resolve, resolve);
+                });
+
+                // add crowd cheering sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('cheering-background-sound',
+                        'audio/cheering-background-sound.mp3',
+                        1, 3, 0, resolve, resolve);
+                });
+
             }
 
             // keep the device awake through the duration of the puzzle
@@ -1422,6 +1431,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // remove puzzle-negative-hint sound
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.unload('puzzle-negative-hint-sound', resolve, resolve);
+                });
+
+                // remove camera-snapshot sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('camera-snapshot-sound', resolve, resolve);
+                });
+
+                // remove crowd cheering sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('cheering-background-sound', resolve, resolve);
                 });
             }
 
@@ -1638,16 +1657,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * pauses the puzzle level. Suspends the puzzle timer and
          * displays the pause-puzzle modal
          *
+         * @param playSound determine if sound should be played or not. When the sound effects is enabled
+         *
          * @returns {Promise<void>}
          */
-        async pausePuzzleLevel(){
+        async pausePuzzleLevel(playSound = true){
 
             // check if sound effects are allowed
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
-                // play sound
-                await new Promise(function(resolve, reject){
-                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
-                });
+                if(playSound === true){
+                    // play sound
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                    });
+                }
             }
 
             // flag that the puzzle has not been completed
@@ -1792,6 +1815,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     window.plugins.NativeAudio.preloadSimple('puzzle-negative-hint-sound',
                         'audio/puzzle-negative-hint-sound.mp3', resolve, resolve);
                 });
+
+                // add camera snapshot sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadSimple('camera-snapshot-sound',
+                        'audio/camera-snapshot-sound.mp3', resolve, resolve);
+                });
+
+                // add crowd cheering sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.preloadComplex('cheering-background-sound',
+                        'audio/cheering-background-sound.mp3',
+                        1, 3, 0, resolve, resolve);
+                });
             }
             else{ // sound-effects is being turned offed
 
@@ -1803,6 +1839,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // remove puzzle-negative-hint sound
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.unload('puzzle-negative-hint-sound', resolve, resolve);
+                });
+
+                // remove camera-snapshot sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('camera-snapshot-sound', resolve, resolve);
+                });
+
+                // remove crowd cheering sound
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.unload('cheering-background-sound', resolve, resolve);
                 });
             }
         },
@@ -1816,6 +1862,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             try{
                 // hide the footer buttons on the modal before taking snapshot
                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "hidden");
+
+                // check if sound effects are allowed
+                if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                    // play the sound
+                    await new Promise(function(resolve, reject){
+                        window.plugins.NativeAudio.play('camera-snapshot-sound', resolve, resolve);
+                    });
+                }
 
                 // get the file path for the successfully taken snapshot
                 utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -1870,7 +1924,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // check if sound effects are allowed
             if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
-                // start playing background tune in a loop
+                // play the sound
                 await new Promise(function(resolve, reject){
                     window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                 });
