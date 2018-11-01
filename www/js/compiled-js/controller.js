@@ -350,7 +350,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     window.plugins.NativeAudio.play('button-switch-sound', resolve, resolve);
                 });
                 // wait for 1 sec for switch sound to play before proceeding
-                await new Promise(function(resolve, reject){window.setTimeout(function(){}, 1000)});
+                await new Promise(function(resolve, reject){window.setTimeout(resolve, 1000)});
             }
 
             // get the current state/status of the Sound Effects switch
@@ -1870,6 +1870,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         window.plugins.NativeAudio.play('camera-snapshot-sound', resolve, resolve);
                     });
                 }
+
+                //wait for 1 sec for buttons to be hidden before taking snapshot
+                await new Promise(function(resolve, reject){window.setTimeout(resolve, 1000)});
 
                 // get the file path for the successfully taken snapshot
                 utopiasoftware[utopiasoftware_app_namespace].controller.

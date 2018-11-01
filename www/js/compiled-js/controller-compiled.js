@@ -523,7 +523,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 3:
                                 _context8.next = 5;
                                 return new Promise(function (resolve, reject) {
-                                    window.setTimeout(function () {}, 1000);
+                                    window.setTimeout(resolve, 1000);
                                 });
 
                             case 5:
@@ -2551,6 +2551,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 5:
                                 _context34.next = 7;
                                 return new Promise(function (resolve, reject) {
+                                    window.setTimeout(resolve, 1000);
+                                });
+
+                            case 7:
+                                _context34.next = 9;
+                                return new Promise(function (resolve, reject) {
                                     navigator.screenshot.save(function (error, res) {
                                         if (error) {
                                             // there is an error
@@ -2563,7 +2569,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }, 'jpg', 80, "MapTEAZER-Level-" + utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.levelNumber + Date.now());
                                 });
 
-                            case 7:
+                            case 9:
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = _context34.sent;
 
 
@@ -2571,8 +2577,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // return the file path for the snapshot
                                 return _context34.abrupt("return", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
 
-                            case 12:
-                                _context34.prev = 12;
+                            case 14:
+                                _context34.prev = 14;
                                 _context34.t0 = _context34["catch"](0);
 
                                 // inform the user that snapshot could not be taken
@@ -2593,19 +2599,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                 });
 
-                            case 15:
-                                _context34.prev = 15;
+                            case 17:
+                                _context34.prev = 17;
 
                                 // show the footer buttons on the modal before taking snapshot
                                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
-                                return _context34.finish(15);
+                                return _context34.finish(17);
 
-                            case 18:
+                            case 20:
                             case "end":
                                 return _context34.stop();
                         }
                     }
-                }, _callee34, this, [[0, 12, 15, 18]]);
+                }, _callee34, this, [[0, 14, 17, 20]]);
             }));
 
             function snapshotButtonClicked() {
