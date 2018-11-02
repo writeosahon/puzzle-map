@@ -18,10 +18,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     appLifeCycleObservable: new Lifecycle({},
                                     ["puzzle-menu:opened", "puzzle-menu:closed", "puzzle-menu:exit-clicked",
+                                     "puzzle-menu:puzzle-levels-clicked",
                                      "puzzle-menu:background-music-clicked", "puzzle-menu:sound-effects-clicked",
                                      "puzzle-menu:puzzle-hints-clicked",
 
-                                     "app:will-exit", "app:no-exit", "app:exited"], {
+                                     "app:will-exit", "app:no-exit", "app:exited",
+                                     "app:will-load-page", "app:no-load-page", "app:loaded-page"], {
                                     autoStart: false, autoEmit: false, autoEnd: false}).start(),
 
     /**
@@ -297,6 +299,129 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                 emit("app:no-exit", []);
             }
+        },
+
+        /**
+         * method is used to listen for when the Puzzle Levels Button on the menu is clicked
+         * @returns {Promise<void>}
+         */
+        async puzzleLevelsButtonClicked(){
+            // check if sound effects are allowed
+            if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true){
+                // start playing background tune in a loop
+                await new Promise(function(resolve, reject){
+                    window.plugins.NativeAudio.play('button-sound', resolve, resolve);
+                });
+            }
+
+            // flag that Puzzle Levels Button on the puzzle menu has been clicked
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            goto("puzzle-menu:puzzle-levels-clicked");
+
+            // call all the listeners registered for this lifecycle stage
+            await new Promise(function(resolve, reject){
+
+                setTimeout(function(){
+                    // return the values gotten from the registered listeners as the resolved value of the Promise
+                    resolve(utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("puzzle-menu:puzzle-levels-clicked", []));
+                }, 0);
+            });
+
+            let willLoadIndex = -1; // holds the load index gotten from the user's confirmation of loading
+
+
+            // flag that the app will soon load the puzzle-levels page if the listeners do not prevent it
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:will-load-page");
+
+            // call all the listeners registered for this lifecycle stage
+            let willLoadPageEvent = await new Promise(function(resolve, reject){
+                setTimeout(function(){
+                    // lifecycle event object.
+                    // listeners can cancel the event that logically follows by setting its cancel property to true
+                    let eventObject = {};
+                    // define properties for the event object
+                    eventObject = Object.defineProperties(eventObject, {
+                        "pageIdToLoad": {
+                            value: "puzzle-levels-page",
+                            enumerable: true,
+                            configurable: false,
+                            writable: false
+                        },
+                        "canCancel": {
+                            value: true,
+                            enumerable: true,
+                            configurable: false,
+                            writable: false
+                        },
+                        "isCanceled": {
+                            get: function(){
+                                return typeof this.cancel === "boolean" ? this.cancel : new Boolean(this.cancel).valueOf();
+                            }.bind(eventObject),
+                            set: function(cancellation){},
+                            enumerable: true,
+                            configurable: false
+                        },
+                        "cancel": {
+                            value: false,
+                            enumerable: true,
+                            configurable: false,
+                            writable: true
+                        },
+                        "warningMessage": {
+                            enumerable: true,
+                            configurable: false,
+                            writable: true
+                        }
+                    });
+
+                    // emit the lifecycle stage event to the listeners
+                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("app:will-load-page", [eventObject]);
+                    // resolve this promise with the event object
+                    resolve(eventObject);
+                }, 0); // end of setTimeout
+            });
+
+            // check if any listener wishes to forestall a page load
+            if(willLoadPageEvent.isCanceled === true){ // listener wants it canceled
+                willLoadIndex = await ons.notification.confirm('',
+                    {title: '<ons-icon icon="md-alert-triangle" style="color: #3f51b5" size="33px"></ons-icon> <span style="color: #3f51b5; display: inline-block; margin-left: 1em;">Warning</span>',
+                        messageHTML: `${willLoadPageEvent.warningMessage}<br><br>Do you want to leave?`,
+                        buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog'});
+
+                // check if user decided to load the page
+                if(willLoadIndex === 0){ // user decided NOT to load the page
+                    // flag that the app DID NOT load the page
+                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:no-load-page");
+                    // notify all listeners that app DID NOT load the page
+                    utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                    emit("app:no-load-page", []);
+
+                    return; // exit the method immediately
+                }
+
+            }
+
+            // IF CODE GETS HERE, THEN PAGE CAN BE LOADED
+            let totalPagesInStack = $('#app-main-navigator').get(0).pages.length ; // get total number of page presently in the stack
+            if(totalPagesInStack > 1){ // if there is more than 1 page
+                // hide the Puzzle-Menu page
+                await utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
+                // go back all the way to the Puzzle-Levels page i.e. the app's main page
+                await $('#app-main-navigator').get(0).popPage({times: $('#app-main-navigator').get(0).pages.length - 1});
+            }
+            else{ // if there is only 1 page
+                // hide the Puzzle-Menu page
+                await utopiasoftware[utopiasoftware_app_namespace].controller.puzzleMenuPageViewModel.tooglePuzzleMenu();
+            }
+
+            // flag that the page has loaded
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.goto("app:loaded-page");
+            // notify all listeners that the page has loaded
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            emit("app:loaded-page", []);
+
         },
 
         /**
@@ -872,6 +997,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
                 on("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.
                     puzzlePageViewModel.appNoExitListener);
+
+                // listen for when the app wants to load a page
+                utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+                on("app:will-load-page", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    puzzlePageViewModel.appWillLoadPageListener);
 
                 // check if background music is enabled
                 if(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.backgroundMusicOn === true) { // background music is on
@@ -1482,6 +1612,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             off("app:no-exit", utopiasoftware[utopiasoftware_app_namespace].controller.
                 puzzlePageViewModel.appNoExitListener);
 
+            utopiasoftware[utopiasoftware_app_namespace].controller.appLifeCycleObservable.
+            off("app:will-load-page", utopiasoftware[utopiasoftware_app_namespace].controller.
+                puzzlePageViewModel.appWillLoadPageListener);
+
             // destroy Draggable.Droppable object
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.draggableDroppableObject.destroy();
             // destroy the dragged elements references & all dragged elements containers references
@@ -1726,6 +1860,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async puzzleMenuClosedListener(){
             // resume puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
+        },
+
+        /**
+         * method is used to listen for when the app notifies that it wants to exit
+         * @param eventArgs
+         * @returns {Promise<void>}
+         */
+        async appWillLoadPageListener(eventArgs){
+            var event = eventArgs[0]; // get the event object from eventArgs array
+            // check if event has been canceled
+            if(event.isCanceled !== true && event.pageIdToLoad === "puzzle-levels-page"){ // event has not been canceled
+                // check if puzzle has been completed
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
+                    puzzleCompleted !== true){ // puzzle level has not been completed
+
+                    // since user has not completed the puzzle, try to prevent app exit using a warning
+                    event.cancel = true;
+                    // attach the warning message for preventing exit
+                    event.warningMessage = "All progress on this puzzle will be lost if you leave now."
+                }
+            }
         },
 
         /**
