@@ -29,6 +29,11 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
   },
 
   /**
+   * property is used to hold the present state of the user's puzzle game
+   */
+  userGameData: {},
+
+  /**
    * holds the base url for reaching the application server
    */
   appBaseUrl: 'http://132.148.150.76/edpms',
