@@ -105,36 +105,41 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         case 19:
                             backupExists = _context.sent;
 
-
-                            if (backupExists === true) {
-                                // backup exist
-                                // get the backup
-                                cordova.plugin.cloudsettings.load(successCallback, [errorCallback]);
+                            if (!(backupExists === true)) {
+                                _context.next = 23;
+                                break;
                             }
-                            _context.next = 26;
-                            break;
+
+                            _context.next = 23;
+                            return new Promise(function (resolve, reject) {
+                                cordova.plugin.cloudsettings.load(resolve, reject);
+                            });
 
                         case 23:
-                            _context.prev = 23;
+                            _context.next = 28;
+                            break;
+
+                        case 25:
+                            _context.prev = 25;
                             _context.t1 = _context["catch"](7);
 
                             console.log("APP LOADING ERROR", _context.t1);
 
-                        case 26:
-                            _context.prev = 26;
+                        case 28:
+                            _context.prev = 28;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(26);
+                            return _context.finish(28);
 
-                        case 31:
+                        case 33:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[7, 23, 26, 31], [9, 15]]);
+            }, _callee, this, [[7, 25, 28, 33], [9, 15]]);
         }))); // end of ons.ready()
     },
 

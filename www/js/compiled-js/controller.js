@@ -90,7 +90,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 if(backupExists === true){ // backup exist
                     // get the backup
-                    cordova.plugin.cloudsettings.load(successCallback, [errorCallback]);
+                    await new Promise(function(resolve, reject){
+                        cordova.plugin.cloudsettings.load(resolve, reject);
+                    });
                 }
             }
             catch(err){
