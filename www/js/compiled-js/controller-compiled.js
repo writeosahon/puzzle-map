@@ -41,7 +41,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // does nothing for now!!
                             });
 
-                            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton = function () {
+                            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
+
+                            $('#app-main-navigator').get(0).onDeviceBackButton = function () {
                                 $('#view-reports-additional-menu-popover').get(0).hide();
                             };
 
@@ -68,23 +70,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 6;
-                            _context.next = 9;
+                            _context.prev = 7;
+                            _context.next = 10;
                             return new Promise(function (resolve, reject) {
                                 // Hide system UI and keep it hidden
                                 AndroidFullScreen.immersiveMode(resolve, reject);
                             });
 
-                        case 9:
-                            _context.next = 13;
+                        case 10:
+                            _context.next = 14;
                             break;
 
-                        case 11:
-                            _context.prev = 11;
-                            _context.t0 = _context["catch"](6);
+                        case 12:
+                            _context.prev = 12;
+                            _context.t0 = _context["catch"](7);
 
-                        case 13:
-                            _context.prev = 13;
+                        case 14:
+                            _context.prev = 14;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -95,44 +97,44 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             });
 
                             // load the game settings data stored in the app database
-                            _context.prev = 15;
-                            _context.next = 18;
+                            _context.prev = 16;
+                            _context.next = 19;
                             return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
 
-                        case 18:
+                        case 19:
                             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
-                            _context.next = 23;
+                            _context.next = 24;
                             break;
 
-                        case 21:
-                            _context.prev = 21;
-                            _context.t1 = _context["catch"](15);
+                        case 22:
+                            _context.prev = 22;
+                            _context.t1 = _context["catch"](16);
 
-                        case 23:
-                            _context.next = 28;
+                        case 24:
+                            _context.next = 29;
                             break;
 
-                        case 25:
-                            _context.prev = 25;
-                            _context.t2 = _context["catch"](13);
+                        case 26:
+                            _context.prev = 26;
+                            _context.t2 = _context["catch"](14);
 
                             console.log("APP LOADING ERROR", _context.t2);
 
-                        case 28:
-                            _context.prev = 28;
+                        case 29:
+                            _context.prev = 29;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(28);
+                            return _context.finish(29);
 
-                        case 33:
+                        case 34:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[6, 11], [13, 25, 28, 33], [15, 21]]);
+            }, _callee, this, [[7, 12], [14, 26, 29, 34], [16, 22]]);
         }))); // end of ons.ready()
     },
 

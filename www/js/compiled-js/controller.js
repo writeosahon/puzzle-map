@@ -38,7 +38,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // does nothing for now!!
             });
 
-            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton = function(){
+            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
+
+            $('#app-main-navigator').get(0).onDeviceBackButton = function(){
                 $('#view-reports-additional-menu-popover').get(0).hide();
             };
 
