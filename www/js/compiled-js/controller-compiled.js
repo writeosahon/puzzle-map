@@ -43,10 +43,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
 
-                            $('#app-main-navigator').get(0).onDeviceBackButton = function () {
-                                $('#view-reports-additional-menu-popover').get(0).hide();
-                            };
-
                             // create the view-reports-additional menu popover
                             // await ons.createPopover("view-reports-additional-menu-popover-template");
 
@@ -54,15 +50,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#loader-modal-message').html("Loading Puzzle...");
                             $('#loader-modal').get(0).show(); // show loader
 
-                            if (true) {
-                                // there is a previous logged in user
-                                // load the app main page
-                                $('ons-splitter').get(0).content.load("app-main-template");
-                            } else {
-                                // there is no previously logged in user
-                                // load the login page
-                                $('ons-splitter').get(0).content.load("login-template");
+                            if (!true) {
+                                _context.next = 10;
+                                break;
                             }
+
+                            _context.next = 7;
+                            return $('ons-splitter').get(0).content.load("app-main-template");
+
+                        case 7:
+                            $('#app-main-navigator').get(0).onDeviceBackButton = function () {
+                                $('#view-reports-additional-menu-popover').get(0).hide();
+                            };
+                            _context.next = 11;
+                            break;
+
+                        case 10:
+                            // there is no previously logged in user
+                            // load the login page
+                            $('ons-splitter').get(0).content.load("login-template");
+
+                        case 11:
 
                             // START ALL CORDOVA PLUGINS CONFIGURATIONS
                             try {
@@ -70,23 +78,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 7;
-                            _context.next = 10;
+                            _context.prev = 12;
+                            _context.next = 15;
                             return new Promise(function (resolve, reject) {
                                 // Hide system UI and keep it hidden
                                 AndroidFullScreen.immersiveMode(resolve, reject);
                             });
 
-                        case 10:
-                            _context.next = 14;
+                        case 15:
+                            _context.next = 19;
                             break;
 
-                        case 12:
-                            _context.prev = 12;
-                            _context.t0 = _context["catch"](7);
+                        case 17:
+                            _context.prev = 17;
+                            _context.t0 = _context["catch"](12);
 
-                        case 14:
-                            _context.prev = 14;
+                        case 19:
+                            _context.prev = 19;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -97,44 +105,44 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             });
 
                             // load the game settings data stored in the app database
-                            _context.prev = 16;
-                            _context.next = 19;
+                            _context.prev = 21;
+                            _context.next = 24;
                             return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
 
-                        case 19:
-                            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
-                            _context.next = 24;
-                            break;
-
-                        case 22:
-                            _context.prev = 22;
-                            _context.t1 = _context["catch"](16);
-
                         case 24:
+                            utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
                             _context.next = 29;
                             break;
 
-                        case 26:
-                            _context.prev = 26;
-                            _context.t2 = _context["catch"](14);
+                        case 27:
+                            _context.prev = 27;
+                            _context.t1 = _context["catch"](21);
+
+                        case 29:
+                            _context.next = 34;
+                            break;
+
+                        case 31:
+                            _context.prev = 31;
+                            _context.t2 = _context["catch"](19);
 
                             console.log("APP LOADING ERROR", _context.t2);
 
-                        case 29:
-                            _context.prev = 29;
+                        case 34:
+                            _context.prev = 34;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(29);
+                            return _context.finish(34);
 
-                        case 34:
+                        case 39:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[7, 12], [14, 26, 29, 34], [16, 22]]);
+            }, _callee, this, [[12, 17], [19, 31, 34, 39], [21, 27]]);
         }))); // end of ons.ready()
     },
 

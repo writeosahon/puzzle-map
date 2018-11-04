@@ -40,9 +40,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
 
-            $('#app-main-navigator').get(0).onDeviceBackButton = function(){
-                $('#view-reports-additional-menu-popover').get(0).hide();
-            };
 
             // create the view-reports-additional menu popover
             // await ons.createPopover("view-reports-additional-menu-popover-template");
@@ -53,7 +50,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             if(true){ // there is a previous logged in user
                 // load the app main page
-                $('ons-splitter').get(0).content.load("app-main-template");
+                await $('ons-splitter').get(0).content.load("app-main-template");
+                $('#app-main-navigator').get(0).onDeviceBackButton = function(){
+                    $('#view-reports-additional-menu-popover').get(0).hide();
+                };
             }
             else{ // there is no previously logged in user
                 // load the login page
