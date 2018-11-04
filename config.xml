@@ -51,9 +51,16 @@
     <plugin name="cordova-plugin-android-window-background" spec="https://github.com/writeosahon/map-puzzle-background.git">
         <variable name="WINDOW_BACKGROUND_COLOR" value="#3f51b5"/>
     </plugin>
+
     <plugin name="cordova-plugin-cloud-settings" spec="https://github.com/writeosahon/cordova-plugin-cloud-settings-backup-service-only.git">
         <variable name="ANDROID_BACKUP_SERVICE_KEY" value="AEdPqrEAAAAIAcW3QbgXsUy2GVAtUKN2-c-HSr7yKkCbgz0n2g"/>
     </plugin>
+    <!-- edit the application tag for the BACKUP SERVICE / cordova-plugin-cloud-settings plugin -->
+    <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+        <application
+                android:allowBackup="true"
+                android:backupAgent="cordova.plugin.cloudsettings.BackupAgentHelper" />
+    </edit-config>
 
     <plugin name="cordova-plugin-whitelist" spec="1.3.3"/>
 
@@ -128,12 +135,5 @@
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest/application">
         <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF30A401" />
     </config-file>
-
-    <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
-        <application
-                android:allowBackup="true"
-                android:backupAgent="cordova.plugin.cloudsettings.BackupAgentHelper"
-        />
-    </edit-config>
 
 </widget>
