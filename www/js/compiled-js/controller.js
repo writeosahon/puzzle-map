@@ -38,6 +38,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // does nothing for now!!
             });
 
+            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton = function(){
+                $('#view-reports-additional-menu-popover').get(0).hide();
+            };
+
             // create the view-reports-additional menu popover
             // await ons.createPopover("view-reports-additional-menu-popover-template");
 
