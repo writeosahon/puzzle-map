@@ -2166,7 +2166,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 6:
                                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                    _context25.next = 15;
+                                    _context25.next = 17;
                                     break;
                                 }
 
@@ -2174,8 +2174,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 console.log("CHECK ANSWER ENTRY", entry);
 
+                                if (entry[0]) {
+                                    _context25.next = 11;
+                                    break;
+                                }
+
+                                return _context25.abrupt("continue", 14);
+
+                            case 11:
                                 if (!(entry[1] === false)) {
-                                    _context25.next = 12;
+                                    _context25.next = 14;
                                     break;
                                 }
 
@@ -2184,46 +2192,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
                                 return _context25.abrupt("return");
 
-                            case 12:
+                            case 14:
                                 _iteratorNormalCompletion = true;
                                 _context25.next = 6;
                                 break;
 
-                            case 15:
-                                _context25.next = 21;
+                            case 17:
+                                _context25.next = 23;
                                 break;
 
-                            case 17:
-                                _context25.prev = 17;
+                            case 19:
+                                _context25.prev = 19;
                                 _context25.t0 = _context25["catch"](4);
                                 _didIteratorError = true;
                                 _iteratorError = _context25.t0;
 
-                            case 21:
-                                _context25.prev = 21;
-                                _context25.prev = 22;
+                            case 23:
+                                _context25.prev = 23;
+                                _context25.prev = 24;
 
                                 if (!_iteratorNormalCompletion && _iterator.return) {
                                     _iterator.return();
                                 }
 
-                            case 24:
-                                _context25.prev = 24;
+                            case 26:
+                                _context25.prev = 26;
 
                                 if (!_didIteratorError) {
-                                    _context25.next = 27;
+                                    _context25.next = 29;
                                     break;
                                 }
 
                                 throw _iteratorError;
 
-                            case 27:
-                                return _context25.finish(24);
-
-                            case 28:
-                                return _context25.finish(21);
-
                             case 29:
+                                return _context25.finish(26);
+
+                            case 30:
+                                return _context25.finish(23);
+
+                            case 31:
 
                                 // flag that puzzle has been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = true;
@@ -2231,12 +2239,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.pause();
                                 return _context25.abrupt("return");
 
-                            case 32:
+                            case 34:
                             case "end":
                                 return _context25.stop();
                         }
                     }
-                }, _callee25, this, [[4, 17, 21, 29], [22,, 24, 28]]);
+                }, _callee25, this, [[4, 19, 23, 31], [24,, 26, 30]]);
             }));
 
             function checkAnswerSheet() {

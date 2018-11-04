@@ -1728,6 +1728,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             for(let entry of utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
                 puzzleAnswerSheetMap){
                 console.log("CHECK ANSWER ENTRY", entry);
+
+                if(!entry[0]){ // if the map key is null or undefined,
+                    continue; // skip it
+                }
+
                 if(entry[1] === false){ // an answer is still wrong
                     // flag that puzzle has NOT been completed
                     utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.
