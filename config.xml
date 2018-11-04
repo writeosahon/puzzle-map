@@ -51,7 +51,7 @@
     <plugin name="cordova-plugin-android-window-background" spec="https://github.com/writeosahon/map-puzzle-background.git">
         <variable name="WINDOW_BACKGROUND_COLOR" value="#3f51b5"/>
     </plugin>
-    <plugin name="cordova-plugin-backup" spec="https://github.com/writeosahon/cordova-plugin-cloud-settings-backup-service-only.git">
+    <plugin name="cordova-plugin-cloud-settings" spec="https://github.com/writeosahon/cordova-plugin-cloud-settings-backup-service-only.git">
         <variable name="ANDROID_BACKUP_SERVICE_KEY" value="AEdPqrEAAAAIAcW3QbgXsUy2GVAtUKN2-c-HSr7yKkCbgz0n2g"/>
     </plugin>
 
