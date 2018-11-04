@@ -38,22 +38,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // does nothing for now!!
             });
 
-            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
-
-
-            // create the view-reports-additional menu popover
-            // await ons.createPopover("view-reports-additional-menu-popover-template");
-
             // displaying prepping message
             $('#loader-modal-message').html("Loading Puzzle...");
             $('#loader-modal').get(0).show(); // show loader
 
             if(true){ // there is a previous logged in user
                 // load the app main page
-                await $('ons-splitter').get(0).content.load("app-main-template");
-                $('#app-main-navigator').get(0).onDeviceBackButton = function(){
-                    $('#view-reports-additional-menu-popover').get(0).hide();
-                };
+                $('ons-splitter').get(0).content.load("app-main-template");
+
             }
             else{ // there is no previously logged in user
                 // load the login page
@@ -67,13 +59,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
             catch(err){}
 
-            try{
-                await new Promise(function(resolve, reject){
-                    // Hide system UI and keep it hidden
-                    AndroidFullScreen.immersiveMode(resolve, reject);
-                });
-            }
-            catch(err){}
+            // Promise hides system UI and keeps it hidden
+            await new Promise(function(resolve, reject){
+                // Hide system UI and keep it hidden
+                AndroidFullScreen.immersiveMode(resolve, resolve);
+            });
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
@@ -90,6 +80,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         await utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
                 }
                 catch(err2){}
+
+                // check if app backed-up data exist
+                let backupExists = await new Promise(function(resolve, reject){
+                    cordova.plugin.cloudsettings.exists(function(exists){
+                        resolve(exists); // resolve the promise with the status of whether backup exist or not
+                    });
+                });
+
+                if(backupExists === true){ // backup exist
+                    // get the backup
+                    cordova.plugin.cloudsettings.load(successCallback, [errorCallback]);
+                }
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);

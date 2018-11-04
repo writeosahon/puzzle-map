@@ -32,6 +32,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         // initialise the app libraries and plugins
         ons.ready(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+            var backupExists;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -41,36 +42,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // does nothing for now!!
                             });
 
-                            $('#view-reports-additional-menu-popover').get(0).onDeviceBackButton.disable();
-
-                            // create the view-reports-additional menu popover
-                            // await ons.createPopover("view-reports-additional-menu-popover-template");
-
                             // displaying prepping message
                             $('#loader-modal-message').html("Loading Puzzle...");
                             $('#loader-modal').get(0).show(); // show loader
 
-                            if (!true) {
-                                _context.next = 10;
-                                break;
+                            if (true) {
+                                // there is a previous logged in user
+                                // load the app main page
+                                $('ons-splitter').get(0).content.load("app-main-template");
+                            } else {
+                                // there is no previously logged in user
+                                // load the login page
+                                $('ons-splitter').get(0).content.load("login-template");
                             }
-
-                            _context.next = 7;
-                            return $('ons-splitter').get(0).content.load("app-main-template");
-
-                        case 7:
-                            $('#app-main-navigator').get(0).onDeviceBackButton = function () {
-                                $('#view-reports-additional-menu-popover').get(0).hide();
-                            };
-                            _context.next = 11;
-                            break;
-
-                        case 10:
-                            // there is no previously logged in user
-                            // load the login page
-                            $('ons-splitter').get(0).content.load("login-template");
-
-                        case 11:
 
                             // START ALL CORDOVA PLUGINS CONFIGURATIONS
                             try {
@@ -78,23 +62,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 12;
-                            _context.next = 15;
+                            // Promise hides system UI and keeps it hidden
+                            _context.next = 7;
                             return new Promise(function (resolve, reject) {
                                 // Hide system UI and keep it hidden
-                                AndroidFullScreen.immersiveMode(resolve, reject);
+                                AndroidFullScreen.immersiveMode(resolve, resolve);
                             });
 
-                        case 15:
-                            _context.next = 19;
-                            break;
-
-                        case 17:
-                            _context.prev = 17;
-                            _context.t0 = _context["catch"](12);
-
-                        case 19:
-                            _context.prev = 19;
+                        case 7:
+                            _context.prev = 7;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -105,44 +81,60 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             });
 
                             // load the game settings data stored in the app database
-                            _context.prev = 21;
-                            _context.next = 24;
+                            _context.prev = 9;
+                            _context.next = 12;
                             return utopiasoftware[utopiasoftware_app_namespace].gameSettingsOperations.loadGameSettingsData();
 
-                        case 24:
+                        case 12:
                             utopiasoftware[utopiasoftware_app_namespace].model.gameSettings = _context.sent;
-                            _context.next = 29;
+                            _context.next = 17;
                             break;
 
-                        case 27:
-                            _context.prev = 27;
-                            _context.t1 = _context["catch"](21);
+                        case 15:
+                            _context.prev = 15;
+                            _context.t0 = _context["catch"](9);
 
-                        case 29:
-                            _context.next = 34;
+                        case 17:
+                            _context.next = 19;
+                            return new Promise(function (resolve, reject) {
+                                cordova.plugin.cloudsettings.exists(function (exists) {
+                                    resolve(exists); // resolve the promise with the status of whether backup exist or not
+                                });
+                            });
+
+                        case 19:
+                            backupExists = _context.sent;
+
+
+                            if (backupExists === true) {
+                                // backup exist
+                                // get the backup
+                                cordova.plugin.cloudsettings.load(successCallback, [errorCallback]);
+                            }
+                            _context.next = 26;
                             break;
 
-                        case 31:
-                            _context.prev = 31;
-                            _context.t2 = _context["catch"](19);
+                        case 23:
+                            _context.prev = 23;
+                            _context.t1 = _context["catch"](7);
 
-                            console.log("APP LOADING ERROR", _context.t2);
+                            console.log("APP LOADING ERROR", _context.t1);
 
-                        case 34:
-                            _context.prev = 34;
+                        case 26:
+                            _context.prev = 26;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(34);
+                            return _context.finish(26);
 
-                        case 39:
+                        case 31:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[12, 17], [19, 31, 34, 39], [21, 27]]);
+            }, _callee, this, [[7, 23, 26, 31], [9, 15]]);
         }))); // end of ons.ready()
     },
 
