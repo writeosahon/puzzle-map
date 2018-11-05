@@ -651,7 +651,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <img src="css/app-images/check-mark.png" class="completed" 
                             style="width: 50%; height: auto; margin-top: 25%; 
                             margin-left: 50%; position: absolute; top: 0; z-index: 2;">
-                            <img src="css/app-images/key-locked.png" class="locked" 
+                            <img src="css/app-images/key-locked2.png" class="locked" 
                             style="width: 50%; height: auto; margin-top: 25%; 
                             margin-left: 50%; position: absolute; top: 0; z-index: 2;">
                             <span style="display: block; position: absolute; top: 0; margin-top: 100%; 
