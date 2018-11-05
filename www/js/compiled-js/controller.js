@@ -641,7 +641,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     puzzleLevelsPageViewModel.gameConfigObject["config"]["total_levels"]; index++){
                     puzzleLevelContent +=
                         `<div class="col-xs-1" style="margin-top: 1em;"></div>
-                            <div class="col-xs-3" class="puzzle-level-grid-block completed" 
+                            <div class="col-xs-3 puzzle-level-grid-block completed"  
                             style="margin-top: 1em; position: relative;"
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.
                             loadPuzzleLevel(${index})">
