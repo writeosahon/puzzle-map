@@ -641,7 +641,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     puzzleLevelsPageViewModel.gameConfigObject["config"]["total_levels"]; index++){
                     puzzleLevelContent +=
                         `<div class="col-xs-1" style="margin-top: 1em;"></div>
-                            <div class="col-xs-3 puzzle-level-grid-block locked"  
+                            <div class="col-xs-3 puzzle-level-grid-block"  
                             style="margin-top: 1em; position: relative;"
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.
                             loadPuzzleLevel(${index})">
@@ -651,7 +651,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <img src="css/app-images/check-mark.png" class="completed" 
                             style="width: 50%; height: auto; margin-top: 25%; 
                             margin-left: 50%; position: absolute; top: 0; z-index: 2;">
-                            <img src="css/app-images/key-locked2.png" class="locked" 
+                            <img src="css/app-images/key-locked.png" class="locked" 
                             style="width: 50%; height: auto; margin-top: 25%; 
                             margin-left: 50%; position: absolute; top: 0; z-index: 2;">
                             <span style="display: block; position: absolute; top: 0; margin-top: 100%; 
@@ -1805,7 +1805,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * pauses the puzzle level. Suspends the puzzle timer and
          * displays the pause-puzzle modal
          *
-         * @param playSound determine if sound should be played or not. When the sound effects is enabled
+         * @param playSound determine if sound should be played or not.
+         * Only applicable when the sound effects is enabled
          *
          * @returns {Promise<void>}
          */
@@ -1854,6 +1855,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // resume puzzle timer
             utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
         },
+
+        /**
+         * method is used to mark a puzzle level as completed
+         * @param puzzleLevel
+         * @returns {Promise<void>}
+         */
+        async markPuzzleLevelCompleted(puzzleLevel){},
 
         /**
          * method is used to listen for when the puzzle menu is opened

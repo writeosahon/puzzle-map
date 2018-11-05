@@ -31,12 +31,14 @@
     background-size: cover, cover;
     background-position: center;
 }
+/** style for displaying or hiding the level completed icon **/
 #puzzle-levels-page #puzzle-levels-container .puzzle-level-grid-block img.completed {
     display: none;
 }
 #puzzle-levels-page #puzzle-levels-container .puzzle-level-grid-block.completed img.completed {
     display: inline-block;
 }
+/** style for displaying or hiding the level locked icon **/
 #puzzle-levels-page #puzzle-levels-container .puzzle-level-grid-block img.locked {
     display: none;
 }

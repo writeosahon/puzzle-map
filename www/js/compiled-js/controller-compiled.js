@@ -917,7 +917,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // create the puzzle levels board/content
 
                                     for (index = 1; index <= utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.gameConfigObject["config"]["total_levels"]; index++) {
-                                        puzzleLevelContent += "<div class=\"col-xs-1\" style=\"margin-top: 1em;\"></div>\n                            <div class=\"col-xs-3 puzzle-level-grid-block locked\"  \n                            style=\"margin-top: 1em; position: relative;\"\n                            onclick=\"utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.\n                            loadPuzzleLevel(" + index + ")\">\n                            <ons-ripple></ons-ripple>\n                            <img src=\"game-puzzle/level-" + index + "-puzzle-completed.png\" style=\"width: 90%; height: auto; \n                            position: absolute; top: 0; z-index: 1;\">\n                            <img src=\"css/app-images/check-mark.png\" class=\"completed\" \n                            style=\"width: 50%; height: auto; margin-top: 25%; \n                            margin-left: 50%; position: absolute; top: 0; z-index: 2;\">\n                            <img src=\"css/app-images/key-locked2.png\" class=\"locked\" \n                            style=\"width: 50%; height: auto; margin-top: 25%; \n                            margin-left: 50%; position: absolute; top: 0; z-index: 2;\">\n                            <span style=\"display: block; position: absolute; top: 0; margin-top: 100%; \n                            z-index: 3; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;\n                            text-shadow: -1px -1px 2px #000000;\">\n                            LEVEL " + index + "\n                            </span>\n                        </div>";
+                                        puzzleLevelContent += "<div class=\"col-xs-1\" style=\"margin-top: 1em;\"></div>\n                            <div class=\"col-xs-3 puzzle-level-grid-block\"  \n                            style=\"margin-top: 1em; position: relative;\"\n                            onclick=\"utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.\n                            loadPuzzleLevel(" + index + ")\">\n                            <ons-ripple></ons-ripple>\n                            <img src=\"game-puzzle/level-" + index + "-puzzle-completed.png\" style=\"width: 90%; height: auto; \n                            position: absolute; top: 0; z-index: 1;\">\n                            <img src=\"css/app-images/check-mark.png\" class=\"completed\" \n                            style=\"width: 50%; height: auto; margin-top: 25%; \n                            margin-left: 50%; position: absolute; top: 0; z-index: 2;\">\n                            <img src=\"css/app-images/key-locked.png\" class=\"locked\" \n                            style=\"width: 50%; height: auto; margin-top: 25%; \n                            margin-left: 50%; position: absolute; top: 0; z-index: 2;\">\n                            <span style=\"display: block; position: absolute; top: 0; margin-top: 100%; \n                            z-index: 3; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;\n                            text-shadow: -1px -1px 2px #000000;\">\n                            LEVEL " + index + "\n                            </span>\n                        </div>";
                                     }
 
                                     $('#puzzle-levels-page #puzzle-levels-container').html(puzzleLevelContent); // append the content to the page
@@ -2314,7 +2314,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * pauses the puzzle level. Suspends the puzzle timer and
          * displays the pause-puzzle modal
          *
-         * @param playSound determine if sound should be played or not. When the sound effects is enabled
+         * @param playSound determine if sound should be played or not.
+         * Only applicable when the sound effects is enabled
          *
          * @returns {Promise<void>}
          */
@@ -2417,14 +2418,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
+         * method is used to mark a puzzle level as completed
+         * @param puzzleLevel
+         * @returns {Promise<void>}
+         */
+        markPuzzleLevelCompleted: function () {
+            var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29(puzzleLevel) {
+                return regeneratorRuntime.wrap(function _callee29$(_context29) {
+                    while (1) {
+                        switch (_context29.prev = _context29.next) {
+                            case 0:
+                            case "end":
+                                return _context29.stop();
+                        }
+                    }
+                }, _callee29, this);
+            }));
+
+            function markPuzzleLevelCompleted(_x7) {
+                return _ref29.apply(this, arguments);
+            }
+
+            return markPuzzleLevelCompleted;
+        }(),
+
+
+        /**
          * method is used to listen for when the puzzle menu is opened
          * @returns {Promise<void>}
          */
         puzzleMenuOpenedListener: function () {
-            var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
-                return regeneratorRuntime.wrap(function _callee29$(_context29) {
+            var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
+                return regeneratorRuntime.wrap(function _callee30$(_context30) {
                     while (1) {
-                        switch (_context29.prev = _context29.next) {
+                        switch (_context30.prev = _context30.next) {
                             case 0:
                                 // flag that puzzle has NOT been completed
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleCompleted = false;
@@ -2433,14 +2460,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context29.stop();
+                                return _context30.stop();
                         }
                     }
-                }, _callee29, this);
+                }, _callee30, this);
             }));
 
             function puzzleMenuOpenedListener() {
-                return _ref29.apply(this, arguments);
+                return _ref30.apply(this, arguments);
             }
 
             return puzzleMenuOpenedListener;
@@ -2452,24 +2479,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         puzzleMenuClosedListener: function () {
-            var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
-                return regeneratorRuntime.wrap(function _callee30$(_context30) {
+            var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
+                return regeneratorRuntime.wrap(function _callee31$(_context31) {
                     while (1) {
-                        switch (_context30.prev = _context30.next) {
+                        switch (_context31.prev = _context31.next) {
                             case 0:
                                 // resume puzzle timer
                                 utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleTimer.start();
 
                             case 1:
                             case "end":
-                                return _context30.stop();
+                                return _context31.stop();
                         }
                     }
-                }, _callee30, this);
+                }, _callee31, this);
             }));
 
             function puzzleMenuClosedListener() {
-                return _ref30.apply(this, arguments);
+                return _ref31.apply(this, arguments);
             }
 
             return puzzleMenuClosedListener;
@@ -2482,11 +2509,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appWillLoadPageListener: function () {
-            var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31(eventArgs) {
+            var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee31$(_context31) {
+                return regeneratorRuntime.wrap(function _callee32$(_context32) {
                     while (1) {
-                        switch (_context31.prev = _context31.next) {
+                        switch (_context32.prev = _context32.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
                                 // check if event has been canceled
@@ -2506,14 +2533,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context31.stop();
+                                return _context32.stop();
                         }
                     }
-                }, _callee31, this);
+                }, _callee32, this);
             }));
 
-            function appWillLoadPageListener(_x7) {
-                return _ref31.apply(this, arguments);
+            function appWillLoadPageListener(_x8) {
+                return _ref32.apply(this, arguments);
             }
 
             return appWillLoadPageListener;
@@ -2526,11 +2553,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appWillExitListener: function () {
-            var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32(eventArgs) {
+            var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee32$(_context32) {
+                return regeneratorRuntime.wrap(function _callee33$(_context33) {
                     while (1) {
-                        switch (_context32.prev = _context32.next) {
+                        switch (_context33.prev = _context33.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
                                 // check if event has been canceled
@@ -2550,14 +2577,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case "end":
-                                return _context32.stop();
+                                return _context33.stop();
                         }
                     }
-                }, _callee32, this);
+                }, _callee33, this);
             }));
 
-            function appWillExitListener(_x8) {
-                return _ref32.apply(this, arguments);
+            function appWillExitListener(_x9) {
+                return _ref33.apply(this, arguments);
             }
 
             return appWillExitListener;
@@ -2569,20 +2596,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         appNoExitListener: function () {
-            var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
-                return regeneratorRuntime.wrap(function _callee33$(_context33) {
+            var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
+                return regeneratorRuntime.wrap(function _callee34$(_context34) {
                     while (1) {
-                        switch (_context33.prev = _context33.next) {
+                        switch (_context34.prev = _context34.next) {
                             case 0:
                             case "end":
-                                return _context33.stop();
+                                return _context34.stop();
                         }
                     }
-                }, _callee33, this);
+                }, _callee34, this);
             }));
 
             function appNoExitListener() {
-                return _ref33.apply(this, arguments);
+                return _ref34.apply(this, arguments);
             }
 
             return appNoExitListener;
@@ -2595,58 +2622,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         backgroundMusicSwitchClickedListener: function () {
-            var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34(eventArgs) {
+            var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee34$(_context34) {
+                return regeneratorRuntime.wrap(function _callee35$(_context35) {
                     while (1) {
-                        switch (_context34.prev = _context34.next) {
+                        switch (_context35.prev = _context35.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
 
                                 // check if background sound is being turned on or off
 
                                 if (!(event.switchOn === true)) {
-                                    _context34.next = 8;
+                                    _context35.next = 8;
                                     break;
                                 }
 
-                                _context34.next = 4;
+                                _context35.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('puzzle-background', 'audio/puzzle-level-background.mp3', 1, 1, 0, resolve, resolve);
                                 });
 
                             case 4:
-                                _context34.next = 6;
+                                _context35.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.loop('puzzle-background', resolve, resolve);
                                 });
 
                             case 6:
-                                _context34.next = 12;
+                                _context35.next = 12;
                                 break;
 
                             case 8:
-                                _context34.next = 10;
+                                _context35.next = 10;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.stop('puzzle-background', resolve, resolve);
                                 });
 
                             case 10:
-                                _context34.next = 12;
+                                _context35.next = 12;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-background', resolve, resolve);
                                 });
 
                             case 12:
                             case "end":
-                                return _context34.stop();
+                                return _context35.stop();
                         }
                     }
-                }, _callee34, this);
+                }, _callee35, this);
             }));
 
-            function backgroundMusicSwitchClickedListener(_x9) {
-                return _ref34.apply(this, arguments);
+            function backgroundMusicSwitchClickedListener(_x10) {
+                return _ref35.apply(this, arguments);
             }
 
             return backgroundMusicSwitchClickedListener;
@@ -2659,82 +2686,82 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         soundEffectsSwitchClickedListener: function () {
-            var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35(eventArgs) {
+            var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36(eventArgs) {
                 var event;
-                return regeneratorRuntime.wrap(function _callee35$(_context35) {
+                return regeneratorRuntime.wrap(function _callee36$(_context36) {
                     while (1) {
-                        switch (_context35.prev = _context35.next) {
+                        switch (_context36.prev = _context36.next) {
                             case 0:
                                 event = eventArgs[0]; // get the event object from eventArgs array
 
                                 // check if sound effects is being turned on or off
 
                                 if (!(event.switchOn === true)) {
-                                    _context35.next = 12;
+                                    _context36.next = 12;
                                     break;
                                 }
 
-                                _context35.next = 4;
+                                _context36.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadSimple('puzzle-positive-hint-sound', 'audio/puzzle-positive-hint-sound.mp3', resolve, resolve);
                                 });
 
                             case 4:
-                                _context35.next = 6;
+                                _context36.next = 6;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadSimple('puzzle-negative-hint-sound', 'audio/puzzle-negative-hint-sound.mp3', resolve, resolve);
                                 });
 
                             case 6:
-                                _context35.next = 8;
+                                _context36.next = 8;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadSimple('camera-snapshot-sound', 'audio/camera-snapshot-sound.mp3', resolve, resolve);
                                 });
 
                             case 8:
-                                _context35.next = 10;
+                                _context36.next = 10;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.preloadComplex('cheering-background-sound', 'audio/cheering-background-sound.mp3', 1, 3, 0, resolve, resolve);
                                 });
 
                             case 10:
-                                _context35.next = 20;
+                                _context36.next = 20;
                                 break;
 
                             case 12:
-                                _context35.next = 14;
+                                _context36.next = 14;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-positive-hint-sound', resolve, resolve);
                                 });
 
                             case 14:
-                                _context35.next = 16;
+                                _context36.next = 16;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('puzzle-negative-hint-sound', resolve, resolve);
                                 });
 
                             case 16:
-                                _context35.next = 18;
+                                _context36.next = 18;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('camera-snapshot-sound', resolve, resolve);
                                 });
 
                             case 18:
-                                _context35.next = 20;
+                                _context36.next = 20;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.unload('cheering-background-sound', resolve, resolve);
                                 });
 
                             case 20:
                             case "end":
-                                return _context35.stop();
+                                return _context36.stop();
                         }
                     }
-                }, _callee35, this);
+                }, _callee36, this);
             }));
 
-            function soundEffectsSwitchClickedListener(_x10) {
-                return _ref35.apply(this, arguments);
+            function soundEffectsSwitchClickedListener(_x11) {
+                return _ref36.apply(this, arguments);
             }
 
             return soundEffectsSwitchClickedListener;
@@ -2745,12 +2772,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the Snapshot button on the Puzzle-Level-Complete modal is clicked
          */
         snapshotButtonClicked: function () {
-            var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
-                return regeneratorRuntime.wrap(function _callee36$(_context36) {
+            var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
+                return regeneratorRuntime.wrap(function _callee37$(_context37) {
                     while (1) {
-                        switch (_context36.prev = _context36.next) {
+                        switch (_context37.prev = _context37.next) {
                             case 0:
-                                _context36.prev = 0;
+                                _context37.prev = 0;
 
                                 // hide the footer buttons on the modal before taking snapshot
                                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "hidden");
@@ -2758,23 +2785,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // check if sound effects are allowed
 
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
-                                    _context36.next = 5;
+                                    _context37.next = 5;
                                     break;
                                 }
 
-                                _context36.next = 5;
+                                _context37.next = 5;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.play('camera-snapshot-sound', resolve, resolve);
                                 });
 
                             case 5:
-                                _context36.next = 7;
+                                _context37.next = 7;
                                 return new Promise(function (resolve, reject) {
                                     window.setTimeout(resolve, 1000);
                                 });
 
                             case 7:
-                                _context36.next = 9;
+                                _context37.next = 9;
                                 return new Promise(function (resolve, reject) {
                                     navigator.screenshot.save(function (error, res) {
                                         if (error) {
@@ -2789,16 +2816,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
 
                             case 9:
-                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = _context36.sent;
+                                utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath = _context37.sent;
 
 
                                 console.log("SNAPSHOT URL", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
                                 // return the file path for the snapshot
-                                return _context36.abrupt("return", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
+                                return _context37.abrupt("return", utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.puzzleSnapshotFilePath);
 
                             case 14:
-                                _context36.prev = 14;
-                                _context36.t0 = _context36["catch"](0);
+                                _context37.prev = 14;
+                                _context37.t0 = _context37["catch"](0);
 
                                 // inform the user that snapshot could not be taken
                                 window.plugins.toast.showWithOptions({
@@ -2819,22 +2846,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
 
                             case 17:
-                                _context36.prev = 17;
+                                _context37.prev = 17;
 
                                 // show the footer buttons on the modal before taking snapshot
                                 $('#puzzle-level-complete-modal .puzzle-modal-footer').css("visibility", "visible");
-                                return _context36.finish(17);
+                                return _context37.finish(17);
 
                             case 20:
                             case "end":
-                                return _context36.stop();
+                                return _context37.stop();
                         }
                     }
-                }, _callee36, this, [[0, 14, 17, 20]]);
+                }, _callee37, this, [[0, 14, 17, 20]]);
             }));
 
             function snapshotButtonClicked() {
-                return _ref36.apply(this, arguments);
+                return _ref37.apply(this, arguments);
             }
 
             return snapshotButtonClicked;
@@ -2845,23 +2872,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the Continue button on the Puzzle-Level-Complete modal is clicked
          */
         continueButtonClicked: function () {
-            var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
-                return regeneratorRuntime.wrap(function _callee37$(_context37) {
+            var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
+                return regeneratorRuntime.wrap(function _callee38$(_context38) {
                     while (1) {
-                        switch (_context37.prev = _context37.next) {
+                        switch (_context38.prev = _context38.next) {
                             case 0:
                                 if (!(utopiasoftware[utopiasoftware_app_namespace].model.gameSettings.soundEffectsOn === true)) {
-                                    _context37.next = 3;
+                                    _context38.next = 3;
                                     break;
                                 }
 
-                                _context37.next = 3;
+                                _context38.next = 3;
                                 return new Promise(function (resolve, reject) {
                                     window.plugins.NativeAudio.play('button-sound', resolve, resolve);
                                 });
 
                             case 3:
-                                _context37.next = 5;
+                                _context38.next = 5;
                                 return $('#puzzle-level-complete-modal').get(0).hide();
 
                             case 5:
@@ -2870,14 +2897,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 6:
                             case "end":
-                                return _context37.stop();
+                                return _context38.stop();
                         }
                     }
-                }, _callee37, this);
+                }, _callee38, this);
             }));
 
             function continueButtonClicked() {
-                return _ref37.apply(this, arguments);
+                return _ref38.apply(this, arguments);
             }
 
             return continueButtonClicked;
@@ -2888,16 +2915,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the Share button on the Puzzle-Level-Complete modal is clicked
          */
         shareButtonClicked: function () {
-            var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
-                return regeneratorRuntime.wrap(function _callee38$(_context38) {
+            var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
+                return regeneratorRuntime.wrap(function _callee39$(_context39) {
                     while (1) {
-                        switch (_context38.prev = _context38.next) {
+                        switch (_context39.prev = _context39.next) {
                             case 0:
-                                _context38.next = 2;
+                                _context39.next = 2;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.puzzlePageViewModel.snapshotButtonClicked();
 
                             case 2:
-                                _context38.next = 4;
+                                _context39.next = 4;
                                 return new Promise(function (resolve, reject) {
                                     // popup the share actionsheet widget
                                     window.plugins.socialsharing.shareWithOptions({
@@ -2910,14 +2937,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 4:
                             case "end":
-                                return _context38.stop();
+                                return _context39.stop();
                         }
                     }
-                }, _callee38, this);
+                }, _callee39, this);
             }));
 
             function shareButtonClicked() {
-                return _ref38.apply(this, arguments);
+                return _ref39.apply(this, arguments);
             }
 
             return shareButtonClicked;
