@@ -32,7 +32,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         // initialise the app libraries and plugins
         ons.ready(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-            var backupExists;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -95,51 +94,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             _context.t0 = _context["catch"](9);
 
                         case 17:
-                            _context.next = 19;
-                            return new Promise(function (resolve, reject) {
-                                cordova.plugin.cloudsettings.exists(function (exists) {
-                                    resolve(exists); // resolve the promise with the status of whether backup exist or not
-                                });
-                            });
 
-                        case 19:
-                            backupExists = _context.sent;
-
-                            if (!(backupExists === true)) {
-                                _context.next = 23;
-                                break;
-                            }
-
+                            // register the backup service onRestore hook
+                            cordova.plugin.cloudsettings.onRestore(utopiasoftware[utopiasoftware_app_namespace].userGameDataOperations.onRestoreHandler);
                             _context.next = 23;
-                            return new Promise(function (resolve, reject) {
-                                cordova.plugin.cloudsettings.load(resolve, reject);
-                            });
-
-                        case 23:
-                            _context.next = 28;
                             break;
 
-                        case 25:
-                            _context.prev = 25;
+                        case 20:
+                            _context.prev = 20;
                             _context.t1 = _context["catch"](7);
 
                             console.log("APP LOADING ERROR", _context.t1);
 
-                        case 28:
-                            _context.prev = 28;
+                        case 23:
+                            _context.prev = 23;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(28);
+                            return _context.finish(23);
 
-                        case 33:
+                        case 28:
                         case "end":
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[7, 25, 28, 33], [9, 15]]);
+            }, _callee, this, [[7, 20, 23, 28], [9, 15]]);
         }))); // end of ons.ready()
     },
 

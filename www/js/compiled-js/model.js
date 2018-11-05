@@ -26,47 +26,8 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
         backgroundMusicOn: true,
         soundEffectsOn: true,
         puzzleHintsOn: true
-    },
+    }
 
-    /**
-     * property is used to hold the present state of the user's puzzle game
-     */
-    _userGameData: {
-    },
-
-    userGameData: new Proxy(utopiasoftware[utopiasoftware_app_namespace].model._userGameData, {
-        set: function(target, prop, value){
-            if(prop === "_update_all_data"){ // copy all properties of the object for backup
-                for(let propertyName in value){
-                    target[propertyName] = value[propertyName];
-                }
-            }
-            else{ // copy the single property provided for backup
-                target[prop] = value;
-            }
-
-            // backup the target i.e. userGameData
-            new Promise(function(resolve, reject){
-                cordova.plugin.cloudsettings.save(target, resolve, resolve, true);
-            });
-            return true; // return true to signal that proxy updating was successful
-        },
-
-        get: async function(target, prop, proxyObj){
-
-            // return a promise which resolves to the property requested, but loaded from the backup data
-            return new Promise(function(resolve, reject){
-                cordova.plugin.cloudsettings.load(function(backedUpData){
-                    for(let propertyName in backedUpData){
-                        target[propertyName] = backedUpData[propertyName];
-                    }
-                    resolve(target[prop]);
-                }, function(){
-                    resolve(target[prop]);
-                });
-            });
-        }
-    })
 
 };
 

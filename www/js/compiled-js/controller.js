@@ -81,19 +81,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err2){}
 
-                // check if app backed-up data exist
-                let backupExists = await new Promise(function(resolve, reject){
-                    cordova.plugin.cloudsettings.exists(function(exists){
-                        resolve(exists); // resolve the promise with the status of whether backup exist or not
-                    });
-                });
-
-                if(backupExists === true){ // backup exist
-                    // get the backup
-                    await new Promise(function(resolve, reject){
-                        cordova.plugin.cloudsettings.load(resolve, reject);
-                    });
-                }
+                // register the backup service onRestore hook
+                cordova.plugin.cloudsettings.
+                onRestore(utopiasoftware[utopiasoftware_app_namespace].userGameDataOperations.onRestoreHandler);
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
