@@ -1861,7 +1861,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @param puzzleLevel
          * @returns {Promise<void>}
          */
-        async markPuzzleLevelCompleted(puzzleLevel){},
+        async markPuzzleLevelCompleted(puzzleLevel){
+
+        },
 
         /**
          * method is used to listen for when the puzzle menu is opened
