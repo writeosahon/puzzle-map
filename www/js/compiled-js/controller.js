@@ -641,11 +641,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     puzzleLevelsPageViewModel.gameConfigObject["config"]["total_levels"]; index++){
                     puzzleLevelContent +=
                         `<div class="col-xs-1" style="margin-top: 1em;"></div>
-                            <div class="col-xs-3" style="margin-top: 1em;"
+                            <div class="col-xs-3" class="puzzle-level-grid-block completed" 
+                            style="margin-top: 1em; position: relative;"
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.puzzleLevelsPageViewModel.
                             loadPuzzleLevel(${index})">
                             <ons-ripple></ons-ripple>
-                            <img src="game-puzzle/level-${index}-puzzle-completed.png" style="width: 90%; height: auto;">
+                            <img src="game-puzzle/level-${index}-puzzle-completed.png" style="width: 90%; height: auto; 
+                            position: absolute; top: 0; z-index: 1;">
+                            <img src="css/app-images/check-mark.png" class="completed" 
+                            style="width: 50%; height: auto; margin-top: 25%; 
+                            margin-left: 50%; position: absolute; top: 0; z-index: 2;">
                             <span style="display: block; width: 100%; text-align: justify; font-size: 0.9em; color: #F4C724;
                             text-shadow: -1px -1px 2px #000000;">
                             LEVEL ${index}

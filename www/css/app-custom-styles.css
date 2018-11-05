@@ -31,7 +31,14 @@
     background-size: cover, cover;
     background-position: center;
 }
+#puzzle-levels-page #puzzle-levels-container .puzzle-level-grid-block img.completed {
+    display: none;
+}
+#puzzle-levels-page #puzzle-levels-container .puzzle-level-grid-block.completed img.completed {
+    display: inline-block;
+}
 /** STYLE FOR THE PUZZLE LEVELS PAGE ENDS **/
+
 
 /** STYLE FOR THE PUZZLE-MENU PAGE BEGINS **/
 #puzzle-menu-page .page--material__background {
