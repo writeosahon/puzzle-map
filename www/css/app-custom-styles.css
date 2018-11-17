@@ -22,6 +22,10 @@
 }
 /** STYLE FOR THE APP ALERT DIALOG ENDS **/
 
+*:focus {
+    outline: none !important;
+}
+
 
 /** STYLE FOR THE PUZZLE LEVELS PAGE BEGINS **/
 #puzzle-levels-page .page--material__background {

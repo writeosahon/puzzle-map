@@ -21,7 +21,7 @@
     <allow-intent href="edpms:*"/>
 
     <access origin="*"/>
-    <preference name="phonegap-version" value="cli-8.0.0" />
+    <preference name="phonegap-version" value="cli-7.1.0" />
 
 
     <plugin name="cordova-plugin-statusbar" spec="2.4.2"/>
